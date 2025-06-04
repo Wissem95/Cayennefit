@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAllVehicles, createVehicle } from '@lib/database';
 
 /**
- * GET - Récupère tous les véhicules depuis Prisma avec filtres optionnels
+ * GET - Récupère tous les véhicules depuis Prisma (données fraîches) avec filtres optionnels
  */
 export async function GET(request: NextRequest) {
     try {
@@ -109,7 +109,7 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * POST - Crée un nouveau véhicule dans Prisma
+ * POST - Crée un nouveau véhicule dans Prisma (données fraîches)
  */
 export async function POST(request: NextRequest) {
     try {

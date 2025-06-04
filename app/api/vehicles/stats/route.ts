@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getVehicleStats } from '@lib/database';
 
 /**
- * GET - Récupère les statistiques des véhicules depuis Prisma
+ * GET - Récupère les statistiques des véhicules depuis Prisma (données fraîches)
  * Compatible avec Vercel, Ionos et tous les hébergeurs
  */
 export async function GET() {

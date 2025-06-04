@@ -1,18 +1,17 @@
 import { PrismaClient } from '@prisma/client'
-import { withAccelerate } from '@prisma/extension-accelerate'
 import { VehicleProps } from '@types'
 
 /**
- * Service de base de données CAYENNEFIT avec Prisma Accelerate
- * Cache ultra-rapide pour performances optimales
+ * Service de base de données CAYENNEFIT sans cache
+ * Données toujours fraîches - pas de cache pour éviter les problèmes de synchronisation
  */
 
-// Type pour l'instance Prisma étendue avec Accelerate
-type ExtendedPrismaClient = ReturnType<typeof createPrismaClient>
+// Type pour l'instance Prisma standard
+type ExtendedPrismaClient = PrismaClient
 
-// Fonction pour créer l'instance Prisma avec Accelerate
+// Fonction pour créer l'instance Prisma standard (sans Accelerate)
 function createPrismaClient() {
-  return new PrismaClient().$extends(withAccelerate())
+  return new PrismaClient()
 }
 
 // Instance Prisma singleton avec Accelerate
@@ -73,7 +72,7 @@ function convertToCreateData(vehicleData: Omit<VehicleProps, 'id' | 'createdAt' 
 }
 
 /**
- * Récupère tous les véhicules avec cache Accelerate (5min)
+ * Récupère tous les véhicules (données fraîches)
  */
 export async function getAllVehicles(): Promise<VehicleProps[]> {
   try {
@@ -83,7 +82,6 @@ export async function getAllVehicles(): Promise<VehicleProps[]> {
     
     const vehicles = await prisma.vehicle.findMany({
       orderBy: { createdAt: 'desc' }
-      // Temporairement sans cache pour debug
     })
     
     console.log(`${vehicles.length} véhicules récupérés de la base`)
@@ -110,7 +108,7 @@ export async function getAllVehicles(): Promise<VehicleProps[]> {
 }
 
 /**
- * Récupère un véhicule par ID avec cache Accelerate
+ * Récupère un véhicule par ID (données fraîches)
  */
 export async function getVehicleById(id: string): Promise<VehicleProps | null> {
   try {
@@ -124,7 +122,6 @@ export async function getVehicleById(id: string): Promise<VehicleProps | null> {
     
     const vehicle = await prisma.vehicle.findUnique({
       where: { id }
-      // Temporairement sans cache pour debug
     })
     
     if (vehicle) {
@@ -338,28 +335,23 @@ export async function deleteVehicle(id: string): Promise<boolean> {
 }
 
 /**
- * Calcule les statistiques des véhicules avec cache Accelerate
+ * Calcule les statistiques des véhicules (données fraîches)
  */
 export async function getVehicleStats() {
   try {
     console.log('Calcul des statistiques des véhicules')
     
     const [totalVehicles, availableVehicles, soldVehicles, priceStats] = await Promise.all([
-      prisma.vehicle.count({
-        // Temporairement sans cache pour debug
-      }),
+      prisma.vehicle.count(),
       prisma.vehicle.count({ 
         where: { isAvailable: true }
-        // Temporairement sans cache pour debug
       }),
       prisma.vehicle.count({ 
         where: { isAvailable: false }
-        // Temporairement sans cache pour debug
       }),
       prisma.vehicle.aggregate({
         _avg: { price: true },
         _sum: { price: true }
-        // Temporairement sans cache pour debug
       })
     ])
     
@@ -398,7 +390,7 @@ export async function getVehicleStats() {
 }
 
 /**
- * Initialise la base de données avec des données de démonstration
+ * Initialise la base de données
  */
 export async function initializeDatabase() {
   try {
@@ -410,11 +402,11 @@ export async function initializeDatabase() {
       return
     }
 
-    console.log('Base de données Prisma Accelerate prête - aucune donnée de démonstration')
+    console.log('Base de données Prisma prête - aucune donnée de démonstration')
     
-    console.log('Base de données Prisma Accelerate initialisée avec succès !')
+    console.log('Base de données Prisma initialisée avec succès !')
   } catch (error) {
-    console.error('Erreur lors de l\'initialisation Prisma Accelerate:', error)
+    console.error('Erreur lors de l\'initialisation Prisma:', error)
   }
 }
 
