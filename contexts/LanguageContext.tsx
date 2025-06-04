@@ -22,7 +22,7 @@ const translations = {
             "parts": "& PIÈCES DÉTACHÉES",
             "discover": "DÉCOUVRIR",
             "hoverToPlay": "Survolez pour lancer la vidéo",
-            "excellence": "Excellence Automobile",
+            "excellence": "LE SPECIALISTE PORSCHE CAYENNE",
             "hoverToListen": "Survolez pour lancer la vidéo",
             "muteVideo": "Couper le son",
             "unmuteVideo": "Activer le son"

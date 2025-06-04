@@ -110,7 +110,7 @@ const Hero = () => {
                             playsInline
                             preload="metadata"
                         >
-                            <source src="/videos/BB_0f12adc1-439a-47f9-aae7-de22db10df56.mp4" type="video/mp4" />
+                            <source src="/videos/2025 Porsche Cayenne Coupe.mp4" type="video/mp4" />
                             <source src="/videos/luxury-car-1.mp4" type="video/mp4" />
                         </video>
                     </div>
@@ -138,14 +138,7 @@ const Hero = () => {
                         </div>
                     </div>
 
-                    {/* Indicateur survol pour lancer la vidéo */}
-                    {currentVideo === 0 && !isHovered && (
-                        <div className="absolute bottom-4 left-4 z-20">
-                            <div className="bg-black/60 text-white px-3 py-1 rounded-full text-xs font-light tracking-wide">
-                                🎬 {t('hero.hoverToPlay')}
-                            </div>
-                        </div>
-                    )}
+                    
                 </div>
 
                 {/* Séparateur central */}
@@ -169,7 +162,7 @@ const Hero = () => {
                             playsInline
                             preload="metadata"
                         >
-                            <source src="/videos/BB_5e63ad56-5580-47b6-8864-b807fd5e0125.mp4" type="video/mp4" />
+                            <source src="/videos/Porsche Cayenne Coupe Sound Review (1).mp4" type="video/mp4" />
                             <source src="/videos/luxury-car-2.mp4" type="video/mp4" />
                         </video>
                     </div>
@@ -197,14 +190,7 @@ const Hero = () => {
                         </div>
                     </div>
 
-                    {/* Indicateur survol pour lancer la vidéo */}
-                    {currentVideo === 1 && !isHovered && (
-                        <div className="absolute bottom-4 left-4 z-20">
-                            <div className="bg-black/60 text-white px-3 py-1 rounded-full text-xs font-light tracking-wide">
-                                🎬 {t('hero.hoverToPlay')}
-                            </div>
-                        </div>
-                    )}
+                   
                 </div>
             </div>
 
@@ -221,14 +207,7 @@ const Hero = () => {
                 </div>
             </div>
 
-            {/* Instructions de survol - Plus discrètes */}
-            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20">
-                <div className="text-center text-white/60">
-                    <p className="text-xs font-light tracking-wider uppercase">
-                        {t('hero.hoverToListen')}
-                    </p>
-                </div>
-            </div>
+            
 
             {/* Navigation scroll hint */}
             <div className="absolute bottom-6 right-6 z-20">

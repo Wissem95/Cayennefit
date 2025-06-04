@@ -200,7 +200,7 @@ const AdminVehicleForm = ({ vehicle, onClose }: AdminVehicleFormProps) => {
     const isEditing = !!vehicle;
 
     return (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-gray-900/50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[10000] overflow-y-auto bg-gray-900/50 flex items-center justify-center p-4">
             <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                 {/* Header */}
                 <div className="border-b border-gray-200 px-6 py-4">
