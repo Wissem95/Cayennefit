@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { VehicleProps } from '@types';
+import { getVehicleStats } from '@lib/database';
 
 // Chemin vers le fichier de base de données JSON
 const DB_PATH = path.join(process.cwd(), 'data', 'vehicles.json');
@@ -77,27 +78,18 @@ function readDatabase(): VehicleProps[] {
     }
 }
 
-// GET - Récupérer les statistiques des véhicules
-export async function GET(request: NextRequest) {
+/**
+ * GET - Récupère les statistiques des véhicules depuis Vercel KV
+ */
+export async function GET() {
     try {
-        const vehicles = readDatabase();
-        const totalVehicles = vehicles.length;
-        const availableVehicles = vehicles.filter(v => v.isAvailable).length;
-        const averagePrice = totalVehicles > 0 ? vehicles.reduce((sum, v) => sum + v.price, 0) / totalVehicles : 0;
-        
-        const vehiclesByBrand = vehicles.reduce((acc, vehicle) => {
-            acc[vehicle.make] = (acc[vehicle.make] || 0) + 1;
-            return acc;
-        }, {} as Record<string, number>);
-
-        return NextResponse.json({
-            totalVehicles,
-            availableVehicles,
-            averagePrice: Math.round(averagePrice),
-            vehiclesByBrand
-        });
+        const stats = await getVehicleStats();
+        return NextResponse.json(stats);
     } catch (error) {
-        console.error('Erreur GET /api/vehicles/stats:', error);
-        return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
+        console.error('Erreur lors du calcul des statistiques:', error);
+        return NextResponse.json(
+            { error: 'Erreur lors du calcul des statistiques' },
+            { status: 500 }
+        );
     }
 } 
