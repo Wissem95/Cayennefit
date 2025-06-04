@@ -53,14 +53,18 @@ export default function HistoriquePage() {
     };
 
     /**
-     * Charge tous les véhicules depuis l'API
+     * Charge tous les véhicules depuis l'API (incluant les vendus)
      */
     const loadData = async () => {
         setIsLoading(true);
         try {
+            // Récupérer tous les véhicules pour l'historique
             const response = await fetch('/api/vehicles');
             if (response.ok) {
                 const data = await response.json();
+                console.log('Historique: Véhicules récupérés:', data.length);
+                console.log('Historique: Disponibles:', data.filter((v: VehicleProps) => v.isAvailable).length);
+                console.log('Historique: Vendus:', data.filter((v: VehicleProps) => !v.isAvailable).length);
                 setVehicles(data);
             }
         } catch (error) {

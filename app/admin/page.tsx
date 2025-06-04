@@ -52,7 +52,7 @@ export default function AdminPanel() {
         setIsLoading(true);
         try {
             const [vehiclesResponse, statsResponse] = await Promise.all([
-                fetch('/api/vehicles?includeAll=true'), // Récupérer TOUS les véhicules pour l'admin
+                fetch('/api/vehicles'), // Récupérer tous les véhicules  
                 fetch('/api/vehicles/stats')
             ]);
 

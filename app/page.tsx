@@ -11,14 +11,19 @@ interface HomeProps {
 
 /**
  * Récupère les véhicules directement depuis Prisma avec filtres
- * L'API retourne automatiquement seulement les véhicules disponibles (non vendus)
+ * Retourne seulement les véhicules disponibles (non vendus)
  */
 async function getVehicles(filters?: FilterProps): Promise<VehicleProps[]> {
     try {
-        // Récupérer les véhicules disponibles depuis l'API (filtrage côté serveur)
+        // Récupérer tous les véhicules depuis Prisma
         let vehicles = await getAllVehicles();
         
-        console.log(`Page d'accueil: ${vehicles.length} véhicules disponibles récupérés depuis l'API`)
+        console.log(`Page d'accueil: ${vehicles.length} véhicules récupérés depuis la base`)
+        
+        // Filtrer seulement les véhicules disponibles (CORRECTIF PRINCIPAL)
+        vehicles = vehicles.filter(vehicle => vehicle.isAvailable === true);
+        
+        console.log(`Page d'accueil: ${vehicles.length} véhicules disponibles après filtrage`)
 
         // Appliquer les filtres si fournis
         if (filters) {
@@ -55,7 +60,7 @@ async function getVehicles(filters?: FilterProps): Promise<VehicleProps[]> {
             }
         }
 
-        console.log(`Page d'accueil: ${vehicles.length} véhicules après filtrage client`)
+        console.log(`Page d'accueil: ${vehicles.length} véhicules après filtrage complet`)
         return vehicles;
     } catch (error) {
         console.error('Erreur lors de la récupération des véhicules:', error);

@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAllVehicles, createVehicle } from '@lib/database';
 
 /**
- * GET - Récupère les véhicules DISPONIBLES depuis Prisma (données fraîches) avec filtres optionnels
- * Ajouter ?includeAll=true pour récupérer tous les véhicules (admin uniquement)
+ * GET - Récupère tous les véhicules depuis Prisma (données fraîches) avec filtres optionnels
+ * Chaque page fait son propre filtrage selon ses besoins
  */
 export async function GET(request: NextRequest) {
     try {
@@ -12,22 +12,11 @@ export async function GET(request: NextRequest) {
         const { searchParams } = new URL(request.url);
         console.log('API: Paramètres de recherche:', Object.fromEntries(searchParams.entries()))
         
-        // Paramètre pour récupérer tous les véhicules (admin)
-        const includeAll = searchParams.get('includeAll') === 'true';
-        
-        // Récupérer les véhicules depuis Prisma
+        // Récupérer tous les véhicules depuis Prisma
         let vehicles = await getAllVehicles();
         console.log(`API: ${vehicles.length} véhicules récupérés depuis la base`)
         
-        // Filtrer seulement les véhicules disponibles SAUF si includeAll=true
-        if (!includeAll) {
-            vehicles = vehicles.filter(vehicle => vehicle.isAvailable === true);
-            console.log(`API: ${vehicles.length} véhicules disponibles après filtrage`)
-        } else {
-            console.log('API: Récupération de tous les véhicules (admin mode)')
-        }
-        
-        // Appliquer les autres filtres côté serveur
+        // Appliquer les filtres côté serveur
         const manufacturer = searchParams.get('manufacturer');
         const year = searchParams.get('year');
         const fuel = searchParams.get('fuel');
@@ -95,7 +84,7 @@ export async function GET(request: NextRequest) {
             console.log(`API: Filtre prix max ${maxPriceNum}: ${vehicles.length} véhicules`)
         }
         
-        console.log(`API: Retour de ${vehicles.length} véhicules après filtrage complet`)
+        console.log(`API: Retour de ${vehicles.length} véhicules après filtrage`)
         return NextResponse.json(vehicles);
     } catch (error) {
         console.error('API: Erreur détaillée lors de la récupération des véhicules:', error);
