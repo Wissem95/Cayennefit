@@ -7,13 +7,20 @@ import { VehicleProps } from '@types'
  * Cache ultra-rapide pour performances optimales
  */
 
-// Instance Prisma singleton avec Accelerate
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined
+// Type pour l'instance Prisma étendue avec Accelerate
+type ExtendedPrismaClient = ReturnType<typeof createPrismaClient>
+
+// Fonction pour créer l'instance Prisma avec Accelerate
+function createPrismaClient() {
+  return new PrismaClient().$extends(withAccelerate())
 }
 
-export const prisma = globalForPrisma.prisma ?? 
-  new PrismaClient().$extends(withAccelerate())
+// Instance Prisma singleton avec Accelerate
+const globalForPrisma = globalThis as unknown as {
+  prisma: ExtendedPrismaClient | undefined
+}
+
+export const prisma = globalForPrisma.prisma ?? createPrismaClient()
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
@@ -197,8 +204,8 @@ export async function getVehicleStats() {
       totalVehicles,
       availableVehicles,
       soldVehicles,
-      averagePrice: Math.round(priceStats._avg.price || 0),
-      totalValue: priceStats._sum.price || 0
+      averagePrice: Math.round((priceStats._avg as any)?.price || 0),
+      totalValue: (priceStats._sum as any)?.price || 0
     }
   } catch (error) {
     console.error('Erreur lors du calcul des statistiques:', error)
@@ -225,48 +232,7 @@ export async function initializeDatabase() {
       return
     }
 
-    console.log('Initialisation de la base de données Prisma Accelerate...')
-    
-    // Données de démonstration
-    const demoVehicles = [
-      {
-        make: "Porsche",
-        model: "Cayenne",
-        year: 2023,
-        price: 98000,
-        cityMpg: 8.5,
-        highwayMpg: 6.2,
-        fuelType: "Essence",
-        transmission: "Automatique",
-        drive: "AWD",
-        color: "Noir",
-        mileage: 1200,
-        description: "Porsche Cayenne neuf, état exceptionnel",
-        images: ["/pattern.png"],
-        isAvailable: true
-      },
-      {
-        make: "BMW",
-        model: "X5",
-        year: 2022,
-        price: 75000,
-        cityMpg: 9.2,
-        highwayMpg: 6.8,
-        fuelType: "Diesel",
-        transmission: "Automatique",
-        drive: "AWD",
-        color: "Blanc",
-        mileage: 15000,
-        description: "BMW X5 diesel en excellent état",
-        images: ["/pattern.png"],
-        isAvailable: true
-      }
-    ]
-
-    // Créer les véhicules de démonstration
-    for (const vehicleData of demoVehicles) {
-      await prisma.vehicle.create({ data: vehicleData })
-    }
+    console.log('Base de données Prisma Accelerate prête - aucune donnée de démonstration')
     
     console.log('Base de données Prisma Accelerate initialisée avec succès !')
   } catch (error) {

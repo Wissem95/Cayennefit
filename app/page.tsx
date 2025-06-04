@@ -1,82 +1,30 @@
 import { FilterProps, VehicleProps } from "@types";
 import { fuels, yearsOfProduction } from "@constants";
 import { VehicleCard, ShowMore, SearchBar, CustomFilter, Hero } from "@components";
-import fs from 'fs';
-import path from 'path';
+import { getAllVehicles } from "@lib/database";
 
 interface HomeProps {
     searchParams: FilterProps;
 }
 
-// Véhicules d'exemple pour l'initialisation
-const INITIAL_VEHICLES: VehicleProps[] = [
-    {
-        id: "vehicle-1",
-        make: "BMW",
-        model: "Série 3",
-        year: 2022,
-        price: 45000,
-        city_mpg: 8.5,
-        highway_mpg: 6.2,
-        fuel_type: "Essence",
-        transmission: "Automatique",
-        drive: "RWD",
-        color: "Noir",
-        mileage: 15000,
-        description: "BMW Série 3 en excellent état, parfaite pour les trajets urbains et autoroutiers.",
-        images: ["/pattern.png"],
-        isAvailable: true,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-    },
-    {
-        id: "vehicle-2", 
-        make: "Mercedes",
-        model: "Classe C",
-        year: 2021,
-        price: 42000,
-        city_mpg: 9.1,
-        highway_mpg: 6.8,
-        fuel_type: "Diesel",
-        transmission: "Automatique", 
-        drive: "RWD",
-        color: "Blanc",
-        mileage: 22000,
-        description: "Mercedes Classe C diesel, économique et confortable pour tous vos déplacements.",
-        images: ["/pattern.png"],
-        isAvailable: true,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-    }
-];
+// Plus de véhicules codés en dur - utilisation uniquement de Prisma
 
 /**
- * Récupère les véhicules directement depuis le serveur
+ * Récupère les véhicules directement depuis Prisma avec filtres
  * Retourne seulement les véhicules disponibles (non vendus)
  */
 async function getVehicles(filters?: FilterProps): Promise<VehicleProps[]> {
     try {
-        const DB_PATH = path.join(process.cwd(), 'data', 'vehicles.json');
+        // Récupérer tous les véhicules depuis Prisma
+        let vehicles = await getAllVehicles();
         
-        // Initialiser la base de données si nécessaire
-        if (!fs.existsSync(path.dirname(DB_PATH))) {
-            fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
-        }
-        
-        if (!fs.existsSync(DB_PATH)) {
-            fs.writeFileSync(DB_PATH, JSON.stringify(INITIAL_VEHICLES, null, 2));
-        }
-        
-        const data = fs.readFileSync(DB_PATH, 'utf-8');
-        let vehicles: VehicleProps[] = JSON.parse(data);
-
-        // IMPORTANT: Ne montrer que les véhicules disponibles sur le site principal
+        // Filtrer seulement les véhicules disponibles
         vehicles = vehicles.filter(vehicle => vehicle.isAvailable === true);
 
+        // Appliquer les filtres si fournis
         if (filters) {
             const { manufacturer, year, fuel, minPrice, maxPrice, model } = filters;
 
-            // Appliquer les filtres
             if (manufacturer) {
                 vehicles = vehicles.filter(vehicle => 
                     vehicle.make.toLowerCase().includes(manufacturer.toLowerCase())
@@ -111,7 +59,7 @@ async function getVehicles(filters?: FilterProps): Promise<VehicleProps[]> {
         return vehicles;
     } catch (error) {
         console.error('Erreur lors de la récupération des véhicules:', error);
-        return INITIAL_VEHICLES.filter(vehicle => vehicle.isAvailable === true);
+        return []; // Retourner un tableau vide au lieu de données codées en dur
     }
 }
 

@@ -1,18 +1,52 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAllVehicles, createVehicle, initializeDatabase } from '@lib/database';
+import { getAllVehicles, createVehicle } from '@lib/database';
 
 /**
- * GET - Récupère tous les véhicules depuis Vercel KV
+ * GET - Récupère tous les véhicules depuis Prisma avec filtres optionnels
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
     try {
-        const vehicles = await getAllVehicles();
+        const { searchParams } = new URL(request.url);
         
-        // Si aucun véhicule, initialiser la base avec des données de démo
-        if (vehicles.length === 0) {
-            await initializeDatabase();
-            const newVehicles = await getAllVehicles();
-            return NextResponse.json(newVehicles);
+        // Récupérer tous les véhicules depuis Prisma
+        let vehicles = await getAllVehicles();
+        
+        // Appliquer les filtres côté serveur
+        const manufacturer = searchParams.get('manufacturer');
+        const year = searchParams.get('year');
+        const fuel = searchParams.get('fuel');
+        const model = searchParams.get('model');
+        const minPrice = searchParams.get('minPrice');
+        const maxPrice = searchParams.get('maxPrice');
+
+        if (manufacturer) {
+            vehicles = vehicles.filter(vehicle => 
+                vehicle.make.toLowerCase().includes(manufacturer.toLowerCase())
+            );
+        }
+
+        if (model) {
+            vehicles = vehicles.filter(vehicle =>
+                vehicle.model.toLowerCase().includes(model.toLowerCase())
+            );
+        }
+
+        if (year) {
+            vehicles = vehicles.filter(vehicle => vehicle.year === parseInt(year));
+        }
+
+        if (fuel) {
+            vehicles = vehicles.filter(vehicle =>
+                vehicle.fuel_type.toLowerCase().includes(fuel.toLowerCase())
+            );
+        }
+
+        if (minPrice) {
+            vehicles = vehicles.filter(vehicle => vehicle.price >= parseInt(minPrice));
+        }
+
+        if (maxPrice) {
+            vehicles = vehicles.filter(vehicle => vehicle.price <= parseInt(maxPrice));
         }
         
         return NextResponse.json(vehicles);
@@ -26,7 +60,7 @@ export async function GET() {
 }
 
 /**
- * POST - Crée un nouveau véhicule dans Vercel KV
+ * POST - Crée un nouveau véhicule dans Prisma
  */
 export async function POST(request: NextRequest) {
     try {

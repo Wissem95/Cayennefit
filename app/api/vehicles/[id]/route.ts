@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getVehicleById, updateVehicle, deleteVehicle } from '@lib/database';
 
 /**
- * GET - Récupère un véhicule par ID depuis Vercel KV
+ * GET - Récupère un véhicule par ID depuis Prisma
  */
 export async function GET(
     request: NextRequest,
@@ -29,7 +29,7 @@ export async function GET(
 }
 
 /**
- * PUT - Met à jour un véhicule dans Vercel KV
+ * PUT - Met à jour un véhicule dans Prisma
  */
 export async function PUT(
     request: NextRequest,
@@ -59,7 +59,7 @@ export async function PUT(
 }
 
 /**
- * DELETE - Supprime un véhicule de Vercel KV
+ * DELETE - Supprime un véhicule de Prisma
  */
 export async function DELETE(
     request: NextRequest,
