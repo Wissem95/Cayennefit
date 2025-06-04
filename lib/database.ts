@@ -77,13 +77,26 @@ function convertToCreateData(vehicleData: Omit<VehicleProps, 'id' | 'createdAt' 
  */
 export async function getAllVehicles(): Promise<VehicleProps[]> {
   try {
+    console.log('Récupération de tous les véhicules')
+    
     const vehicles = await prisma.vehicle.findMany({
       orderBy: { createdAt: 'desc' },
       cacheStrategy: { ttl: 300 } // Cache 5 minutes
     })
+    
+    console.log(`${vehicles.length} véhicules récupérés`)
     return vehicles.map(convertPrismaVehicle)
   } catch (error) {
-    console.error('Erreur lors de la récupération des véhicules:', error)
+    console.error('Erreur détaillée lors de la récupération des véhicules:', error)
+    
+    if (error instanceof Error) {
+      console.error('Message:', error.message)
+      
+      if (error.message.includes('User was denied access')) {
+        console.error('Erreur d\'accès à la base de données pour getAllVehicles')
+      }
+    }
+    
     return []
   }
 }
@@ -93,13 +106,37 @@ export async function getAllVehicles(): Promise<VehicleProps[]> {
  */
 export async function getVehicleById(id: string): Promise<VehicleProps | null> {
   try {
+    console.log(`Récupération du véhicule ${id}`)
+    
+    // Validation de l'ID
+    if (!id || typeof id !== 'string') {
+      console.error('ID de véhicule invalide pour récupération')
+      return null
+    }
+    
     const vehicle = await prisma.vehicle.findUnique({
       where: { id },
       cacheStrategy: { ttl: 300 } // Cache 5 minutes
     })
-    return vehicle ? convertPrismaVehicle(vehicle) : null
+    
+    if (vehicle) {
+      console.log(`Véhicule ${id} trouvé`)
+      return convertPrismaVehicle(vehicle)
+    } else {
+      console.log(`Véhicule ${id} non trouvé`)
+      return null
+    }
   } catch (error) {
-    console.error('Erreur lors de la récupération du véhicule:', error)
+    console.error(`Erreur détaillée lors de la récupération du véhicule ${id}:`, error)
+    
+    if (error instanceof Error) {
+      console.error('Message:', error.message)
+      
+      if (error.message.includes('User was denied access')) {
+        console.error('Erreur d\'accès à la base de données pour getVehicleById')
+      }
+    }
+    
     return null
   }
 }
@@ -109,14 +146,37 @@ export async function getVehicleById(id: string): Promise<VehicleProps | null> {
  */
 export async function createVehicle(vehicleData: Omit<VehicleProps, 'id' | 'createdAt' | 'updatedAt'>): Promise<VehicleProps> {
   try {
+    console.log('Données avant conversion:', vehicleData)
     const createData = convertToCreateData(vehicleData)
+    console.log('Données après conversion pour Prisma:', createData)
+    
     const newVehicle = await prisma.vehicle.create({
       data: createData
     })
+    
+    console.log('Véhicule créé avec succès:', newVehicle.id)
     return convertPrismaVehicle(newVehicle)
   } catch (error) {
-    console.error('Erreur lors de la création du véhicule:', error)
-    throw new Error('Impossible de créer le véhicule')
+    console.error('Erreur détaillée lors de la création du véhicule:', error)
+    
+    // Logs spécifiques selon le type d'erreur
+    if (error instanceof Error) {
+      console.error('Message:', error.message)
+      console.error('Stack:', error.stack)
+      
+      // Erreurs spécifiques Prisma
+      if (error.message.includes('User was denied access')) {
+        throw new Error('Erreur d\'accès à la base de données')
+      }
+      if (error.message.includes('Unique constraint')) {
+        throw new Error('Un véhicule avec ces caractéristiques existe déjà')
+      }
+      if (error.message.includes('Foreign key constraint')) {
+        throw new Error('Référence invalide dans les données')
+      }
+    }
+    
+    throw new Error(`Impossible de créer le véhicule: ${error instanceof Error ? error.message : 'Erreur inconnue'}`)
   }
 }
 
@@ -125,13 +185,39 @@ export async function createVehicle(vehicleData: Omit<VehicleProps, 'id' | 'crea
  */
 export async function updateVehicle(id: string, updates: Partial<VehicleProps>): Promise<VehicleProps> {
   try {
-    // Conversion des champs pour Prisma
+    console.log(`Mise à jour du véhicule ${id} avec:`, updates)
+    
+    // Validation de l'ID
+    if (!id || typeof id !== 'string') {
+      throw new Error('ID de véhicule invalide')
+    }
+
+    // Vérifier si le véhicule existe
+    const existingVehicle = await prisma.vehicle.findUnique({
+      where: { id }
+    })
+    
+    if (!existingVehicle) {
+      throw new Error('Véhicule non trouvé')
+    }
+
+    // Conversion des champs pour Prisma avec validation
     const updateData: any = {}
     
     if (updates.make) updateData.make = updates.make
     if (updates.model) updateData.model = updates.model
-    if (updates.year) updateData.year = updates.year
-    if (updates.price) updateData.price = updates.price
+    if (updates.year) {
+      if (typeof updates.year !== 'number' || updates.year < 1900 || updates.year > new Date().getFullYear() + 1) {
+        throw new Error('Année invalide pour la mise à jour')
+      }
+      updateData.year = updates.year
+    }
+    if (updates.price) {
+      if (typeof updates.price !== 'number' || updates.price <= 0) {
+        throw new Error('Prix invalide pour la mise à jour')
+      }
+      updateData.price = updates.price
+    }
     if (updates.city_mpg) updateData.cityMpg = updates.city_mpg
     if (updates.highway_mpg) updateData.highwayMpg = updates.highway_mpg
     if (updates.fuel_type) updateData.fuelType = updates.fuel_type
@@ -146,18 +232,42 @@ export async function updateVehicle(id: string, updates: Partial<VehicleProps>):
       // Marquer comme vendu si plus disponible
       if (!updates.isAvailable) {
         updateData.soldAt = new Date()
+        console.log(`Véhicule ${id} marqué comme vendu`)
+      } else {
+        // Remettre en vente - supprimer la date de vente
+        updateData.soldAt = null
+        console.log(`Véhicule ${id} remis en vente`)
       }
     }
+
+    console.log('Données de mise à jour pour Prisma:', updateData)
 
     const updatedVehicle = await prisma.vehicle.update({
       where: { id },
       data: updateData
     })
     
+    console.log(`Véhicule ${id} mis à jour avec succès`)
     return convertPrismaVehicle(updatedVehicle)
   } catch (error) {
-    console.error('Erreur lors de la mise à jour du véhicule:', error)
-    throw new Error('Impossible de mettre à jour le véhicule')
+    console.error(`Erreur détaillée lors de la mise à jour du véhicule ${id}:`, error)
+    
+    if (error instanceof Error) {
+      console.error('Message:', error.message)
+      
+      // Erreurs spécifiques Prisma
+      if (error.message.includes('Record to update not found')) {
+        throw new Error('Véhicule non trouvé pour la mise à jour')
+      }
+      if (error.message.includes('User was denied access')) {
+        throw new Error('Erreur d\'accès à la base de données')
+      }
+      if (error.message.includes('Unique constraint')) {
+        throw new Error('Conflit lors de la mise à jour')
+      }
+    }
+    
+    throw new Error(`Impossible de mettre à jour le véhicule: ${error instanceof Error ? error.message : 'Erreur inconnue'}`)
   }
 }
 
@@ -166,13 +276,56 @@ export async function updateVehicle(id: string, updates: Partial<VehicleProps>):
  */
 export async function deleteVehicle(id: string): Promise<boolean> {
   try {
+    console.log(`Tentative de suppression du véhicule ${id}`)
+    
+    // Validation de l'ID
+    if (!id || typeof id !== 'string') {
+      console.error('ID de véhicule invalide pour suppression')
+      throw new Error('ID de véhicule invalide')
+    }
+
+    // Vérifier si le véhicule existe avant suppression
+    const existingVehicle = await prisma.vehicle.findUnique({
+      where: { id }
+    })
+    
+    if (!existingVehicle) {
+      console.error(`Véhicule ${id} non trouvé pour suppression`)
+      throw new Error('Véhicule non trouvé')
+    }
+
+    // Suppression effective
     await prisma.vehicle.delete({
       where: { id }
     })
+    
+    console.log(`Véhicule ${id} supprimé avec succès`)
     return true
   } catch (error) {
-    console.error('Erreur lors de la suppression du véhicule:', error)
-    return false
+    console.error(`Erreur détaillée lors de la suppression du véhicule ${id}:`, error)
+    
+    if (error instanceof Error) {
+      console.error('Message:', error.message)
+      
+      // Erreurs spécifiques Prisma
+      if (error.message.includes('Record to delete does not exist')) {
+        console.error('Véhicule déjà supprimé ou inexistant')
+        throw new Error('Véhicule non trouvé')
+      }
+      if (error.message.includes('User was denied access')) {
+        throw new Error('Erreur d\'accès à la base de données')
+      }
+      if (error.message.includes('Foreign key constraint')) {
+        throw new Error('Impossible de supprimer - véhicule référencé ailleurs')
+      }
+      
+      // Propager l'erreur si elle vient de nos validations
+      if (error.message.includes('ID de véhicule invalide') || error.message.includes('Véhicule non trouvé')) {
+        throw error
+      }
+    }
+    
+    throw new Error(`Impossible de supprimer le véhicule: ${error instanceof Error ? error.message : 'Erreur inconnue'}`)
   }
 }
 
@@ -181,6 +334,8 @@ export async function deleteVehicle(id: string): Promise<boolean> {
  */
 export async function getVehicleStats() {
   try {
+    console.log('Calcul des statistiques des véhicules')
+    
     const [totalVehicles, availableVehicles, soldVehicles, priceStats] = await Promise.all([
       prisma.vehicle.count({
         cacheStrategy: { ttl: 60 } // Cache 1 minute pour stats
@@ -200,22 +355,37 @@ export async function getVehicleStats() {
       })
     ])
     
-    return {
+    const stats = {
       totalVehicles,
       availableVehicles,
       soldVehicles,
       averagePrice: Math.round((priceStats._avg as any)?.price || 0),
       totalValue: (priceStats._sum as any)?.price || 0
     }
+    
+    console.log('Statistiques calculées:', stats)
+    return stats
   } catch (error) {
-    console.error('Erreur lors du calcul des statistiques:', error)
-    return {
+    console.error('Erreur détaillée lors du calcul des statistiques:', error)
+    
+    if (error instanceof Error) {
+      console.error('Message:', error.message)
+      
+      if (error.message.includes('User was denied access')) {
+        console.error('Erreur d\'accès à la base de données pour getVehicleStats')
+      }
+    }
+    
+    const fallbackStats = {
       totalVehicles: 0,
       availableVehicles: 0,
       soldVehicles: 0,
       averagePrice: 0,
       totalValue: 0
     }
+    
+    console.log('Retour des statistiques par défaut:', fallbackStats)
+    return fallbackStats
   }
 }
 
