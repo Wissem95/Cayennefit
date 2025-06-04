@@ -38,3 +38,5 @@ next-env.d.ts
 # Database et images uploadées
 /data/vehicles.json
 /public/vehicles/*
+
+/lib/generated/prisma

@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// Schéma Prisma pour CAYENNEFIT
+// Compatible avec Vercel, Ionos et tous les hébergeurs PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Modèle principal pour les véhicules
+model Vehicle {
+  id          String   @id @default(cuid())
+  make        String   // Marque (BMW, Mercedes, Porsche...)
+  model       String   // Modèle (Série 3, Classe C, Cayenne...)
+  year        Int      // Année
+  price       Int      // Prix en euros
+  cityMpg     Float    @map("city_mpg")      // Consommation ville
+  highwayMpg  Float    @map("highway_mpg")   // Consommation autoroute
+  fuelType    String   @map("fuel_type")     // Type de carburant
+  transmission String  // Transmission
+  drive       String   // Type de traction
+  color       String   // Couleur
+  mileage     Int      @default(0)           // Kilométrage
+  description String?  // Description
+  images      String[] // URLs des images
+  isAvailable Boolean  @default(true) @map("is_available") // Disponible ou vendu
+  
+  // Métadonnées
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  soldAt      DateTime? @map("sold_at") // Date de vente
+
+  @@map("vehicles") // Nom de la table en base
+}

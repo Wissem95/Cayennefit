@@ -1,216 +1,269 @@
-import { kv } from '@vercel/kv';
-import { VehicleProps } from '@types';
+import { PrismaClient } from '@prisma/client'
+import { VehicleProps } from '@types'
 
 /**
- * Service de base de données CAYENNEFIT utilisant Vercel KV
- * Remplace le stockage JSON local pour les déploiements
+ * Service de base de données CAYENNEFIT avec PostgreSQL + Prisma
+ * Compatible avec Vercel, Ionos et tous les hébergeurs
  */
 
-// Clé principale pour stocker les véhicules
-const VEHICLES_KEY = 'cayennefit:vehicles';
-const COUNTER_KEY = 'cayennefit:counter';
+// Instance Prisma singleton pour éviter les connexions multiples
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined
+}
+
+export const prisma = globalForPrisma.prisma ?? new PrismaClient()
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
 /**
- * Génère un ID unique pour un nouveau véhicule
+ * Convertit un véhicule Prisma vers le format VehicleProps
  */
-async function generateVehicleId(): Promise<string> {
-    const counter = await kv.incr(COUNTER_KEY);
-    return `vehicle_${counter}`;
+function convertPrismaVehicle(vehicle: any): VehicleProps {
+  return {
+    id: vehicle.id,
+    make: vehicle.make,
+    model: vehicle.model,
+    year: vehicle.year,
+    price: vehicle.price,
+    city_mpg: vehicle.cityMpg,
+    highway_mpg: vehicle.highwayMpg,
+    fuel_type: vehicle.fuelType,
+    transmission: vehicle.transmission,
+    drive: vehicle.drive,
+    color: vehicle.color,
+    mileage: vehicle.mileage,
+    description: vehicle.description || '',
+    images: vehicle.images,
+    isAvailable: vehicle.isAvailable,
+    createdAt: vehicle.createdAt.toISOString(),
+    updatedAt: vehicle.updatedAt.toISOString(),
+    soldAt: vehicle.soldAt?.toISOString()
+  }
+}
+
+/**
+ * Convertit VehicleProps vers le format Prisma
+ */
+function convertToCreateData(vehicleData: Omit<VehicleProps, 'id' | 'createdAt' | 'updatedAt'>): any {
+  return {
+    make: vehicleData.make,
+    model: vehicleData.model,
+    year: vehicleData.year,
+    price: vehicleData.price,
+    cityMpg: vehicleData.city_mpg,
+    highwayMpg: vehicleData.highway_mpg,
+    fuelType: vehicleData.fuel_type,
+    transmission: vehicleData.transmission,
+    drive: vehicleData.drive,
+    color: vehicleData.color,
+    mileage: vehicleData.mileage || 0,
+    description: vehicleData.description || '',
+    images: vehicleData.images || [],
+    isAvailable: vehicleData.isAvailable ?? true
+  }
 }
 
 /**
  * Récupère tous les véhicules
  */
 export async function getAllVehicles(): Promise<VehicleProps[]> {
-    try {
-        const vehiclesData = await kv.get<Record<string, VehicleProps>>(VEHICLES_KEY);
-        if (!vehiclesData) {
-            return [];
-        }
-        return Object.values(vehiclesData);
-    } catch (error) {
-        console.error('Erreur lors de la récupération des véhicules:', error);
-        return [];
-    }
+  try {
+    const vehicles = await prisma.vehicle.findMany({
+      orderBy: { createdAt: 'desc' }
+    })
+    return vehicles.map(convertPrismaVehicle)
+  } catch (error) {
+    console.error('Erreur lors de la récupération des véhicules:', error)
+    return []
+  }
 }
 
 /**
  * Récupère un véhicule par ID
  */
 export async function getVehicleById(id: string): Promise<VehicleProps | null> {
-    try {
-        const vehiclesData = await kv.get<Record<string, VehicleProps>>(VEHICLES_KEY);
-        if (!vehiclesData || !vehiclesData[id]) {
-            return null;
-        }
-        return vehiclesData[id];
-    } catch (error) {
-        console.error('Erreur lors de la récupération du véhicule:', error);
-        return null;
-    }
+  try {
+    const vehicle = await prisma.vehicle.findUnique({
+      where: { id }
+    })
+    return vehicle ? convertPrismaVehicle(vehicle) : null
+  } catch (error) {
+    console.error('Erreur lors de la récupération du véhicule:', error)
+    return null
+  }
 }
 
 /**
  * Crée un nouveau véhicule
  */
 export async function createVehicle(vehicleData: Omit<VehicleProps, 'id' | 'createdAt' | 'updatedAt'>): Promise<VehicleProps> {
-    try {
-        const id = await generateVehicleId();
-        const now = new Date().toISOString();
-        
-        const newVehicle: VehicleProps = {
-            ...vehicleData,
-            id,
-            createdAt: now,
-            updatedAt: now
-        };
-
-        // Récupérer les véhicules existants
-        const existingVehicles = await kv.get<Record<string, VehicleProps>>(VEHICLES_KEY) || {};
-        
-        // Ajouter le nouveau véhicule
-        existingVehicles[id] = newVehicle;
-        
-        // Sauvegarder
-        await kv.set(VEHICLES_KEY, existingVehicles);
-        
-        return newVehicle;
-    } catch (error) {
-        console.error('Erreur lors de la création du véhicule:', error);
-        throw new Error('Impossible de créer le véhicule');
-    }
+  try {
+    const createData = convertToCreateData(vehicleData)
+    const newVehicle = await prisma.vehicle.create({
+      data: createData
+    })
+    return convertPrismaVehicle(newVehicle)
+  } catch (error) {
+    console.error('Erreur lors de la création du véhicule:', error)
+    throw new Error('Impossible de créer le véhicule')
+  }
 }
 
 /**
  * Met à jour un véhicule existant
  */
 export async function updateVehicle(id: string, updates: Partial<VehicleProps>): Promise<VehicleProps> {
-    try {
-        // Récupérer les véhicules existants
-        const existingVehicles = await kv.get<Record<string, VehicleProps>>(VEHICLES_KEY) || {};
-        
-        if (!existingVehicles[id]) {
-            throw new Error('Véhicule non trouvé');
-        }
-
-        // Mettre à jour le véhicule
-        const updatedVehicle = {
-            ...existingVehicles[id],
-            ...updates,
-            id, // Préserver l'ID
-            updatedAt: new Date().toISOString()
-        };
-
-        existingVehicles[id] = updatedVehicle;
-        
-        // Sauvegarder
-        await kv.set(VEHICLES_KEY, existingVehicles);
-        
-        return updatedVehicle;
-    } catch (error) {
-        console.error('Erreur lors de la mise à jour du véhicule:', error);
-        throw new Error('Impossible de mettre à jour le véhicule');
+  try {
+    // Conversion des champs pour Prisma
+    const updateData: any = {}
+    
+    if (updates.make) updateData.make = updates.make
+    if (updates.model) updateData.model = updates.model
+    if (updates.year) updateData.year = updates.year
+    if (updates.price) updateData.price = updates.price
+    if (updates.city_mpg) updateData.cityMpg = updates.city_mpg
+    if (updates.highway_mpg) updateData.highwayMpg = updates.highway_mpg
+    if (updates.fuel_type) updateData.fuelType = updates.fuel_type
+    if (updates.transmission) updateData.transmission = updates.transmission
+    if (updates.drive) updateData.drive = updates.drive
+    if (updates.color) updateData.color = updates.color
+    if (updates.mileage !== undefined) updateData.mileage = updates.mileage
+    if (updates.description !== undefined) updateData.description = updates.description
+    if (updates.images) updateData.images = updates.images
+    if (updates.isAvailable !== undefined) {
+      updateData.isAvailable = updates.isAvailable
+      // Marquer comme vendu si plus disponible
+      if (!updates.isAvailable) {
+        updateData.soldAt = new Date()
+      }
     }
+
+    const updatedVehicle = await prisma.vehicle.update({
+      where: { id },
+      data: updateData
+    })
+    
+    return convertPrismaVehicle(updatedVehicle)
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour du véhicule:', error)
+    throw new Error('Impossible de mettre à jour le véhicule')
+  }
 }
 
 /**
  * Supprime un véhicule
  */
 export async function deleteVehicle(id: string): Promise<boolean> {
-    try {
-        // Récupérer les véhicules existants
-        const existingVehicles = await kv.get<Record<string, VehicleProps>>(VEHICLES_KEY) || {};
-        
-        if (!existingVehicles[id]) {
-            return false;
-        }
-
-        // Supprimer le véhicule
-        delete existingVehicles[id];
-        
-        // Sauvegarder
-        await kv.set(VEHICLES_KEY, existingVehicles);
-        
-        return true;
-    } catch (error) {
-        console.error('Erreur lors de la suppression du véhicule:', error);
-        throw new Error('Impossible de supprimer le véhicule');
-    }
+  try {
+    await prisma.vehicle.delete({
+      where: { id }
+    })
+    return true
+  } catch (error) {
+    console.error('Erreur lors de la suppression du véhicule:', error)
+    return false
+  }
 }
 
 /**
  * Calcule les statistiques des véhicules
  */
 export async function getVehicleStats() {
-    try {
-        const vehicles = await getAllVehicles();
-        
-        const totalVehicles = vehicles.length;
-        const availableVehicles = vehicles.filter(v => v.isAvailable).length;
-        const soldVehicles = totalVehicles - availableVehicles;
-        
-        const totalValue = vehicles.reduce((sum, v) => sum + v.price, 0);
-        const averagePrice = totalVehicles > 0 ? Math.round(totalValue / totalVehicles) : 0;
-        
-        return {
-            totalVehicles,
-            availableVehicles,
-            soldVehicles,
-            averagePrice
-        };
-    } catch (error) {
-        console.error('Erreur lors du calcul des statistiques:', error);
-        return {
-            totalVehicles: 0,
-            availableVehicles: 0,
-            soldVehicles: 0,
-            averagePrice: 0
-        };
+  try {
+    const [totalVehicles, availableVehicles, soldVehicles, priceStats] = await Promise.all([
+      prisma.vehicle.count(),
+      prisma.vehicle.count({ where: { isAvailable: true } }),
+      prisma.vehicle.count({ where: { isAvailable: false } }),
+      prisma.vehicle.aggregate({
+        _avg: { price: true },
+        _sum: { price: true }
+      })
+    ])
+    
+    return {
+      totalVehicles,
+      availableVehicles,
+      soldVehicles,
+      averagePrice: Math.round(priceStats._avg.price || 0),
+      totalValue: priceStats._sum.price || 0
     }
+  } catch (error) {
+    console.error('Erreur lors du calcul des statistiques:', error)
+    return {
+      totalVehicles: 0,
+      availableVehicles: 0,
+      soldVehicles: 0,
+      averagePrice: 0,
+      totalValue: 0
+    }
+  }
 }
 
 /**
  * Initialise la base de données avec des données de démonstration
- * (À utiliser seulement une fois lors du premier déploiement)
  */
 export async function initializeDatabase() {
-    try {
-        const existingVehicles = await kv.get<Record<string, VehicleProps>>(VEHICLES_KEY);
-        
-        // Si des données existent déjà, ne pas les écraser
-        if (existingVehicles && Object.keys(existingVehicles).length > 0) {
-            console.log('Base de données déjà initialisée');
-            return;
-        }
-
-        console.log('Initialisation de la base de données...');
-        
-        // Données de démonstration
-        const demoVehicles = [
-            {
-                make: "Porsche",
-                model: "Cayenne",
-                year: 2023,
-                price: 98000,
-                city_mpg: 8.5,
-                highway_mpg: 6.2,
-                fuel_type: "Essence",
-                transmission: "Automatique",
-                drive: "AWD",
-                color: "Noir",
-                mileage: 1200,
-                description: "Porsche Cayenne neuf, état exceptionnel",
-                isAvailable: true,
-                images: ["/pattern.png"]
-            }
-        ];
-
-        for (const vehicleData of demoVehicles) {
-            await createVehicle(vehicleData);
-        }
-        
-        console.log('Base de données initialisée avec succès');
-    } catch (error) {
-        console.error('Erreur lors de l\'initialisation:', error);
+  try {
+    // Vérifier si des véhicules existent déjà
+    const existingCount = await prisma.vehicle.count()
+    
+    if (existingCount > 0) {
+      console.log('Base de données déjà initialisée')
+      return
     }
+
+    console.log('Initialisation de la base de données PostgreSQL...')
+    
+    // Données de démonstration
+    const demoVehicles = [
+      {
+        make: "Porsche",
+        model: "Cayenne",
+        year: 2023,
+        price: 98000,
+        cityMpg: 8.5,
+        highwayMpg: 6.2,
+        fuelType: "Essence",
+        transmission: "Automatique",
+        drive: "AWD",
+        color: "Noir",
+        mileage: 1200,
+        description: "Porsche Cayenne neuf, état exceptionnel",
+        images: ["/pattern.png"],
+        isAvailable: true
+      },
+      {
+        make: "BMW",
+        model: "X5",
+        year: 2022,
+        price: 75000,
+        cityMpg: 9.2,
+        highwayMpg: 6.8,
+        fuelType: "Diesel",
+        transmission: "Automatique",
+        drive: "AWD",
+        color: "Blanc",
+        mileage: 15000,
+        description: "BMW X5 diesel en excellent état",
+        images: ["/pattern.png"],
+        isAvailable: true
+      }
+    ]
+
+    // Créer les véhicules de démonstration
+    for (const vehicleData of demoVehicles) {
+      await prisma.vehicle.create({ data: vehicleData })
+    }
+    
+    console.log('Base de données PostgreSQL initialisée avec succès !')
+  } catch (error) {
+    console.error('Erreur lors de l\'initialisation PostgreSQL:', error)
+  }
+}
+
+/**
+ * Ferme la connexion Prisma (utile pour les tests)
+ */
+export async function disconnectDatabase() {
+  await prisma.$disconnect()
 } 

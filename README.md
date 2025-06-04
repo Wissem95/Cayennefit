@@ -1,196 +1,184 @@
-# ShopYourCar V2 - Système de Vente de Véhicules
+# 🚗 CAYENNEFIT - Plateforme de Vente de Véhicules de Luxe
 
-## 🚗 Description
+Plateforme moderne de vente de véhicules haut de gamme avec interface admin complète.
 
-ShopYourCar V2 est une application web moderne de vente de véhicules d'occasion, construite avec Next.js 13, TypeScript et Tailwind CSS. Le système remplace l'ancien modèle de location par un système complet de vente avec panel d'administration.
+## 🛠️ TechnologiE
 
-## ✨ Fonctionnalités Principales
+- **Frontend**: Next.js 14, TypeScript, Tailwind CSS
+- **Base de données**: PostgreSQL + Prisma ORM
+- **Authentification**: Session-based auth
+- **Hébergement**: Compatible Vercel, Ionos, tous hébergeurs
 
-### 🏠 Page d'Accueil
+## 🚀 Installation & Développement
 
-- **Catalogue de véhicules** : Affichage des véhicules disponibles à la vente
-- **Système de recherche** : Filtrage par marque, modèle, année, carburant
-- **Cartes véhicules** : Affichage avec prix, images, caractéristiques
-- **Interface moderne** : Design responsive et animations fluides
-
-### 👨‍💼 Panel d'Administration
-
-- **Gestion complète des véhicules** : Créer, modifier, supprimer
-- **Statistiques en temps réel** : Nombre total, disponibles, prix moyen
-- **Formulaire complet** : Toutes les caractéristiques du véhicule
-- **Interface intuitive** : Confirmation de suppression, validation des données
-
-### 🚙 Gestion des Véhicules
-
-- **Informations détaillées** : Marque, modèle, année, prix, kilométrage
-- **Caractéristiques techniques** : Consommation, transmission, carburant
-- **Galerie d'images** : Support multi-images avec navigation
-- **Descriptions personnalisées** : Texte libre pour chaque véhicule
-
-## 🛠️ Technologies Utilisées
-
-- **Framework** : Next.js 13 (App Router)
-- **Langage** : TypeScript
-- **Styling** : Tailwind CSS
-- **UI Components** : Headless UI
-- **Base de données** : Système local (à migrer vers une vraie DB)
-- **Images** : Next.js Image Optimization
-
-## 📁 Structure du Projet
-
-```
-ShopYourCarV2/
-├── app/
-│   ├── page.tsx              # Page d'accueil (catalogue)
-│   ├── admin/
-│   │   └── page.tsx          # Panel d'administration
-│   ├── layout.tsx            # Layout principal
-│   └── globals.css           # Styles globaux
-├── components/
-│   ├── VehicleCard.tsx       # Carte de véhicule
-│   ├── VehicleDetails.tsx    # Modal de détails
-│   ├── AdminVehicleForm.tsx  # Formulaire admin
-│   ├── Hero.tsx              # Section hero
-│   ├── Navbar.tsx            # Navigation
-│   └── ...                   # Autres composants
-├── utils/
-│   └── vehicles.ts           # Gestion des données véhicules
-├── types/
-│   └── index.ts              # Types TypeScript
-└── public/                   # Assets statiques
-```
-
-## 🚀 Installation et Démarrage
-
-1. **Cloner le projet**
+### 1. Clonage et dépendances
 
 ```bash
-git clone [url-du-repo]
+git clone <repo-url>
 cd ShopYourCarV2
-```
-
-2. **Installer les dépendances**
-
-```bash
 npm install
 ```
 
-3. **Lancer le serveur de développement**
+### 2. Configuration base de données
+
+#### Option A: PostgreSQL Local (Docker)
+
+```bash
+# Lancer PostgreSQL avec Docker
+docker run --name cayenne-postgres \
+  -e POSTGRES_PASSWORD=password \
+  -e POSTGRES_USER=cayenne \
+  -e POSTGRES_DB=cayennefit \
+  -p 5432:5432 -d postgres:15
+
+# Créer .env.local
+echo 'DATABASE_URL="postgresql://cayenne:password@localhost:5432/cayennefit?schema=public"' > .env.local
+```
+
+#### Option C: Ionos
+
+1. Activer PostgreSQL dans votre hébergement Ionos
+2. Noter les informations de connexion
+3. Configurer `.env.local`:
+
+```bash
+DATABASE_URL="postgresql://username:password@hostname:5432/database_name?sslmode=require"
+```
+
+### 3. Initialisation base de données
+
+```bash
+# Appliquer le schéma
+npx prisma db push
+
+# Générer le client Prisma
+npx prisma generate
+
+# Voir la base de données (optionnel)
+npx prisma studio
+```
+
+### 4. Lancement
 
 ```bash
 npm run dev
+# Site: http://localhost:3000
+# Admin: http://localhost:3000/admin/login
+# Identifiants: admin / cayenne2024
 ```
 
-4. **Ouvrir l'application**
+## 🌐 Déploiement
 
-- Page d'accueil : http://localhost:3000
-- Panel admin : http://localhost:3000/admin
+### Vercel
 
-## 📋 Utilisation
+```bash
+# Connecter base Neon dans dashboard Vercel
+vercel env add DATABASE_URL
 
-### Pour les Visiteurs
+# Déployer
+vercel --prod
+```
 
-1. Parcourir le catalogue de véhicules sur la page d'accueil
-2. Utiliser les filtres pour affiner la recherche
-3. Cliquer sur "Voir Détails" pour plus d'informations
-4. Consulter les caractéristiques et images
+### Ionos
 
-### Pour les Administrateurs
+1. Uploader les fichiers
+2. Configurer `DATABASE_URL` dans les variables d'environnement
+3. Lancer `npx prisma db push` via SSH
 
-1. Accéder au panel admin via le lien dans la navbar
-2. Voir les statistiques en temps réel
-3. Ajouter un nouveau véhicule avec le bouton "Nouveau Véhicule"
-4. Modifier un véhicule existant avec le bouton "Modifier"
-5. Supprimer un véhicule (avec confirmation)
+### Autres hébergeurs
 
-## 🔧 Configuration
+- Configurer PostgreSQL
+- Définir `DATABASE_URL`
+- Builder : `npm run build`
+- Démarrer : `npm start`
 
-### Ajout d'Images
+## 📊 Fonctionnalités
 
-Pour l'instant, le système utilise `/pattern.png` comme placeholder. Pour ajouter de vraies images :
+### Interface Publique
 
-1. Placer les images dans le dossier `public/`
-2. Modifier le champ `images` dans `utils/vehicles.ts`
-3. Ou implémenter un système d'upload dans le formulaire admin
+- ✅ Catalogue véhicules avec filtres
+- ✅ Recherche avancée
+- ✅ Détails véhicules
+- ✅ Design responsive luxueux
 
-### Base de Données
+### Interface Admin
 
-Le système utilise actuellement une base de données en mémoire. Pour la production :
+- ✅ Authentification sécurisée
+- ✅ Ajout/modification véhicules
+- ✅ Gestion images multiples
+- ✅ Statistiques temps réel
+- ✅ Historique des ventes
 
-1. Configurer une vraie base de données (PostgreSQL, MongoDB, etc.)
-2. Remplacer les fonctions dans `utils/vehicles.ts`
-3. Ajouter les variables d'environnement nécessaires
+## 🔧 Scripts
 
-## 🎨 Personnalisation
+```bash
+npm run dev          # Développement
+npm run build        # Build production
+npm run start        # Démarrage production
+npm run lint         # Vérification code
 
-### Styles
+# Prisma
+npx prisma studio    # Interface base de données
+npx prisma db push   # Appliquer schéma
+npx prisma generate  # Générer client
+npx prisma reset     # Reset base (dev seulement)
+```
 
-- Modifier `app/globals.css` pour les styles globaux
-- Utiliser les classes Tailwind dans les composants
-- Personnaliser les couleurs dans `tailwind.config.ts`
+## 📁 Structure
 
-### Fonctionnalités
-
-- Ajouter de nouveaux champs dans `types/index.ts`
-- Étendre les formulaires dans `AdminVehicleForm.tsx`
-- Modifier les filtres dans les composants de recherche
-
-## 🔄 Migrations depuis l'Ancien Système
-
-### Changements Principaux
-
-- ❌ **Supprimé** : API externe Cars by API Ninjas
-- ❌ **Supprimé** : Système de calcul de prix de location
-- ❌ **Supprimé** : Génération automatique d'images
-- ✅ **Ajouté** : Base de données locale de véhicules
-- ✅ **Ajouté** : Panel d'administration complet
-- ✅ **Ajouté** : Système de prix de vente fixe
-- ✅ **Ajouté** : Gestion manuelle des images
-
-### Composants Remplacés
-
-- `CarCard` → `VehicleCard`
-- `CarDetails` → `VehicleDetails`
-- `fetchCars()` → `fetchVehicles()`
+```
+ShopYourCarV2/
+├── app/                 # Pages Next.js
+│   ├── admin/          # Interface admin
+│   ├── api/            # API routes
+│   └── vehicle/        # Pages véhicules
+├── components/         # Composants React
+├── lib/               # Utilitaires
+│   ├── database.ts    # Service PostgreSQL
+│   └── auth.ts        # Authentification
+├── prisma/            # Configuration Prisma
+│   └── schema.prisma  # Schéma base de données
+├── types/             # Types TypeScript
+└── public/            # Fichiers statiques
+```
 
 ## 🐛 Dépannage
 
-### Erreurs Communes
+### Erreur connexion base
 
-1. **Images non affichées** : Vérifier que `/pattern.png` existe
-2. **Erreurs TypeScript** : Vérifier les imports dans `components/index.ts`
-3. **Styles manquants** : Vérifier que Tailwind CSS est configuré
+```bash
+# Vérifier URL dans .env.local
+echo $DATABASE_URL
 
-### Performance
+# Tester connexion
+npx prisma db pull
+```
 
-- Les images sont optimisées automatiquement par Next.js
-- La base de données en mémoire est rapide mais temporaire
-- Utiliser `npm run build` pour la production
+### Erreur Prisma Client
 
-## 📝 TODO / Améliorations Futures
+```bash
+# Régénérer client
+npx prisma generate
 
-- [ ] Système d'upload d'images
-- [ ] Base de données persistante
-- [ ] Authentification administrateur
-- [ ] Système de favoris
-- [ ] Recherche avancée avec prix
-- [ ] Export des données
-- [ ] Notifications en temps réel
-- [ ] Mode sombre
-- [ ] PWA (Progressive Web App)
+# Synchroniser schéma
+npx prisma db push
+```
 
-## 🤝 Contribution
+### Reset complet (dev seulement)
 
-1. Fork le projet
-2. Créer une branche feature (`git checkout -b feature/nouvelle-fonctionnalite`)
-3. Commit les changements (`git commit -m 'Ajout nouvelle fonctionnalité'`)
-4. Push vers la branche (`git push origin feature/nouvelle-fonctionnalite`)
-5. Ouvrir une Pull Request
+```bash
+npx prisma reset
+npx prisma db push
+npx prisma generate
+```
 
-## 📄 Licence
+## 📞 Support
 
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+Compatible avec tous les hébergeurs supportant PostgreSQL :
 
----
-
-**Développé avec ❤️ en utilisant Next.js et TypeScript**
+- ✅ Vercel (avec Neon)
+- ✅ Ionos
+- ✅ Heroku
+- ✅ Railway
+- ✅ PlanetScale
+- ✅ Serveurs dédiés
