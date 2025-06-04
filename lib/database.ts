@@ -1,17 +1,19 @@
 import { PrismaClient } from '@prisma/client'
+import { withAccelerate } from '@prisma/extension-accelerate'
 import { VehicleProps } from '@types'
 
 /**
- * Service de base de données CAYENNEFIT avec PostgreSQL + Prisma
- * Compatible avec Vercel, Ionos et tous les hébergeurs
+ * Service de base de données CAYENNEFIT avec Prisma Accelerate
+ * Cache ultra-rapide pour performances optimales
  */
 
-// Instance Prisma singleton pour éviter les connexions multiples
+// Instance Prisma singleton avec Accelerate
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
 }
 
-export const prisma = globalForPrisma.prisma ?? new PrismaClient()
+export const prisma = globalForPrisma.prisma ?? 
+  new PrismaClient().$extends(withAccelerate())
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
@@ -64,12 +66,13 @@ function convertToCreateData(vehicleData: Omit<VehicleProps, 'id' | 'createdAt' 
 }
 
 /**
- * Récupère tous les véhicules
+ * Récupère tous les véhicules avec cache Accelerate (5min)
  */
 export async function getAllVehicles(): Promise<VehicleProps[]> {
   try {
     const vehicles = await prisma.vehicle.findMany({
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
+      cacheStrategy: { ttl: 300 } // Cache 5 minutes
     })
     return vehicles.map(convertPrismaVehicle)
   } catch (error) {
@@ -79,12 +82,13 @@ export async function getAllVehicles(): Promise<VehicleProps[]> {
 }
 
 /**
- * Récupère un véhicule par ID
+ * Récupère un véhicule par ID avec cache Accelerate
  */
 export async function getVehicleById(id: string): Promise<VehicleProps | null> {
   try {
     const vehicle = await prisma.vehicle.findUnique({
-      where: { id }
+      where: { id },
+      cacheStrategy: { ttl: 300 } // Cache 5 minutes
     })
     return vehicle ? convertPrismaVehicle(vehicle) : null
   } catch (error) {
@@ -166,17 +170,26 @@ export async function deleteVehicle(id: string): Promise<boolean> {
 }
 
 /**
- * Calcule les statistiques des véhicules
+ * Calcule les statistiques des véhicules avec cache Accelerate
  */
 export async function getVehicleStats() {
   try {
     const [totalVehicles, availableVehicles, soldVehicles, priceStats] = await Promise.all([
-      prisma.vehicle.count(),
-      prisma.vehicle.count({ where: { isAvailable: true } }),
-      prisma.vehicle.count({ where: { isAvailable: false } }),
+      prisma.vehicle.count({
+        cacheStrategy: { ttl: 60 } // Cache 1 minute pour stats
+      }),
+      prisma.vehicle.count({ 
+        where: { isAvailable: true },
+        cacheStrategy: { ttl: 60 }
+      }),
+      prisma.vehicle.count({ 
+        where: { isAvailable: false },
+        cacheStrategy: { ttl: 60 }
+      }),
       prisma.vehicle.aggregate({
         _avg: { price: true },
-        _sum: { price: true }
+        _sum: { price: true },
+        cacheStrategy: { ttl: 60 }
       })
     ])
     
@@ -212,7 +225,7 @@ export async function initializeDatabase() {
       return
     }
 
-    console.log('Initialisation de la base de données PostgreSQL...')
+    console.log('Initialisation de la base de données Prisma Accelerate...')
     
     // Données de démonstration
     const demoVehicles = [
@@ -255,9 +268,9 @@ export async function initializeDatabase() {
       await prisma.vehicle.create({ data: vehicleData })
     }
     
-    console.log('Base de données PostgreSQL initialisée avec succès !')
+    console.log('Base de données Prisma Accelerate initialisée avec succès !')
   } catch (error) {
-    console.error('Erreur lors de l\'initialisation PostgreSQL:', error)
+    console.error('Erreur lors de l\'initialisation Prisma Accelerate:', error)
   }
 }
 
