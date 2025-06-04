@@ -2,28 +2,38 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAllVehicles, createVehicle } from '@lib/database';
 
 /**
- * GET - Récupère tous les véhicules depuis Prisma (données fraîches) avec filtres optionnels
+ * GET - Récupère les véhicules DISPONIBLES depuis Prisma (données fraîches) avec filtres optionnels
+ * Ajouter ?includeAll=true pour récupérer tous les véhicules (admin uniquement)
  */
 export async function GET(request: NextRequest) {
     try {
-        console.log('API: Récupération de tous les véhicules')
+        console.log('API: Récupération des véhicules')
         
         const { searchParams } = new URL(request.url);
         console.log('API: Paramètres de recherche:', Object.fromEntries(searchParams.entries()))
         
-        // Récupérer tous les véhicules depuis Prisma
+        // Paramètre pour récupérer tous les véhicules (admin)
+        const includeAll = searchParams.get('includeAll') === 'true';
+        
+        // Récupérer les véhicules depuis Prisma
         let vehicles = await getAllVehicles();
         console.log(`API: ${vehicles.length} véhicules récupérés depuis la base`)
         
-        // Appliquer les filtres côté serveur
+        // Filtrer seulement les véhicules disponibles SAUF si includeAll=true
+        if (!includeAll) {
+            vehicles = vehicles.filter(vehicle => vehicle.isAvailable === true);
+            console.log(`API: ${vehicles.length} véhicules disponibles après filtrage`)
+        } else {
+            console.log('API: Récupération de tous les véhicules (admin mode)')
+        }
+        
+        // Appliquer les autres filtres côté serveur
         const manufacturer = searchParams.get('manufacturer');
         const year = searchParams.get('year');
         const fuel = searchParams.get('fuel');
         const model = searchParams.get('model');
         const minPrice = searchParams.get('minPrice');
         const maxPrice = searchParams.get('maxPrice');
-
-        let filteredCount = vehicles.length
 
         if (manufacturer) {
             vehicles = vehicles.filter(vehicle => 
@@ -85,7 +95,7 @@ export async function GET(request: NextRequest) {
             console.log(`API: Filtre prix max ${maxPriceNum}: ${vehicles.length} véhicules`)
         }
         
-        console.log(`API: Retour de ${vehicles.length} véhicules après filtrage`)
+        console.log(`API: Retour de ${vehicles.length} véhicules après filtrage complet`)
         return NextResponse.json(vehicles);
     } catch (error) {
         console.error('API: Erreur détaillée lors de la récupération des véhicules:', error);

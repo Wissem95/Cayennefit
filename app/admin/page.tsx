@@ -52,7 +52,7 @@ export default function AdminPanel() {
         setIsLoading(true);
         try {
             const [vehiclesResponse, statsResponse] = await Promise.all([
-                fetch('/api/vehicles'),
+                fetch('/api/vehicles?includeAll=true'), // Récupérer TOUS les véhicules pour l'admin
                 fetch('/api/vehicles/stats')
             ]);
 
@@ -60,7 +60,11 @@ export default function AdminPanel() {
                 const vehiclesData = await vehiclesResponse.json();
                 const statsData = await statsResponse.json();
                 
-                // Filtrer seulement les véhicules disponibles pour l'admin principal
+                console.log('Admin: Tous les véhicules récupérés:', vehiclesData.length)
+                console.log('Admin: Véhicules disponibles:', vehiclesData.filter((v: VehicleProps) => v.isAvailable).length)
+                console.log('Admin: Véhicules vendus:', vehiclesData.filter((v: VehicleProps) => !v.isAvailable).length)
+                
+                // Filtrer seulement les véhicules disponibles pour l'affichage admin principal
                 const availableVehicles = vehiclesData.filter((v: VehicleProps) => v.isAvailable);
                 setVehicles(availableVehicles);
                 setStats(statsData);
@@ -104,6 +108,8 @@ export default function AdminPanel() {
      */
     const handleMarkAsSold = async (vehicleId: string) => {
         try {
+            console.log(`Admin: Marquage du véhicule ${vehicleId} comme vendu`)
+            
             const response = await fetch(`/api/vehicles/${vehicleId}`, {
                 method: 'PUT',
                 headers: {
@@ -116,10 +122,14 @@ export default function AdminPanel() {
             });
 
             if (response.ok) {
+                console.log(`Admin: Véhicule ${vehicleId} marqué comme vendu avec succès`)
                 await loadData(); // Recharger les données
+            } else {
+                const errorData = await response.json().catch(() => ({}))
+                console.error(`Admin: Erreur HTTP ${response.status}:`, errorData)
             }
         } catch (error) {
-            console.error('Erreur lors du marquage comme vendu:', error);
+            console.error('Admin: Erreur lors du marquage comme vendu:', error);
         }
     };
 
@@ -272,7 +282,7 @@ export default function AdminPanel() {
                                     <span className="text-2xl">🎯</span>
                                 </div>
                                 <p className="text-sm font-light text-gray-500 tracking-wider uppercase">Vendus</p>
-                                <p className="text-3xl font-light text-red-600 mt-2">{stats.totalVehicles - stats.availableVehicles}</p>
+                                <p className="text-3xl font-light text-red-600 mt-2">{stats.soldVehicles}</p>
                             </div>
                         </div>
                     </div>
