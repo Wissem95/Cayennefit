@@ -78,19 +78,27 @@ function convertToCreateData(vehicleData: Omit<VehicleProps, 'id' | 'createdAt' 
 export async function getAllVehicles(): Promise<VehicleProps[]> {
   try {
     console.log('Récupération de tous les véhicules')
+    console.log('Instance Prisma:', typeof prisma)
+    console.log('DATABASE_URL présente:', !!process.env.DATABASE_URL)
     
     const vehicles = await prisma.vehicle.findMany({
-      orderBy: { createdAt: 'desc' },
-      cacheStrategy: { ttl: 300 } // Cache 5 minutes
+      orderBy: { createdAt: 'desc' }
+      // Temporairement sans cache pour debug
     })
     
-    console.log(`${vehicles.length} véhicules récupérés`)
-    return vehicles.map(convertPrismaVehicle)
+    console.log(`${vehicles.length} véhicules récupérés de la base`)
+    console.log('Premiers véhicules (max 2):', vehicles.slice(0, 2))
+    
+    const converted = vehicles.map(convertPrismaVehicle)
+    console.log(`${converted.length} véhicules convertis`)
+    
+    return converted
   } catch (error) {
     console.error('Erreur détaillée lors de la récupération des véhicules:', error)
     
     if (error instanceof Error) {
       console.error('Message:', error.message)
+      console.error('Stack:', error.stack)
       
       if (error.message.includes('User was denied access')) {
         console.error('Erreur d\'accès à la base de données pour getAllVehicles')
@@ -115,8 +123,8 @@ export async function getVehicleById(id: string): Promise<VehicleProps | null> {
     }
     
     const vehicle = await prisma.vehicle.findUnique({
-      where: { id },
-      cacheStrategy: { ttl: 300 } // Cache 5 minutes
+      where: { id }
+      // Temporairement sans cache pour debug
     })
     
     if (vehicle) {
@@ -338,20 +346,20 @@ export async function getVehicleStats() {
     
     const [totalVehicles, availableVehicles, soldVehicles, priceStats] = await Promise.all([
       prisma.vehicle.count({
-        cacheStrategy: { ttl: 60 } // Cache 1 minute pour stats
+        // Temporairement sans cache pour debug
       }),
       prisma.vehicle.count({ 
-        where: { isAvailable: true },
-        cacheStrategy: { ttl: 60 }
+        where: { isAvailable: true }
+        // Temporairement sans cache pour debug
       }),
       prisma.vehicle.count({ 
-        where: { isAvailable: false },
-        cacheStrategy: { ttl: 60 }
+        where: { isAvailable: false }
+        // Temporairement sans cache pour debug
       }),
       prisma.vehicle.aggregate({
         _avg: { price: true },
-        _sum: { price: true },
-        cacheStrategy: { ttl: 60 }
+        _sum: { price: true }
+        // Temporairement sans cache pour debug
       })
     ])
     
