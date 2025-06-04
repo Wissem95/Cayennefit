@@ -7,6 +7,10 @@ interface HomeProps {
     searchParams: FilterProps;
 }
 
+// Configuration pour éviter le cache et forcer le rechargement des données
+export const revalidate = 0; // Revalider à chaque requête
+export const dynamic = 'force-dynamic'; // Forcer le rendu dynamique
+
 // Plus de véhicules codés en dur - utilisation uniquement de Prisma
 
 /**

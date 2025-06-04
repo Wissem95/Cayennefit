@@ -190,7 +190,8 @@ export async function createVehicle(vehicleData: Omit<VehicleProps, 'id' | 'crea
  */
 export async function updateVehicle(id: string, updates: Partial<VehicleProps>): Promise<VehicleProps> {
   try {
-    console.log(`Mise à jour du véhicule ${id} avec:`, updates)
+    console.log(`🔧 Mise à jour du véhicule ${id}`)
+    console.log('📝 Données de mise à jour reçues:', JSON.stringify(updates, null, 2))
     
     // Validation de l'ID
     if (!id || typeof id !== 'string') {
@@ -205,6 +206,14 @@ export async function updateVehicle(id: string, updates: Partial<VehicleProps>):
     if (!existingVehicle) {
       throw new Error('Véhicule non trouvé')
     }
+
+    console.log('📄 Véhicule existant avant mise à jour:', {
+      id: existingVehicle.id,
+      make: existingVehicle.make,
+      model: existingVehicle.model,
+      isAvailable: existingVehicle.isAvailable,
+      soldAt: existingVehicle.soldAt
+    })
 
     // Conversion des champs pour Prisma avec validation
     const updateData: any = {}
@@ -237,28 +246,37 @@ export async function updateVehicle(id: string, updates: Partial<VehicleProps>):
       // Marquer comme vendu si plus disponible
       if (!updates.isAvailable) {
         updateData.soldAt = new Date()
-        console.log(`Véhicule ${id} marqué comme vendu`)
+        console.log(`🎯 Véhicule ${id} marqué comme vendu avec soldAt:`, updateData.soldAt)
       } else {
         // Remettre en vente - supprimer la date de vente
         updateData.soldAt = null
-        console.log(`Véhicule ${id} remis en vente`)
+        console.log(`✅ Véhicule ${id} remis en vente`)
       }
     }
 
-    console.log('Données de mise à jour pour Prisma:', updateData)
+    console.log('💾 Données finales pour Prisma:', JSON.stringify(updateData, null, 2))
 
     const updatedVehicle = await prisma.vehicle.update({
       where: { id },
       data: updateData
     })
     
-    console.log(`Véhicule ${id} mis à jour avec succès`)
+    console.log('✅ Véhicule mis à jour avec succès en base:')
+    console.log('📄 Véhicule après mise à jour:', {
+      id: updatedVehicle.id,
+      make: updatedVehicle.make,
+      model: updatedVehicle.model,
+      isAvailable: updatedVehicle.isAvailable,
+      soldAt: updatedVehicle.soldAt,
+      updatedAt: updatedVehicle.updatedAt
+    })
+    
     return convertPrismaVehicle(updatedVehicle)
   } catch (error) {
-    console.error(`Erreur détaillée lors de la mise à jour du véhicule ${id}:`, error)
+    console.error(`❌ Erreur détaillée lors de la mise à jour du véhicule ${id}:`, error)
     
     if (error instanceof Error) {
-      console.error('Message:', error.message)
+      console.error('📝 Message d\'erreur:', error.message)
       
       // Erreurs spécifiques Prisma
       if (error.message.includes('Record to update not found')) {
