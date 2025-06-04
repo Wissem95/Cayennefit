@@ -5,6 +5,7 @@ import { VehicleProps } from "@types";
 import { CustomButton } from "@components";
 import { useRouter } from "next/navigation";
 import { isAuthenticated, logout, extendSession } from "@lib/auth"; // Import des fonctions d'auth
+import Image from "next/image";
 
 /**
  * Page d'historique des véhicules CAYENNEFIT
@@ -287,11 +288,12 @@ export default function HistoriquePage() {
                                     <tr key={vehicle.id} className="hover:bg-gray-50 transition-colors duration-200">
                                         <td className="py-4 px-6">
                                             <div className="flex items-center">
-                                                <div className="w-16 h-12 bg-gray-200 rounded mr-4 overflow-hidden">
-                                                    <img
+                                                <div className="w-16 h-12 bg-gray-200 rounded mr-4 overflow-hidden relative">
+                                                    <Image
                                                         src={vehicle.images[0] || '/pattern.png'}
                                                         alt={`${vehicle.make} ${vehicle.model}`}
-                                                        className="w-full h-full object-cover"
+                                                        fill
+                                                        className="object-cover"
                                                     />
                                                 </div>
                                                 <div>
