@@ -6,18 +6,6 @@ import { useRouter } from "next/navigation";
 
 import SearchManufacturer from "./SearchManufacturer";
 
-const SearchButton = ({ otherClasses }: { otherClasses: string }) => (
-    <button type='submit' className={`-ml-3 z-10 ${otherClasses}`}>
-        <Image
-            src={"/magnifying-glass.svg"}
-            alt={"magnifying glass"}
-            width={40}
-            height={40}
-            className='object-contain'
-        />
-    </button>
-);
-
 const SearchBar = () => {
     const [manufacturer, setManuFacturer] = useState("");
     const [model, setModel] = useState("");
@@ -59,33 +47,41 @@ const SearchBar = () => {
     };
 
     return (
-        <form className='searchbar bg-white rounded-md' onSubmit={handleSearch}>
+        <form className='searchbar bg-transparent' onSubmit={handleSearch}>
             <div className='searchbar__item'>
                 <SearchManufacturer
                     manufacturer={manufacturer}
                     setManuFacturer={setManuFacturer}
                 />
-                <SearchButton otherClasses='sm:hidden' />
             </div>
             <div className='searchbar__item'>
-                <Image
-                    src='/model-icon.png'
-                    width={25}
-                    height={25}
-                    className='absolute w-[20px] h-[20px] ml-4'
-                    alt='car model'
-                />
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10">
+                    <Image
+                        src='/model-icon.png'
+                        width={20}
+                        height={20}
+                        className='opacity-60'
+                        alt='car model'
+                    />
+                </div>
                 <input
                     type='text'
                     name='model'
                     value={model}
                     onChange={(e) => setModel(e.target.value)}
-                    placeholder='Tiguan...'
+                    placeholder='Cayenne'
                     className='searchbar__input'
                 />
-                <SearchButton otherClasses='sm:hidden' />
+                <button type='submit' className="absolute right-3 top-1/2 transform -translate-y-1/2 z-10 p-2 hover:bg-gray-100 rounded-full transition-all duration-300">
+                    <Image
+                        src={"/magnifying-glass.svg"}
+                        alt={"rechercher"}
+                        width={18}
+                        height={18}
+                        className='opacity-60 hover:opacity-100 transition-all duration-300'
+                    />
+                </button>
             </div>
-            <SearchButton otherClasses='max-sm:hidden' />
         </form>
     );
 };

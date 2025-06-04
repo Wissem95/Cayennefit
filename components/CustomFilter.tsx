@@ -32,7 +32,7 @@ export default function CustomFilter({ title, options }: CustomFilterProps) {
                     {/* Button for the listbox */}
                     <Listbox.Button className='custom-filter__btn'>
                         <span className='block truncate'>{selected.title}</span>
-                        <Image src='/chevron-up-down.svg' width={20} height={20} className='ml-4 object-contain' alt='chevron_up-down' />
+                        <Image src='/chevron-up-down.svg' width={20} height={20} className='ml-4 object-contain opacity-60' alt='chevron_up-down' />
                     </Listbox.Button>
                     {/* Transition for displaying the options */}
                     <Transition
@@ -41,23 +41,29 @@ export default function CustomFilter({ title, options }: CustomFilterProps) {
                         leaveFrom='opacity-100'
                         leaveTo='opacity-0'
                     >
-                        <Listbox.Options className='custom-filter__options'>
-                            {/* Map over the options and display them as listbox options */}
+                        <Listbox.Options className="custom-filter__options">
                             {options.map((option) => (
                                 <Listbox.Option
                                     key={option.title}
                                     className={({ active }) =>
-                                        `relative cursor-default select-none py-2 px-4 ${
-                                            active ? "bg-primary-blue text-white" : "text-gray-900"
+                                        `relative cursor-default select-none py-3 px-4 transition-all duration-200 font-light tracking-wide ${
+                                            active ? "bg-gray-100 text-gray-900" : "text-gray-700 hover:bg-gray-50"
                                         }`
                                     }
                                     value={option}
                                 >
                                     {({ selected }) => (
                                         <>
-                      <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`} >
-                        {option.title}
-                      </span>
+                                            <span className={`block truncate ${selected ? "font-medium" : "font-light"}`}>
+                                                {option.title}
+                                            </span>
+                                            {selected && (
+                                                <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-900">
+                                                    <svg className='h-5 w-5' fill="currentColor" viewBox="0 0 20 20" aria-hidden='true'>
+                                                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                    </svg>
+                                                </span>
+                                            )}
                                         </>
                                     )}
                                 </Listbox.Option>

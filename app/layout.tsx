@@ -1,19 +1,22 @@
 import "./globals.css";
 
 import { Footer, NavBar } from "@components";
+import { LanguageProvider } from "../contexts/LanguageContext";
 
 export const metadata = {
-    title: "ShopYourCar",
-    description: "Discover world's best car showcase application",
+    title: "CAYENNEFIT - Excellence Automobile",
+    description: "Découvrez une sélection exclusive de véhicules d'exception, alliant performance, élégance et raffinement.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang='en'>
-        <body className='relative bg-black-100'>
-        <NavBar />
-        {children}
-        <Footer />
+        <html lang='fr'>
+        <body className='relative bg-white'>
+            <LanguageProvider>
+                <NavBar />
+                {children}
+                <Footer />
+            </LanguageProvider>
         </body>
         </html>
     );

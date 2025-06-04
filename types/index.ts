@@ -1,5 +1,46 @@
 import {MouseEventHandler} from "react";
 
+// Types pour le nouveau système de vente de véhicules
+export interface VehicleProps {
+    id: string;
+    make: string;
+    model: string;
+    year: number;
+    price: number; // Prix de vente au lieu de location
+    city_mpg: number;
+    highway_mpg: number;
+    fuel_type: string;
+    transmission: string;
+    drive: string;
+    color: string;
+    mileage: number; // Kilométrage
+    description: string;
+    images: string[]; // Tableau d'URLs d'images
+    isAvailable: boolean;
+    soldAt?: string; // Date de vente (optionnel)
+    createdAt: string;
+    updatedAt: string;
+}
+
+// Types pour l'administration
+export interface AdminVehicleFormProps {
+    make: string;
+    model: string;
+    year: number;
+    price: number;
+    city_mpg: number;
+    highway_mpg: number;
+    fuel_type: string;
+    transmission: string;
+    drive: string;
+    color: string;
+    mileage: number;
+    description: string;
+    images: FileList | null;
+    isAvailable: boolean;
+}
+
+// Legacy types (à garder pour la migration progressive)
 export interface CarProps {
     city_mpg: number;
     class: string;
@@ -21,6 +62,8 @@ export interface FilterProps {
     model?: string;
     limit?: number;
     fuel?: string;
+    maxPrice?: number; // Nouveau filtre par prix maximum
+    minPrice?: number; // Nouveau filtre par prix minimum
 }
 
 export interface HomeProps {
@@ -65,4 +108,17 @@ export interface ShowMoreProps {
 export interface SearchManuFacturerProps {
     manufacturer: string;
     setManuFacturer: (manufacturer: string) => void;
+}
+
+// Nouveaux types pour l'admin panel
+export interface AdminLayoutProps {
+    children: React.ReactNode;
+}
+
+export interface VehicleCardProps {
+    vehicle: VehicleProps;
+    isAdmin?: boolean;
+    onEdit?: (id: string) => void;
+    onDelete?: (id: string) => void;
+    onMarkAsSold?: (id: string) => void;
 }

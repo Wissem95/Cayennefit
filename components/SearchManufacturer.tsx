@@ -19,27 +19,31 @@ const SearchManufacturer = ({ manufacturer, setManuFacturer }: SearchManuFacture
             );
 
     return (
-        <div className='search-manufacturer bg-white'>
+        <div className='search-manufacturer'>
             <Combobox value={manufacturer} onChange={setManuFacturer}>
                 <div className='relative w-full'>
-                    {/* Button for the combobox. Click on the icon to see the complete dropdown */}
-                    <Combobox.Button className='absolute top-[14px]'>
+                    {/* Search Manufacturer */}
+                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-30">
                         <Image
                             src='/car-logo.svg'
                             width={20}
                             height={20}
-                            className='ml-4'
+                            className='opacity-60'
                             alt='car logo'
                         />
-                    </Combobox.Button>
-
-                    {/* Input field for searching */}
+                    </div>
                     <Combobox.Input
                         className='search-manufacturer__input'
                         displayValue={(item: string) => item}
                         onChange={(event) => setQuery(event.target.value)} // Update the search query when the input changes
-                        placeholder='Volkswagen...'
+                        placeholder='Porsche'
                     />
+                    
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 z-10 pointer-events-none">
+                        <svg className="w-4 h-4 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
 
                     {/* Transition for displaying the options */}
                     <Transition
@@ -50,38 +54,43 @@ const SearchManufacturer = ({ manufacturer, setManuFacturer }: SearchManuFacture
                         afterLeave={() => setQuery("")} // Reset the search query after the transition completes
                     >
                         <Combobox.Options
-                            className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'
+                            className='search-manufacturer__options'
                             static
                         >
-                            {filteredManufacturers.length === 0 && query !== "" ? (
+                            {manufacturers.length === 0 && query !== "" ? (
                                 <Combobox.Option
                                     value={query}
-                                    className='search-manufacturer__option'
+                                    className='search-manufacturer__option text-gray-500'
                                 >
-                                    Create "{query}"
+                                    Créer "{query}"
                                 </Combobox.Option>
                             ) : (
-                                filteredManufacturers.map((item) => (
+                                manufacturers.map((item) => (
                                     <Combobox.Option
                                         key={item}
                                         className={({ active }) =>
-                                            `relative search-manufacturer__option ${
-                                                active ? "bg-primary-blue text-white" : "text-gray-900"
+                                            `search-manufacturer__option ${
+                                                active ? "bg-gray-100 text-gray-900" : "text-gray-700"
                                             }`
                                         }
                                         value={item}
                                     >
                                         {({ selected, active }) => (
                                             <>
-                        <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`}>
-                          {item}
-                        </span>
+                                                <span className={`block truncate ${selected ? "font-medium" : "font-light"}`}>
+                                                    {item}
+                                                </span>
 
                                                 {/* Show an active blue background color if the option is selected */}
-                                                {selected ? (
-                                                    <span className={`absolute inset-y-0 left-0 flex items-center pl-3 ${active? "text-white": "text-pribg-primary-purple"}`}
-                                                    ></span>
-                                                ) : null}
+                                                {selected && (
+                                                    <span className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                                                        active ? "text-gray-900" : "text-gray-700"
+                                                    }`}>
+                                                        <svg className='h-5 w-5' fill="currentColor" viewBox="0 0 20 20" aria-hidden='true'>
+                                                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                        </svg>
+                                                    </span>
+                                                )}
                                             </>
                                         )}
                                     </Combobox.Option>

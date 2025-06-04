@@ -1,4 +1,5 @@
 export const manufacturers = [
+    "Porsche",
     "Acura",
     "Alfa Romeo",
     "Aston Martin",
@@ -32,7 +33,6 @@ export const manufacturers = [
     "MINI",
     "Mitsubishi",
     "Nissan",
-    "Porsche",
     "Ram",
     "Rolls-Royce",
     "Subaru",
