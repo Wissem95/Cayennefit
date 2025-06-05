@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 import { getVehicleStats } from '@lib/database';
 
+// Configuration pour éviter le cache et forcer le rechargement des statistiques
+export const revalidate = 0;
+export const dynamic = 'force-dynamic';
+
 /**
  * GET - Récupère les statistiques des véhicules depuis Prisma (données fraîches)
  * Compatible avec Vercel, Ionos et tous les hébergeurs

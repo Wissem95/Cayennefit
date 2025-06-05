@@ -63,11 +63,14 @@ export default function AdminPanel() {
                 console.log('Admin: Tous les véhicules récupérés:', vehiclesData.length)
                 console.log('Admin: Véhicules disponibles:', vehiclesData.filter((v: VehicleProps) => v.isAvailable).length)
                 console.log('Admin: Véhicules vendus:', vehiclesData.filter((v: VehicleProps) => !v.isAvailable).length)
+                console.log('Admin: Statistiques reçues:', statsData)
                 
                 // Filtrer seulement les véhicules disponibles pour l'affichage admin principal
                 const availableVehicles = vehiclesData.filter((v: VehicleProps) => v.isAvailable);
                 setVehicles(availableVehicles);
                 setStats(statsData);
+            } else {
+                console.error('Admin: Erreur lors du chargement - vehicles:', vehiclesResponse.status, 'stats:', statsResponse.status)
             }
         } catch (error) {
             console.error('Erreur lors du chargement des données:', error);
@@ -123,7 +126,9 @@ export default function AdminPanel() {
 
             if (response.ok) {
                 console.log(`Admin: Véhicule ${vehicleId} marqué comme vendu avec succès`)
+                console.log('Admin: Rechargement des données...')
                 await loadData(); // Recharger les données
+                console.log('Admin: Données rechargées après marquage comme vendu')
             } else {
                 const errorData = await response.json().catch(() => ({}))
                 console.error(`Admin: Erreur HTTP ${response.status}:`, errorData)
