@@ -328,22 +328,16 @@ export default function HistoriquePage() {
                                             {formatDate(vehicle.updatedAt)}
                                         </td>
                                         <td className="py-4 px-6">
-                                            <div className="flex gap-2">
-                                                {!vehicle.isAvailable && (
-                                                    <button
-                                                        onClick={() => handleRestoreVehicle(vehicle.id)}
-                                                        className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm font-light tracking-wider transition-all duration-300"
-                                                    >
-                                                        RESTAURER
-                                                    </button>
-                                                )}
+                                            {!vehicle.isAvailable ? (
                                                 <button
-                                                    onClick={() => router.push(`/admin/vehicles/${vehicle.id}`)}
-                                                    className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm font-light tracking-wider transition-all duration-300"
+                                                    onClick={() => handleRestoreVehicle(vehicle.id)}
+                                                    className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm font-light tracking-wider transition-all duration-300"
                                                 >
-                                                    DÉTAILS
+                                                    RESTAURER
                                                 </button>
-                                            </div>
+                                            ) : (
+                                                <span className="text-sm text-gray-400 font-light">Aucune action</span>
+                                            )}
                                         </td>
                                     </tr>
                                 ))}
