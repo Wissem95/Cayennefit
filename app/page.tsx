@@ -1,6 +1,6 @@
 import { FilterProps, VehicleProps } from "@types";
 import { fuels, yearsOfProduction } from "@constants";
-import { VehicleCard, ShowMore, SearchBar, CustomFilter, Hero } from "@components";
+import { VehicleCard, ShowMore, SearchBar, CustomFilter, Hero, AboutUs, Expertise, Services } from "@components";
 import { getAllVehicles } from "@lib/database";
 
 interface HomeProps {
@@ -98,6 +98,11 @@ export default async function Home({ searchParams }: HomeProps) {
     return (
         <main className='overflow-hidden bg-white'>
             <Hero />
+            
+            {/* Sections de contenu premium */}
+            <AboutUs />
+            <Expertise />
+            <Services />
 
             <div className='mt-12 padding-x padding-y max-width' id='discover'>
                 {/* En-tête élégant */}
