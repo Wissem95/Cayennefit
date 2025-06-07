@@ -141,8 +141,8 @@ const Services: React.FC = () => {
           {/* Grille des services business */}
           <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
             {businessServices.map((service, index) => (
-              <div key={index} className="group relative">
-                <div className="bg-white rounded-2xl p-8 border border-gray-200/50 hover:border-blue-300/50 transition-all duration-500 hover:shadow-xl hover:shadow-blue-200/20 h-full">
+              <div key={index} className="group relative h-full">
+                <div className="bg-white rounded-2xl p-8 border border-gray-200/50 hover:border-blue-300/50 transition-all duration-500 hover:shadow-xl hover:shadow-blue-200/20 h-full flex flex-col">
                   {/* Icône et titre */}
                   <div className="mb-6">
                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200/50 mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -153,7 +153,7 @@ const Services: React.FC = () => {
                   </div>
 
                   {/* Description */}
-                  <p className="text-gray-600 leading-relaxed font-light mb-6">
+                  <p className="text-gray-600 leading-relaxed font-light mb-6 flex-grow">
                     {service.description}
                   </p>
 
@@ -168,7 +168,7 @@ const Services: React.FC = () => {
                   </div>
 
                   {/* CTA */}
-                  <button className="w-full py-3 px-6 bg-gray-900 hover:bg-blue-600 text-white rounded-xl font-medium tracking-wide transition-all duration-300 hover:shadow-lg hover:shadow-blue-600/25 group-hover:-translate-y-0.5">
+                  <button className="w-full py-3 px-6 bg-gray-900 hover:bg-blue-600 text-white rounded-xl font-medium tracking-wide transition-all duration-300 hover:shadow-lg hover:shadow-blue-600/25 group-hover:-translate-y-0.5 mt-auto">
                     En savoir plus
                   </button>
                 </div>
