@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTranslation } from "../contexts/LanguageContext";
 
 import { ShowMoreProps } from "@types";
 import { updateSearchParams } from "@utils";
@@ -15,6 +16,7 @@ interface ShowMoreLuxeProps extends ShowMoreProps {
 }
 
 const ShowMore = ({ pageNumber, isNext, totalVehicles = 0, currentlyShown = 0 }: ShowMoreLuxeProps) => {
+    const { t } = useTranslation();
     const router = useRouter();
 
     const handleNavigation = () => {
@@ -43,9 +45,9 @@ const ShowMore = ({ pageNumber, isNext, totalVehicles = 0, currentlyShown = 0 }:
                 className="bg-black hover:bg-gray-800 text-white px-12 py-4 font-light tracking-wider text-sm transition-all duration-300 border border-gray-700 hover:border-gray-600 shadow-lg hover:shadow-xl group"
             >
                 <div className="flex items-center space-x-3">
-                    <span>CHARGER PLUS</span>
+                    <span>{t('common.loadMore')}</span>
                     <div className="flex items-center space-x-1 text-xs opacity-70">
-                        <span>({remainingVehicles} restant{remainingVehicles > 1 ? 's' : ''})</span>
+                        <span>({remainingVehicles} {t('common.remaining')}{remainingVehicles > 1 ? 's' : ''})</span>
                     </div>
                     <svg 
                         className="w-4 h-4 transform group-hover:translate-y-0.5 transition-transform duration-300" 

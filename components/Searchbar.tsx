@@ -3,10 +3,12 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "../contexts/LanguageContext";
 
 import SearchManufacturer from "./SearchManufacturer";
 
 const SearchBar = () => {
+    const { t } = useTranslation();
     const [manufacturer, setManuFacturer] = useState("");
     const [model, setModel] = useState("");
 
@@ -16,7 +18,7 @@ const SearchBar = () => {
         e.preventDefault();
 
         if (manufacturer.trim() === "" && model.trim() === "") {
-            return alert("Please provide some input");
+            return alert(t('search.pleaseProvideInput'));
         }
 
         updateSearchParams(model.toLowerCase(), manufacturer.toLowerCase());
@@ -75,7 +77,7 @@ const SearchBar = () => {
                 <button type='submit' className="absolute right-3 top-1/2 transform -translate-y-1/2 z-10 p-2 hover:bg-gray-100 rounded-full transition-all duration-300">
                     <Image
                         src={"/magnifying-glass.svg"}
-                        alt={"rechercher"}
+                        alt={t('search.search')}
                         width={18}
                         height={18}
                         className='opacity-60 hover:opacity-100 transition-all duration-300'

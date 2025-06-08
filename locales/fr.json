@@ -36,7 +36,10 @@
     "fuel": "Carburant", 
     "model": "Modèle",
     "minPrice": "Prix minimum",
-    "maxPrice": "Prix maximum"
+    "maxPrice": "Prix maximum",
+    "pleaseProvideInput": "Veuillez fournir une entrée",
+    "search": "rechercher",
+    "create": "Créer"
   },
   "vehicle": {
     "price": "€",
@@ -50,7 +53,10 @@
     "sold": "Vendu",
     "cityConsumption": "Ville",
     "highwayConsumption": "Route",
-    "drive": "Transmission"
+    "drive": "Transmission",
+    "imageUnavailable": "Image non disponible",
+    "viewDetails": "VOIR DÉTAILS",
+    "noDescriptionAvailable": "Aucune description disponible"
   },
   "admin": {
     "title": "PANEL ADMINISTRATEUR",
@@ -106,6 +112,45 @@
     "view": "Voir",
     "close": "Fermer",
     "save": "Enregistrer",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "loadMore": "CHARGER PLUS",
+    "remaining": "restant"
+  },
+  "footer": {
+    "exceptionalCollection": "Collection automobile d'exception",
+    "allRightsReserved": "Tous droits réservés",
+    "privacyPolicy": "Politique de confidentialité",
+    "termsConditions": "Conditions générales",
+    "about": "À propos",
+    "company": "Entreprise",
+    "socials": "Réseaux sociaux",
+    "howItWorks": "Comment ça marche",
+    "featured": "En vedette",
+    "partnership": "Partenariat",
+    "businessRelation": "Relations d'affaires",
+    "events": "Événements",
+    "blog": "Blog",
+    "podcast": "Podcast",
+    "inviteAFriend": "Inviter un ami"
+  },
+  "filters": {
+    "year": "Année",
+    "fuel": "Carburant",
+    "gas": "Essence",
+    "electricity": "Électricité"
+  },
+  "details": {
+    "backToCollection": "Retour à la collection",
+    "contact": "CONTACT",
+    "specifications": "Spécifications",
+    "gallery": "Galerie",
+    "description": "Description",
+    "features": "Caractéristiques",
+    "salePrice": "Prix de vente",
+    "vehicleNotFound": "Véhicule non trouvé",
+    "optimalPerformance": "Performance optimale et technologie avancée",
+    "elegantDesign": "Design élégant et finitions premium",
+    "exceptionalComfort": "Confort de conduite exceptionnel",
+    "securitySystems": "Systèmes de sécurité dernière génération"
   }
 } 

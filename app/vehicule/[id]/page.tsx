@@ -30,10 +30,10 @@ export default function VehicleDetailsPage() {
                     const vehicleData = await response.json();
                     setVehicle(vehicleData);
                 } else {
-                    setError("Véhicule non trouvé");
+                    setError(t('details.vehicleNotFound'));
                 }
             } catch (error) {
-                setError("Erreur lors du chargement du véhicule");
+                setError(t('common.error'));
                 console.error('Erreur:', error);
             } finally {
                 setIsLoading(false);
@@ -43,7 +43,7 @@ export default function VehicleDetailsPage() {
         if (vehicleId) {
             fetchVehicle();
         }
-    }, [vehicleId]);
+    }, [vehicleId, t]);
 
     // Formatage du prix
     const formatPrice = (price: number) => {
@@ -93,7 +93,7 @@ export default function VehicleDetailsPage() {
         return (
             <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
                 <div className="text-center">
-                    <h3 className="text-2xl font-light text-gray-900 mb-4">Véhicule non trouvé</h3>
+                    <h3 className="text-2xl font-light text-gray-900 mb-4">{t('details.vehicleNotFound')}</h3>
                     <Link href="/" className="text-black hover:underline font-light tracking-wide">
                         {t('details.backToCollection')}
                     </Link>
@@ -187,7 +187,7 @@ export default function VehicleDetailsPage() {
                         {/* Prix principal */}
                         <div className="mb-6 text-center">
                             <div className="bg-white border border-gray-200 rounded-lg p-6">
-                                <h3 className="text-sm font-light text-gray-600 mb-2 uppercase tracking-wider">Prix de vente</h3>
+                                <h3 className="text-sm font-light text-gray-600 mb-2 uppercase tracking-wider">{t('details.salePrice')}</h3>
                                 <p className="text-3xl font-light text-gray-900 mb-4">
                                     {formatPrice(vehicle.price)}
                                 </p>
@@ -229,7 +229,7 @@ export default function VehicleDetailsPage() {
                     </div>
                 </div>
 
-                {/* Galerie d'images - comme dans l'image de référence */}
+                {/* Galerie d'images */}
                 {vehicle.images && vehicle.images.length > 1 && (
                     <div className="mb-12">
                         <h2 className="text-2xl font-light text-gray-900 mb-6 tracking-wide">
@@ -276,19 +276,19 @@ export default function VehicleDetailsPage() {
                         <div className="space-y-3">
                             <div className="flex items-center text-gray-700">
                                 <div className="w-2 h-2 bg-black rounded-full mr-3"></div>
-                                Performance optimale et technologie avancée
+                                {t('details.optimalPerformance')}
                             </div>
                             <div className="flex items-center text-gray-700">
                                 <div className="w-2 h-2 bg-black rounded-full mr-3"></div>
-                                Design élégant et finitions premium
+                                {t('details.elegantDesign')}
                             </div>
                             <div className="flex items-center text-gray-700">
                                 <div className="w-2 h-2 bg-black rounded-full mr-3"></div>
-                                Confort de conduite exceptionnel
+                                {t('details.exceptionalComfort')}
                             </div>
                             <div className="flex items-center text-gray-700">
                                 <div className="w-2 h-2 bg-black rounded-full mr-3"></div>
-                                Systèmes de sécurité dernière génération
+                                {t('details.securitySystems')}
                             </div>
                         </div>
                     </div>

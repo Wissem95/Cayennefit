@@ -1,11 +1,15 @@
+"use client";
+
 import Image from "next/image";
 import { Fragment, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
+import { useTranslation } from "../contexts/LanguageContext";
 
 import { manufacturers } from "@constants";
 import { SearchManuFacturerProps } from "@types";
 
 const SearchManufacturer = ({ manufacturer, setManuFacturer }: SearchManuFacturerProps) => {
+    const { t } = useTranslation();
     const [query, setQuery] = useState("");
 
     const filteredManufacturers =
@@ -62,7 +66,7 @@ const SearchManufacturer = ({ manufacturer, setManuFacturer }: SearchManuFacture
                                     value={query}
                                     className='search-manufacturer__option text-gray-500'
                                 >
-                                    Créer "{query}"
+                                    {t('search.create')} "{query}"
                                 </Combobox.Option>
                             ) : (
                                 manufacturers.map((item) => (

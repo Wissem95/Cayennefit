@@ -36,7 +36,10 @@
     "fuel": "Fuel",
     "model": "Model",
     "minPrice": "Minimum price",
-    "maxPrice": "Maximum price"
+    "maxPrice": "Maximum price",
+    "pleaseProvideInput": "Please provide some input",
+    "search": "search",
+    "create": "Create"
   },
   "vehicle": {
     "price": "€",
@@ -50,7 +53,10 @@
     "sold": "Sold",
     "cityConsumption": "City",
     "highwayConsumption": "Highway",
-    "drive": "Drive"
+    "drive": "Drive",
+    "imageUnavailable": "Image unavailable",
+    "viewDetails": "VIEW DETAILS",
+    "noDescriptionAvailable": "No description available"
   },
   "admin": {
     "title": "ADMIN PANEL",
@@ -106,6 +112,45 @@
     "view": "View",
     "close": "Close",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "loadMore": "LOAD MORE",
+    "remaining": "remaining"
+  },
+  "footer": {
+    "exceptionalCollection": "Exceptional automotive collection",
+    "allRightsReserved": "All rights reserved",
+    "privacyPolicy": "Privacy Policy",
+    "termsConditions": "Terms and Conditions",
+    "about": "About",
+    "company": "Company",
+    "socials": "Socials",
+    "howItWorks": "How it works",
+    "featured": "Featured",
+    "partnership": "Partnership",
+    "businessRelation": "Business Relation",
+    "events": "Events",
+    "blog": "Blog",
+    "podcast": "Podcast",
+    "inviteAFriend": "Invite a friend"
+  },
+  "filters": {
+    "year": "Year",
+    "fuel": "Fuel",
+    "gas": "Gas",
+    "electricity": "Electricity"
+  },
+  "details": {
+    "backToCollection": "Back to collection",
+    "contact": "CONTACT",
+    "specifications": "Specifications",
+    "gallery": "Gallery",
+    "description": "Description",
+    "features": "Features",
+    "salePrice": "Sale price",
+    "vehicleNotFound": "Vehicle not found",
+    "optimalPerformance": "Optimal performance and advanced technology",
+    "elegantDesign": "Elegant design and premium finishes",
+    "exceptionalComfort": "Exceptional driving comfort",
+    "securitySystems": "Latest generation security systems"
   }
 } 
