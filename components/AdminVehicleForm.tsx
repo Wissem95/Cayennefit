@@ -22,6 +22,8 @@ const AdminVehicleForm = ({ vehicle, onClose }: AdminVehicleFormProps) => {
     const [success, setSuccess] = useState<string | null>(null);
     const [selectedImages, setSelectedImages] = useState<File[]>([]);
     const [previewImages, setPreviewImages] = useState<string[]>([]);
+    const [existingImages, setExistingImages] = useState<string[]>([]); // Images existantes du véhicule
+    const [deletedExistingImages, setDeletedExistingImages] = useState<string[]>([]); // Images existantes supprimées
     const [formData, setFormData] = useState({
         make: "",
         model: "",
@@ -57,9 +59,30 @@ const AdminVehicleForm = ({ vehicle, onClose }: AdminVehicleFormProps) => {
                 isAvailable: vehicle.isAvailable
             });
             // Charger les images existantes pour l'aperçu
-            setPreviewImages(vehicle.images);
+            setExistingImages(vehicle.images || []);
+            setPreviewImages(vehicle.images || []);
+            // Réinitialiser les états liés aux images
+            setSelectedImages([]);
+            setDeletedExistingImages([]);
+        } else {
+            // Réinitialiser complètement pour un nouveau véhicule
+            setExistingImages([]);
+            setPreviewImages([]);
+            setSelectedImages([]);
+            setDeletedExistingImages([]);
         }
     }, [vehicle]);
+
+    /**
+     * Nettoie les URLs des aperçus créés avec createObjectURL pour éviter les fuites mémoire
+     */
+    const cleanupPreviewUrls = () => {
+        previewImages.forEach((url) => {
+            if (url.startsWith('blob:')) {
+                URL.revokeObjectURL(url);
+            }
+        });
+    };
 
     /**
      * Gestion des changements dans les champs du formulaire
@@ -76,14 +99,16 @@ const AdminVehicleForm = ({ vehicle, onClose }: AdminVehicleFormProps) => {
     };
 
     /**
-     * Gestion de l'upload d'images améliorée
+     * Gestion de l'upload d'images améliorée avec nettoyage approprié
      */
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
         
         // Limiter à 10 images maximum
         const maxImages = 10;
-        const limitedFiles = files.slice(0, maxImages);
+        const currentImagesCount = existingImages.length - deletedExistingImages.length;
+        const availableSlots = maxImages - currentImagesCount;
+        const limitedFiles = files.slice(0, availableSlots);
         
         // Vérifier la taille des fichiers (5MB max par image)
         const maxSize = 5 * 1024 * 1024; // 5MB
@@ -99,24 +124,76 @@ const AdminVehicleForm = ({ vehicle, onClose }: AdminVehicleFormProps) => {
             setTimeout(() => setError(null), 3000); // Effacer l'erreur après 3 secondes
         }
 
+        // Nettoyer les anciennes URLs d'aperçu des nouvelles images
+        selectedImages.forEach((_, index) => {
+            const previewIndex = existingImages.length - deletedExistingImages.length + index;
+            if (previewIndex < previewImages.length && previewImages[previewIndex].startsWith('blob:')) {
+                URL.revokeObjectURL(previewImages[previewIndex]);
+            }
+        });
+
         setSelectedImages(validFiles);
 
-        // Créer des aperçus des images
-        const previews = validFiles.map(file => URL.createObjectURL(file));
-        setPreviewImages(previews);
+        // Créer des aperçus des nouvelles images
+        const newPreviews = validFiles.map(file => URL.createObjectURL(file));
+        
+        // Combiner images existantes (non supprimées) avec les nouvelles
+        const remainingExistingImages = existingImages.filter(img => !deletedExistingImages.includes(img));
+        setPreviewImages([...remainingExistingImages, ...newPreviews]);
 
-        if (limitedFiles.length > maxImages) {
-            setError(`Seulement ${maxImages} images maximum autorisées`);
+        if (limitedFiles.length > availableSlots) {
+            setError(`Seulement ${availableSlots} images supplémentaires autorisées (max ${maxImages} total)`);
             setTimeout(() => setError(null), 3000);
         }
     };
 
     /**
-     * Supprimer une image des aperçus
+     * Supprimer une image des aperçus avec gestion appropriée des images existantes vs nouvelles
      */
     const removeImage = (index: number) => {
-        setSelectedImages(prev => prev.filter((_, i) => i !== index));
+        const remainingExistingCount = existingImages.length - deletedExistingImages.length;
+        
+        if (index < remainingExistingCount) {
+            // C'est une image existante - la marquer comme supprimée
+            const imageToDelete = previewImages[index];
+            setDeletedExistingImages(prev => [...prev, imageToDelete]);
+        } else {
+            // C'est une nouvelle image - la supprimer des fichiers sélectionnés
+            const newImageIndex = index - remainingExistingCount;
+            setSelectedImages(prev => prev.filter((_, i) => i !== newImageIndex));
+            
+            // Nettoyer l'URL d'aperçu
+            if (previewImages[index].startsWith('blob:')) {
+                URL.revokeObjectURL(previewImages[index]);
+            }
+        }
+        
+        // Mettre à jour les aperçus
         setPreviewImages(prev => prev.filter((_, i) => i !== index));
+    };
+
+    /**
+     * Supprimer toutes les images
+     */
+    const removeAllImages = () => {
+        // Marquer toutes les images existantes comme supprimées
+        setDeletedExistingImages([...existingImages]);
+        
+        // Nettoyer les URLs d'aperçu des nouvelles images
+        selectedImages.forEach((_, index) => {
+            const previewIndex = existingImages.length - deletedExistingImages.length + index;
+            if (previewIndex < previewImages.length && previewImages[previewIndex].startsWith('blob:')) {
+                URL.revokeObjectURL(previewImages[previewIndex]);
+            }
+        });
+        
+        // Vider les nouvelles images
+        setSelectedImages([]);
+        setPreviewImages([]);
+        
+        // Réinitialiser l'input file
+        const fileInput = document.getElementById('vehicle-images') as HTMLInputElement;
+        if (fileInput) fileInput.value = '';
     };
 
     /**
@@ -134,7 +211,7 @@ const AdminVehicleForm = ({ vehicle, onClose }: AdminVehicleFormProps) => {
     };
 
     /**
-     * Soumission du formulaire
+     * Soumission du formulaire avec gestion correcte des images
      */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -156,23 +233,34 @@ const AdminVehicleForm = ({ vehicle, onClose }: AdminVehicleFormProps) => {
                 throw new Error("L'année doit être comprise entre 1990 et " + (new Date().getFullYear() + 1));
             }
 
-            // Traiter les images
-            let images: string[] = [];
+            // Traiter les images de manière correcte
+            let finalImages: string[] = [];
+            
+            // 1. Garder les images existantes qui n'ont pas été supprimées
+            const remainingExistingImages = existingImages.filter(img => !deletedExistingImages.includes(img));
+            finalImages = [...remainingExistingImages];
+            
+            // 2. Ajouter les nouvelles images uploadées
             if (selectedImages.length > 0) {
-                images = await processImages(selectedImages);
-            } else if (vehicle && vehicle.images) {
-                // Garder les images existantes si pas de nouvelles images
-                images = vehicle.images;
-            } else {
-                // Image par défaut
-                images = ["/pattern.png"];
+                const newImages = await processImages(selectedImages);
+                finalImages = [...finalImages, ...newImages];
+            }
+            
+            // 3. S'assurer qu'il y a au moins une image
+            if (finalImages.length === 0) {
+                finalImages = ["/pattern.png"]; // Image par défaut
             }
 
             // Préparer les données pour la sauvegarde
             const vehicleData = {
                 ...formData,
-                images
+                images: finalImages
             };
+
+            console.log('AdminForm: Images finales à sauvegarder:', finalImages.length);
+            console.log('AdminForm: Images existantes conservées:', remainingExistingImages.length);
+            console.log('AdminForm: Nouvelles images ajoutées:', selectedImages.length);
+            console.log('AdminForm: Images existantes supprimées:', deletedExistingImages.length);
 
             if (vehicle) {
                 // Modification d'un véhicule existant
@@ -183,6 +271,9 @@ const AdminVehicleForm = ({ vehicle, onClose }: AdminVehicleFormProps) => {
                 await createVehicle(vehicleData);
                 setSuccess("Véhicule créé avec succès !");
             }
+
+            // Nettoyer les URLs d'aperçu avant de fermer
+            cleanupPreviewUrls();
 
             // Fermer le formulaire après un délai
             setTimeout(() => {
@@ -197,6 +288,15 @@ const AdminVehicleForm = ({ vehicle, onClose }: AdminVehicleFormProps) => {
         }
     };
 
+    /**
+     * Nettoyage lors de la fermeture du composant
+     */
+    useEffect(() => {
+        return () => {
+            cleanupPreviewUrls();
+        };
+    }, []);
+
     const isEditing = !!vehicle;
 
     return (
@@ -209,7 +309,10 @@ const AdminVehicleForm = ({ vehicle, onClose }: AdminVehicleFormProps) => {
                             {isEditing ? '✏️ Modifier le véhicule' : '➕ Nouveau véhicule'}
                         </h2>
                         <button
-                            onClick={onClose}
+                            onClick={() => {
+                                cleanupPreviewUrls();
+                                onClose();
+                            }}
                             className="text-gray-400 hover:text-gray-600 transition-colors"
                         >
                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -244,7 +347,7 @@ const AdminVehicleForm = ({ vehicle, onClose }: AdminVehicleFormProps) => {
                         </div>
                     )}
 
-                    {/* Section images améliorée */}
+                    {/* Section images améliorée avec meilleure gestion */}
                     <div className="border border-gray-200 rounded-lg p-6 bg-gray-50">
                         <div className="flex items-center justify-between mb-6">
                             <h3 className="text-lg font-light text-gray-900 tracking-wide">📸 GALERIE PHOTOGRAPHIQUE</h3>
@@ -274,12 +377,7 @@ const AdminVehicleForm = ({ vehicle, onClose }: AdminVehicleFormProps) => {
                                 {previewImages.length > 0 && (
                                     <button
                                         type="button"
-                                        onClick={() => {
-                                            setPreviewImages([]);
-                                            setSelectedImages([]);
-                                            const fileInput = document.getElementById('vehicle-images') as HTMLInputElement;
-                                            if (fileInput) fileInput.value = '';
-                                        }}
+                                        onClick={removeAllImages}
                                         className="flex items-center gap-2 text-red-600 hover:text-red-700 font-light tracking-wide text-sm transition-colors duration-300"
                                     >
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -300,38 +398,49 @@ const AdminVehicleForm = ({ vehicle, onClose }: AdminVehicleFormProps) => {
                             />
                         </div>
 
-                        {/* Aperçu des images avec gestion avancée */}
+                        {/* Aperçu des images avec gestion améliorée */}
                         {previewImages.length > 0 && (
                             <div>
                                 <h4 className="text-sm font-light text-gray-700 tracking-wide mb-4">
                                     APERÇU : {previewImages.length} image{previewImages.length > 1 ? 's' : ''}
+                                    {isEditing && (
+                                        <span className="ml-2 text-xs text-blue-600">
+                                            ({existingImages.length - deletedExistingImages.length} existante{(existingImages.length - deletedExistingImages.length) > 1 ? 's' : ''}, {selectedImages.length} nouvelle{selectedImages.length > 1 ? 's' : ''})
+                                        </span>
+                                    )}
                                 </h4>
                                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-64 overflow-y-auto">
-                                    {previewImages.map((preview, index) => (
-                                        <div key={index} className="relative group">
-                                            <div className="aspect-square rounded-lg overflow-hidden border border-gray-300 hover:border-gray-400 transition-all duration-300">
-                                                <Image
-                                                    src={preview}
-                                                    alt={`Aperçu ${index + 1}`}
-                                                    fill
-                                                    className="object-cover"
-                                                />
+                                    {previewImages.map((preview, index) => {
+                                        const remainingExistingCount = existingImages.length - deletedExistingImages.length;
+                                        const isExistingImage = index < remainingExistingCount;
+                                        
+                                        return (
+                                            <div key={`${preview}-${index}`} className="relative group">
+                                                <div className="aspect-square rounded-lg overflow-hidden border border-gray-300 hover:border-gray-400 transition-all duration-300">
+                                                    <Image
+                                                        src={preview}
+                                                        alt={`Aperçu ${index + 1}`}
+                                                        fill
+                                                        className="object-cover"
+                                                        sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                                    />
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeImage(index)}
+                                                    className="absolute top-2 right-2 bg-red-600/90 hover:bg-red-600 text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg"
+                                                    title={isExistingImage ? "Supprimer cette image existante" : "Supprimer cette nouvelle image"}
+                                                >
+                                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                    </svg>
+                                                </button>
+                                                <div className="absolute bottom-2 left-2 bg-black/80 text-white text-xs px-2 py-1 rounded font-light">
+                                                    #{index + 1} {isExistingImage ? '(existante)' : '(nouvelle)'}
+                                                </div>
                                             </div>
-                                            <button
-                                                type="button"
-                                                onClick={() => removeImage(index)}
-                                                className="absolute top-2 right-2 bg-red-600/90 hover:bg-red-600 text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg"
-                                                title="Supprimer cette image"
-                                            >
-                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                </svg>
-                                            </button>
-                                            <div className="absolute bottom-2 left-2 bg-black/80 text-white text-xs px-2 py-1 rounded font-light">
-                                                #{index + 1}
-                                            </div>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                     
                                     {/* Bouton d'ajout supplémentaire si moins de 10 images */}
                                     {previewImages.length < 10 && (

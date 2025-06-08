@@ -47,13 +47,21 @@ export default function AdminPanel() {
 
     /**
      * Charge les véhicules et statistiques depuis les API routes
+     * @param forceReload - Force le rechargement en ajoutant un timestamp pour éviter le cache
      */
-    const loadData = async () => {
+    const loadData = async (forceReload: boolean = false) => {
         setIsLoading(true);
         try {
+            // Ajouter un timestamp pour éviter le cache si nécessaire
+            const timestamp = forceReload ? `?t=${Date.now()}` : '';
+            
             const [vehiclesResponse, statsResponse] = await Promise.all([
-                fetch('/api/vehicles'), // Récupérer tous les véhicules  
-                fetch('/api/vehicles/stats')
+                fetch(`/api/vehicles${timestamp}`, {
+                    cache: forceReload ? 'no-store' : 'default'
+                }), // Récupérer tous les véhicules  
+                fetch(`/api/vehicles/stats${timestamp}`, {
+                    cache: forceReload ? 'no-store' : 'default'
+                })
             ]);
 
             if (vehiclesResponse.ok && statsResponse.ok) {
@@ -107,7 +115,7 @@ export default function AdminPanel() {
     };
 
     /**
-     * Marque un véhicule comme vendu
+     * Marque un véhicule comme vendu avec refresh amélioré
      */
     const handleMarkAsSold = async (vehicleId: string) => {
         try {
@@ -126,8 +134,13 @@ export default function AdminPanel() {
 
             if (response.ok) {
                 console.log(`Admin: Véhicule ${vehicleId} marqué comme vendu avec succès`)
-                console.log('Admin: Rechargement des données...')
-                await loadData(); // Recharger les données
+                console.log('Admin: Rechargement forcé des données...')
+                
+                // Mettre à jour immédiatement l'état local pour un feedback instantané
+                setVehicles(prev => prev.filter(v => v.id !== vehicleId));
+                
+                // Puis recharger complètement avec force reload
+                await loadData(true);
                 console.log('Admin: Données rechargées après marquage comme vendu')
             } else {
                 const errorData = await response.json().catch(() => ({}))
@@ -135,25 +148,42 @@ export default function AdminPanel() {
             }
         } catch (error) {
             console.error('Admin: Erreur lors du marquage comme vendu:', error);
+            // En cas d'erreur, recharger les données pour être sûr
+            await loadData(true);
         }
     };
 
     /**
-     * Confirme et supprime un véhicule
+     * Confirme et supprime un véhicule avec gestion d'erreurs améliorée
      */
     const handleDeleteVehicle = async (vehicleId: string) => {
         if (deleteConfirm === vehicleId) {
             try {
+                console.log(`Admin: Suppression du véhicule ${vehicleId}`)
+                
                 const response = await fetch(`/api/vehicles/${vehicleId}`, {
                     method: 'DELETE',
                 });
 
                 if (response.ok) {
-                    await loadData(); // Recharger les données
+                    console.log(`Admin: Véhicule ${vehicleId} supprimé avec succès`)
+                    
+                    // Mettre à jour immédiatement l'état local
+                    setVehicles(prev => prev.filter(v => v.id !== vehicleId));
                     setDeleteConfirm(null);
+                    
+                    // Puis recharger avec force reload
+                    await loadData(true);
+                } else {
+                    const errorData = await response.json().catch(() => ({}))
+                    console.error(`Admin: Erreur lors de la suppression HTTP ${response.status}:`, errorData)
                 }
             } catch (error) {
-                console.error('Erreur lors de la suppression:', error);
+                console.error('Admin: Erreur lors de la suppression:', error);
+                // En cas d'erreur, recharger les données
+                await loadData(true);
+            } finally {
+                setDeleteConfirm(null);
             }
         } else {
             setDeleteConfirm(vehicleId);
@@ -161,12 +191,16 @@ export default function AdminPanel() {
     };
 
     /**
-     * Ferme le formulaire et recharge les données
+     * Ferme le formulaire et recharge les données avec force reload
      */
     const handleFormClose = async () => {
+        console.log('Admin: Fermeture du formulaire et rechargement des données...')
         setShowForm(false);
         setEditingVehicle(null);
-        await loadData();
+        
+        // Force reload pour s'assurer d'avoir les dernières données
+        await loadData(true);
+        console.log('Admin: Données rechargées après fermeture du formulaire')
     };
 
     /**

@@ -54,18 +54,27 @@ export default function HistoriquePage() {
 
     /**
      * Charge tous les véhicules depuis l'API (incluant les vendus)
+     * @param forceReload - Force le rechargement en évitant le cache
      */
-    const loadData = async () => {
+    const loadData = async (forceReload: boolean = false) => {
         setIsLoading(true);
         try {
+            // Ajouter un timestamp pour éviter le cache si nécessaire
+            const timestamp = forceReload ? `?t=${Date.now()}` : '';
+            
             // Récupérer tous les véhicules pour l'historique
-            const response = await fetch('/api/vehicles');
+            const response = await fetch(`/api/vehicles${timestamp}`, {
+                cache: forceReload ? 'no-store' : 'default'
+            });
+            
             if (response.ok) {
                 const data = await response.json();
                 console.log('Historique: Véhicules récupérés:', data.length);
                 console.log('Historique: Disponibles:', data.filter((v: VehicleProps) => v.isAvailable).length);
                 console.log('Historique: Vendus:', data.filter((v: VehicleProps) => !v.isAvailable).length);
                 setVehicles(data);
+            } else {
+                console.error('Historique: Erreur lors du chargement, status:', response.status);
             }
         } catch (error) {
             console.error('Erreur lors du chargement des données:', error);
@@ -120,10 +129,12 @@ export default function HistoriquePage() {
     };
 
     /**
-     * Remettre un véhicule en vente
+     * Remettre un véhicule en vente avec gestion d'erreurs améliorée
      */
     const handleRestoreVehicle = async (vehicleId: string) => {
         try {
+            console.log(`Historique: Restauration du véhicule ${vehicleId}`)
+            
             const response = await fetch(`/api/vehicles/${vehicleId}`, {
                 method: 'PUT',
                 headers: {
@@ -136,10 +147,26 @@ export default function HistoriquePage() {
             });
 
             if (response.ok) {
-                await loadData(); // Recharger les données
+                console.log(`Historique: Véhicule ${vehicleId} restauré avec succès`)
+                
+                // Mettre à jour immédiatement l'état local
+                setVehicles(prev => prev.map(v => 
+                    v.id === vehicleId 
+                        ? { ...v, isAvailable: true, soldAt: undefined }
+                        : v
+                ));
+                
+                // Puis recharger avec force reload pour être sûr
+                await loadData(true);
+                console.log('Historique: Données rechargées après restauration')
+            } else {
+                const errorData = await response.json().catch(() => ({}));
+                console.error(`Historique: Erreur lors de la restauration HTTP ${response.status}:`, errorData);
             }
         } catch (error) {
-            console.error('Erreur lors de la restauration:', error);
+            console.error('Historique: Erreur lors de la restauration:', error);
+            // En cas d'erreur, recharger les données
+            await loadData(true);
         }
     };
 
