@@ -218,7 +218,13 @@ const translations = {
             "length": "Longueur",
             "width": "Largeur",
             "height": "Hauteur",
-            "wheelbase": "Empattement"
+            "wheelbase": "Empattement",
+            "salePrice": "Prix de vente",
+            "vehicleNotFound": "Véhicule non trouvé",
+            "optimalPerformance": "Performance optimale et technologie avancée",
+            "elegantDesign": "Design élégant et finitions premium",
+            "exceptionalComfort": "Confort de conduite exceptionnel",
+            "securitySystems": "Systèmes de sécurité dernière génération"
         },
         "common": {
             "loading": "Chargement...",
@@ -452,7 +458,13 @@ const translations = {
             "length": "Length",
             "width": "Width",
             "height": "Height",
-            "wheelbase": "Wheelbase"
+            "wheelbase": "Wheelbase",
+            "salePrice": "Sale price",
+            "vehicleNotFound": "Vehicle not found",
+            "optimalPerformance": "Optimal performance and advanced technology",
+            "elegantDesign": "Elegant design and premium finishes",
+            "exceptionalComfort": "Exceptional driving comfort",
+            "securitySystems": "Latest generation security systems"
         },
         "common": {
             "loading": "Loading...",
