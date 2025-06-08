@@ -55,8 +55,11 @@ const Expertise: React.FC = () => {
           </h2>
           
           <p className="text-xl text-gray-600 font-light max-w-3xl mx-auto leading-relaxed">
-            Notre expertise s'étend bien au-delà de la simple transaction. 
-            Nous vous accompagnons dans chaque étape de votre projet automobile.
+            Depuis plus de 20 ans, nous avons orienté notre activité autour de l'acquisition de Porsche Cayenne hors service, avec un objectif clair : constituer un stock considérable de pièces détachées pour répondre à toutes les demandes, même les plus spécifiques.
+          </p>
+          
+          <p className="text-lg text-gray-600 font-light max-w-3xl mx-auto leading-relaxed mt-4">
+            Cette stratégie nous permet aujourd'hui de proposer à nos clients l'une des plus larges sélections de pièces d'occasion pour Porsche Cayenne, couvrant toutes les générations et motorisations. Chaque pièce est soigneusement démontée, contrôlée et référencée dans notre base, garantissant traçabilité, fiabilité et disponibilité immédiate.
           </p>
         </div>
 

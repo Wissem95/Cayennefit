@@ -30,37 +30,31 @@ const AboutUs: React.FC = () => {
           <div className="space-y-6 lg:space-y-8">
             <div className="prose prose-lg prose-gray max-w-none">
               <p className="text-lg text-gray-700 font-light leading-relaxed">
-                <span className="text-2xl font-light text-gray-900">CAYENNEFIT</span> est une entreprise spécialisée dans 
-                l'achat et la vente de véhicules d'occasion haut de gamme, avec une expertise particulière 
-                sur les modèles <span className="font-medium text-gray-900">Porsche Cayenne</span>.
+                Passionnés par l'univers <span className="font-medium text-gray-900">Porsche Cayenne</span>, nous avons fait de ce SUV d'exception notre spécialité. Depuis plusieurs années, nous nous consacrons exclusivement à la réparation, l'entretien et la valorisation de cette gamme emblématique.
               </p>
               
               <p className="text-gray-600 leading-relaxed">
-                Forte de plusieurs années d'expérience dans le secteur automobile de luxe, notre équipe 
-                s'engage à vous offrir un service personnalisé et des véhicules d'exception, 
-                rigoureusement sélectionnés pour leur qualité et leur authenticité.
+                Nous disposons aujourd'hui de l'un des plus grands stocks de pièces détachées d'occasion au monde dédiées au Porsche Cayenne, toutes rigoureusement contrôlées et garanties. Qu'il s'agisse d'une pièce rare, d'un élément mécanique, électronique ou de carrosserie, vous trouverez chez nous la solution adaptée à vos besoins.
               </p>
               
               <p className="text-gray-600 leading-relaxed">
-                Nous proposons également un service complet d'expertise, de maintenance et de vente 
-                de pièces détachées d'origine, garantissant la préservation de la valeur et des 
-                performances de votre investissement automobile.
+                En plus de la vente de pièces, nous proposons également un service de montage complet dans nos ateliers spécialisés, avec des techniciens formés aux exigences Porsche. Notre mission : prolonger la vie de votre Cayenne, tout en vous faisant bénéficier de la qualité Porsche à prix maîtrisé.
               </p>
             </div>
 
             {/* Statistiques */}
             <div className="grid grid-cols-3 gap-6 pt-8 border-t border-gray-200/50">
               <div className="text-center">
-                <div className="text-3xl font-light text-gray-900 mb-2">150+</div>
-                <div className="text-sm text-gray-600 font-medium tracking-wider uppercase">Véhicules vendus</div>
+                <div className="text-3xl font-light text-gray-900 mb-2">500+</div>
+                <div className="text-sm text-gray-600 font-medium tracking-wider uppercase">Cayenne démontés</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-light text-gray-900 mb-2">8</div>
-                <div className="text-sm text-gray-600 font-medium tracking-wider uppercase">Années d'expérience</div>
+                <div className="text-3xl font-light text-gray-900 mb-2">20</div>
+                <div className="text-sm text-gray-600 font-medium tracking-wider uppercase">Ans d'expérience</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-light text-gray-900 mb-2">98%</div>
-                <div className="text-sm text-gray-600 font-medium tracking-wider uppercase">Clients satisfaits</div>
+                <div className="text-3xl font-light text-gray-900 mb-2">10K+</div>
+                <div className="text-sm text-gray-600 font-medium tracking-wider uppercase">Pièces en stock</div>
               </div>
             </div>
           </div>

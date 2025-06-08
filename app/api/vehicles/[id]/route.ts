@@ -93,10 +93,10 @@ export async function PUT(
         if (error instanceof Error) {
             // Erreurs de validation
             if (error.message.includes('Véhicule non trouvé')) {
-                return NextResponse.json(
-                    { error: 'Véhicule non trouvé' },
-                    { status: 404 }
-                );
+            return NextResponse.json(
+                { error: 'Véhicule non trouvé' },
+                { status: 404 }
+            );
             }
             if (error.message.includes('ID de véhicule invalide')) {
                 return NextResponse.json(
@@ -157,11 +157,11 @@ export async function DELETE(
         if (error instanceof Error) {
             // Erreurs de validation
             if (error.message.includes('Véhicule non trouvé')) {
-                return NextResponse.json(
-                    { error: 'Véhicule non trouvé' },
-                    { status: 404 }
-                );
-            }
+            return NextResponse.json(
+                { error: 'Véhicule non trouvé' },
+                { status: 404 }
+            );
+        }
             if (error.message.includes('ID de véhicule invalide')) {
                 return NextResponse.json(
                     { error: 'ID de véhicule invalide' },

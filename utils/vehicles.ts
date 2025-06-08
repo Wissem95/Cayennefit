@@ -251,9 +251,9 @@ export async function markVehicleAsSold(id: string): Promise<VehicleProps | null
         }
         
         const result = await updateVehicle(id, { 
-            isAvailable: false,
-            updatedAt: new Date().toISOString()
-        });
+        isAvailable: false,
+        updatedAt: new Date().toISOString()
+    });
         
         if (result) {
             console.log(`Utils: Véhicule ${id} marqué comme vendu avec succès`)
@@ -280,9 +280,9 @@ export async function markVehicleAsAvailable(id: string): Promise<VehicleProps |
         }
         
         const result = await updateVehicle(id, { 
-            isAvailable: true,
-            updatedAt: new Date().toISOString()
-        });
+        isAvailable: true,
+        updatedAt: new Date().toISOString()
+    });
         
         if (result) {
             console.log(`Utils: Véhicule ${id} remis en vente avec succès`)

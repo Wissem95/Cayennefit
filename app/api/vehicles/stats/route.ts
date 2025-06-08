@@ -22,7 +22,7 @@ export async function GET() {
         
         if (error instanceof Error) {
             if (error.message.includes('Erreur d\'accès à la base de données')) {
-                return NextResponse.json(
+        return NextResponse.json(
                     { error: 'Service temporairement indisponible' },
                     { status: 503 }
                 );

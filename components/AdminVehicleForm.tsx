@@ -295,7 +295,7 @@ const AdminVehicleForm = ({ vehicle, onClose }: AdminVehicleFormProps) => {
         return () => {
             cleanupPreviewUrls();
         };
-    }, []);
+    }, );
 
     const isEditing = !!vehicle;
 

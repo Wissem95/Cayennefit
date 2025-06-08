@@ -54,13 +54,31 @@ const Services: React.FC = () => {
             </div>
             
             <h2 className="text-4xl lg:text-6xl font-light text-gray-900 tracking-tight leading-tight mb-6">
-              PIÈCES DÉTACHÉES
+              ACHAT DE PIÈCES DÉTACHÉES
             </h2>
             
-            <p className="text-xl text-gray-600 font-light max-w-3xl mx-auto leading-relaxed">
-              Un stock exceptionnel de pièces d'origine et d'occasion, rigoureusement sélectionnées 
-              pour maintenir les performances de votre Porsche Cayenne.
+            <p className="text-lg text-gray-600 font-light max-w-3xl mx-auto leading-relaxed mb-4">
+              <span className="font-medium text-gray-900">Pièces d'occasion</span>
             </p>
+            
+            <div className="space-y-4 max-w-4xl mx-auto">
+              <p className="text-lg text-gray-600 font-light leading-relaxed">
+                Vous recherchez des pièces d'occasion pour votre Porsche Cayenne ? Vous êtes au bon endroit.
+              </p>
+              
+              <p className="text-gray-600 leading-relaxed">
+                Nous disposons d'un stock impressionnant de pièces détachées disponibles immédiatement, couvrant toutes les générations de Cayenne. Mécanique, électronique, carrosserie, intérieur… nous avons ce qu'il vous faut.
+              </p>
+              
+              <p className="text-gray-600 leading-relaxed">
+                <span className="font-medium text-gray-900">👉</span> Rendez-vous directement dans notre dépôt pour découvrir les pièces disponibles, ou<br/>
+                <span className="font-medium text-gray-900">📩</span> contactez-nous via notre chat en ligne : notre équipe dédiée vous répondra rapidement pour vous guider et vérifier la disponibilité des pièces recherchées.
+              </p>
+              
+              <p className="text-gray-600 leading-relaxed">
+                Toutes nos pièces sont testées, contrôlées et garanties, afin de vous assurer une qualité optimale à prix réduit.
+              </p>
+            </div>
           </div>
 
           {/* Grille des catégories de pièces */}
@@ -133,9 +151,37 @@ const Services: React.FC = () => {
             </h2>
             
             <p className="text-xl text-gray-600 font-light max-w-3xl mx-auto leading-relaxed">
-              Des solutions complètes pour tous vos projets automobiles, 
-              de l'achat à la revente en passant par notre service de dépôt-vente.
+              Vous souhaitez vendre votre Porsche Cayenne ? CayenneFit vous propose plusieurs solutions simples et efficaces :
             </p>
+            
+            <div className="space-y-6 max-w-4xl mx-auto mt-8">
+              <div className="bg-white/50 rounded-xl p-6 border border-gray-200/50">
+                <h3 className="text-xl font-medium text-gray-900 mb-3">
+                  <span className="font-bold">Rachat immédiat :</span>
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Nous reprenons votre Cayenne en l'état, même s'il est non roulant. Pas de contraintes, pas de frais cachés : notre équipe s'occupe de tout.
+                </p>
+              </div>
+              
+              <div className="bg-white/50 rounded-xl p-6 border border-gray-200/50">
+                <h3 className="text-xl font-medium text-gray-900 mb-3">
+                  <span className="font-bold">Dépôt-vente :</span>
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Confiez-nous votre véhicule, et nous nous chargeons de sa mise en valeur et de sa vente. Grâce à notre réseau solide d'acheteurs spécialisés, nous maximisons vos chances de vendre rapidement et au bon prix.
+                </p>
+              </div>
+              
+              <div className="bg-blue-50/50 rounded-xl p-6 border border-blue-200/50 mt-8">
+                <h3 className="text-xl font-medium text-gray-900 mb-3">
+                  <span className="font-bold">Vous êtes à la recherche d'un Porsche Cayenne d'occasion ?</span>
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Rendez-vous dans notre rubrique "Occasions du moment" pour découvrir notre sélection de véhicules disponibles. Tous nos modèles sont révisés, garantis, et prêts à prendre la route.
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Grille des services business */}
