@@ -48,7 +48,7 @@ const VehicleCard = ({ vehicle, isAdmin = false, onEdit, onDelete, onMarkAsSold 
     };
 
     return (
-        <div className="group relative bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-500">
+        <div className="group relative bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden border border-gray-500 flex flex-col h-full">
             {/* Badge de statut de disponibilité */}
             <div className={`absolute top-4 left-4 z-20 px-4 py-2 rounded-lg text-sm font-medium tracking-wider shadow-lg ${
                 vehicle.isAvailable 
@@ -64,7 +64,7 @@ const VehicleCard = ({ vehicle, isAdmin = false, onEdit, onDelete, onMarkAsSold 
             </div>
 
             {/* Carrousel d'images élégant */}
-            <div className="relative h-64 lg:h-72 overflow-hidden">
+            <div className="relative h-64 lg:h-72 overflow-hidden flex-shrink-0">
                 {vehicle.images && vehicle.images.length > 0 ? (
                     <>
                         <Image
@@ -123,9 +123,9 @@ const VehicleCard = ({ vehicle, isAdmin = false, onEdit, onDelete, onMarkAsSold 
             </div>
 
             {/* Contenu de la carte */}
-            <div className="p-6">
-                {/* Titre du véhicule */}
-                <div className="mb-4">
+            <div className="p-6 flex flex-col flex-grow">
+                {/* Titre du véhicule avec hauteur fixe */}
+                <div className="mb-4 min-h-[4rem] flex flex-col justify-start">
                     <h3 className="text-xl font-light text-gray-900 tracking-wide leading-tight">
                         {vehicle.make} {vehicle.model}
                     </h3>
@@ -156,37 +156,39 @@ const VehicleCard = ({ vehicle, isAdmin = false, onEdit, onDelete, onMarkAsSold 
                     </div>
                 </div>
 
-                {/* Actions selon le mode */}
-                {isAdmin ? (
-                    <div className="grid grid-cols-1 gap-3">
-                        <CustomButton
-                            title={t('admin.edit')}
-                            containerStyles="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 font-light tracking-wider text-sm transition-all duration-300"
-                            handleClick={() => onEdit && onEdit(vehicle.id)}
-                        />
-                        
-                        {vehicle.isAvailable && (
+                {/* Actions selon le mode - poussé vers le bas */}
+                <div className="mt-auto">
+                    {isAdmin ? (
+                        <div className="grid grid-cols-1 gap-3">
                             <CustomButton
-                                title={t('admin.markAsSold')}
-                                containerStyles="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 font-light tracking-wider text-sm transition-all duration-300"
-                                handleClick={() => onMarkAsSold && onMarkAsSold(vehicle.id)}
+                                title={t('admin.edit')}
+                                containerStyles="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 font-light tracking-wider text-sm transition-all duration-300"
+                                handleClick={() => onEdit && onEdit(vehicle.id)}
                             />
-                        )}
-                        
-                        <CustomButton
-                            title={t('admin.delete')}
-                            containerStyles="w-full bg-gray-900 hover:bg-black text-white py-2 px-4 font-light tracking-wider text-sm transition-all duration-300"
-                            handleClick={() => onDelete && onDelete(vehicle.id)}
-                        />
-                    </div>
-                ) : (
-                    <Link
-                        href={`/vehicule/${vehicle.id}`}
-                        className="block w-full bg-black hover:bg-gray-800 text-white py-3 px-4 font-light tracking-wider text-sm transition-all duration-300 text-center rounded"
-                    >
-                        {t('vehicle.viewDetails')}
-                    </Link>
-                )}
+                            
+                            {vehicle.isAvailable && (
+                                <CustomButton
+                                    title={t('admin.markAsSold')}
+                                    containerStyles="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 font-light tracking-wider text-sm transition-all duration-300"
+                                    handleClick={() => onMarkAsSold && onMarkAsSold(vehicle.id)}
+                                />
+                            )}
+                            
+                            <CustomButton
+                                title={t('admin.delete')}
+                                containerStyles="w-full bg-gray-900 hover:bg-black text-white py-2 px-4 font-light tracking-wider text-sm transition-all duration-300"
+                                handleClick={() => onDelete && onDelete(vehicle.id)}
+                            />
+                        </div>
+                    ) : (
+                        <Link
+                            href={`/vehicule/${vehicle.id}`}
+                            className="block w-full bg-black hover:bg-gray-800 text-white py-3 px-4 font-light tracking-wider text-sm transition-all duration-300 text-center rounded"
+                        >
+                            {t('vehicle.viewDetails')}
+                        </Link>
+                    )}
+                </div>
             </div>
         </div>
     );

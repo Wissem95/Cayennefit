@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "../contexts/LanguageContext";
+import { useScrollAnimation, useStaggeredAnimation } from '../hooks/useScrollAnimation';
 import { FilterProps, VehicleProps } from "@types";
 import { VehicleCard, ShowMore, SearchBar, CustomFilter } from "@components";
 import { getFuels, getYearsOfProduction } from "../utils/translatedConstants";
@@ -27,6 +28,12 @@ const HomeContent = ({
 }: HomeContentProps) => {
     const { t } = useTranslation();
     
+    // Animations pour les différentes sections
+    const { elementRef: sectionRef, isVisible: sectionVisible } = useScrollAnimation(0.1);
+    const { elementRef: titleRef, isVisible: titleVisible } = useStaggeredAnimation(200);
+    const { elementRef: filtersRef, isVisible: filtersVisible } = useStaggeredAnimation(400);
+    const { elementRef: gridRef, isVisible: gridVisible } = useStaggeredAnimation(600);
+    
     const isDataEmpty = !Array.isArray(allVehicles) || allVehicles.length < 1 || !allVehicles;
 
     // Utiliser les constantes traduites
@@ -34,9 +41,16 @@ const HomeContent = ({
     const yearsOfProduction = getYearsOfProduction(t);
 
     return (
-        <div className='mt-12 padding-x padding-y max-width' id='discover'>
+        <div 
+            ref={sectionRef as React.RefObject<HTMLDivElement>}
+            className={`mt-12 padding-x padding-y max-width section-fade-in ${sectionVisible ? 'visible' : ''}`} 
+            id='discover'
+        >
             {/* En-tête élégant avec traductions */}
-            <div className='home__text-container mb-16'>
+            <div 
+                ref={titleRef as React.RefObject<HTMLDivElement>}
+                className={`home__text-container mb-16 slide-up ${titleVisible ? 'animate' : ''}`}
+            >
                 <h1 className='text-4xl lg:text-6xl font-light text-gray-900 tracking-[0.2em] leading-tight'>
                     {t('home.collection')}
                     <span className="block text-gray-600 text-2xl lg:text-3xl mt-2 tracking-[0.3em]">
@@ -49,7 +63,10 @@ const HomeContent = ({
             </div>
 
             {/* Filtres sophistiqués */}
-            <div className='home__filters mb-16'>
+            <div 
+                ref={filtersRef as React.RefObject<HTMLDivElement>}
+                className={`home__filters mb-16 slide-up ${filtersVisible ? 'animate' : ''}`}
+            >
                 <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-lg">
                     <h3 className="text-gray-900 font-light text-xl tracking-wider mb-6">
                         {t('home.refineSearch')}
@@ -57,8 +74,8 @@ const HomeContent = ({
                     <SearchBar />
 
                     <div className='home__filter-container mt-6'>
-                        <CustomFilter title='fuel' options={fuels} />
-                        <CustomFilter title='year' options={yearsOfProduction} />
+                        <CustomFilter title={t('search.fuel')} options={fuels} />
+                        <CustomFilter title={t('search.year')} options={yearsOfProduction} />
                     </div>
                 </div>
             </div>
@@ -74,7 +91,10 @@ const HomeContent = ({
                     </div>
 
                     {/* Grille de véhicules */}
-                    <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-16'>
+                    <div 
+                        ref={gridRef as React.RefObject<HTMLDivElement>}
+                        className={`grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-16 slide-up ${gridVisible ? 'animate' : ''}`}
+                    >
                         {displayedVehicles?.map((vehicle) => (
                             <div key={vehicle.id} className="group">
                                 <VehicleCard vehicle={vehicle} />

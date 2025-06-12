@@ -359,7 +359,7 @@ export async function getVehicleStats() {
   try {
     console.log('Calcul des statistiques des véhicules')
     
-    const [totalVehicles, availableVehicles, soldVehicles, priceStats] = await Promise.all([
+    const [totalVehicles, availableVehicles, soldVehicles, allPriceStats, availablePriceStats] = await Promise.all([
       prisma.vehicle.count(),
       prisma.vehicle.count({ 
         where: { isAvailable: true }
@@ -367,7 +367,14 @@ export async function getVehicleStats() {
       prisma.vehicle.count({ 
         where: { isAvailable: false }
       }),
+      // Statistiques de prix pour tous les véhicules
       prisma.vehicle.aggregate({
+        _avg: { price: true },
+        _sum: { price: true }
+      }),
+      // Statistiques de prix pour les véhicules disponibles uniquement
+      prisma.vehicle.aggregate({
+        where: { isAvailable: true },
         _avg: { price: true },
         _sum: { price: true }
       })
@@ -377,11 +384,14 @@ export async function getVehicleStats() {
       totalVehicles,
       availableVehicles,
       soldVehicles,
-      averagePrice: Math.round((priceStats._avg as any)?.price || 0),
-      totalValue: (priceStats._sum as any)?.price || 0
+      averagePrice: Math.round((allPriceStats._avg as any)?.price || 0),
+      totalValue: (allPriceStats._sum as any)?.price || 0, // Valeur totale de tous les véhicules
+      availableValue: (availablePriceStats._sum as any)?.price || 0 // Valeur du stock disponible uniquement
     }
     
     console.log('Statistiques calculées:', stats)
+    console.log('📊 Valeur totale tous véhicules:', stats.totalValue)
+    console.log('📊 Valeur stock disponible:', stats.availableValue)
     return stats
   } catch (error) {
     console.error('Erreur détaillée lors du calcul des statistiques:', error)
@@ -399,7 +409,8 @@ export async function getVehicleStats() {
       availableVehicles: 0,
       soldVehicles: 0,
       averagePrice: 0,
-      totalValue: 0
+      totalValue: 0,
+      availableValue: 0
     }
     
     console.log('Retour des statistiques par défaut:', fallbackStats)

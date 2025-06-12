@@ -2,6 +2,7 @@ import "./globals.css";
 
 import { Footer, NavBar } from "@components";
 import { LanguageProvider } from "../contexts/LanguageContext";
+import ConditionalLayout from "../components/ConditionalLayout";
 
 export const metadata = {
     title: "CAYENNEFIT - Excellence Automobile",
@@ -13,9 +14,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang='fr'>
         <body className='relative bg-white'>
             <LanguageProvider>
-                <NavBar />
-                {children}
-                <Footer />
+                <ConditionalLayout>
+                    {children}
+                </ConditionalLayout>
             </LanguageProvider>
         </body>
         </html>

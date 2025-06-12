@@ -36,16 +36,16 @@ const LanguageSelector: React.FC = () => {
             {/* Bouton principal */}
             <button
                 onClick={toggleMenu}
-                className="flex items-center space-x-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-lg px-3 py-2 transition-all duration-300 group"
+                className="flex items-center space-x-1 md:space-x-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-lg px-2 py-1.5 md:px-3 md:py-2 transition-all duration-300 group"
                 title={`Langue: ${currentLanguage?.name}`}
                 style={{ zIndex: 9999 }}
             >
-                <span className="text-lg">{currentLanguage?.flag}</span>
-                <span className="text-white text-sm font-light tracking-wider uppercase hidden sm:block">
+                <span className="text-sm md:text-lg">{currentLanguage?.flag}</span>
+                <span className="text-white text-xs md:text-sm font-light tracking-wider uppercase hidden sm:block">
                     {language}
                 </span>
                 <svg 
-                    className={`w-4 h-4 text-white/70 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                    className={`w-3 h-3 md:w-4 md:h-4 text-white/70 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
                     fill="none" 
                     stroke="currentColor" 
                     viewBox="0 0 24 24"

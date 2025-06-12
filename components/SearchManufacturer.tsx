@@ -29,11 +29,11 @@ const SearchManufacturer = ({ manufacturer, setManuFacturer }: SearchManuFacture
                     {/* Search Manufacturer */}
                     <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-30">
                         <Image
-                            src='/car-logo.svg'
+                            src='/porsche-3.svg'
                             width={20}
                             height={20}
                             className='opacity-60'
-                            alt='car logo'
+                            alt='porsche logo'
                         />
                     </div>
                     <Combobox.Input

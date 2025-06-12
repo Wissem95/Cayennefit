@@ -17,9 +17,9 @@ const translations = {
     fr: {
         "hero": {
             "services": "SERVICES",
-            "automobiles": "AUTOMOBILES",
-            "vehicles": "VÉHICULES",
-            "parts": "& PIÈCES DÉTACHÉES",
+            "automobiles": "ENTRETIEN & REPARATION POUR PORSCHE CAYENNE",
+            "vehicles": "& VÉHICULES D'OCCASION PORSCHE CAYENNE",
+            "parts": "PIÈCES DÉTACHÉES PORSCHE CAYENNE",
             "discover": "DÉCOUVRIR",
             "hoverToPlay": "Survolez pour lancer la vidéo",
             "excellence": "LE SPECIALISTE PORSCHE CAYENNE",
@@ -29,13 +29,18 @@ const translations = {
         },
         "navigation": {
             "home": "Accueil",
+            "about": "Qui sommes-nous",
+            "expertise": "Notre expertise",
+            "services": "Services",
             "vehicles": "Véhicules",
             "admin": "Administration",
             "history": "Historique",
-            "contact": "Contact"
+            "contact": "Contact",
+            "menu": "Menu",
+            "close": "Fermer"
         },
         "home": {
-            "collection": "COLLECTION",
+            "collection": "VENTE DE VÉHICULES D'OCCASION",
             "automobile": "AUTOMOBILE",
             "description": "Découvrez une sélection exclusive de véhicules d'exception, alliant performance, élégance et raffinement.",
             "refineSearch": "AFFINER VOTRE RECHERCHE",
@@ -53,6 +58,12 @@ const translations = {
             "model": "Modèle",
             "minPrice": "Prix minimum",
             "maxPrice": "Prix maximum"
+        },
+        "filters": {
+            "year": "Année",
+            "fuel": "Diesel",
+            "gas": "Essence",
+            "electricity": "Électricité"
         },
         "vehicle": {
             "price": "€",
@@ -158,7 +169,17 @@ const translations = {
             "vehicleModified": "Véhicule modifié avec succès !",
             "vehicleCreated": "Véhicule créé avec succès !",
             "priceError": "Le prix doit être supérieur à 0.",
-            "yearError": "L'année doit être comprise entre 1990 et"
+            "yearError": "L'année doit être comprise entre 1990 et",
+            "imageManagement": "📸 Gestion des images",
+            "addImages": "➕ Ajouter des images",
+            "imageOrder": "Ordre des images",
+            "moveUp": "↑ Monter",
+            "moveDown": "↓ Descendre", 
+            "makePrimary": "🌟 Image principale",
+            "isPrimary": "✨ Principale",
+            "existingImage": "💾 Existante",
+            "newImage": "🆕 Nouvelle",
+            "dragToReorder": "🖱️ Glissez pour réorganiser"
         },
         "history": {
             "title": "HISTORIQUE DES VÉHICULES",
@@ -252,14 +273,140 @@ const translations = {
             "day": "jour",
             "hour": "heure",
             "minute": "minute"
+        },
+       "aboutUs": {
+            "title": "QUI SOMMES-NOUS ?",
+            "subtitle": "À propos",
+            "passion": "Passionnés par l'univers",
+            "cayenne": "Porsche Cayenne",
+            "specialty": ", nous avons fait de ce SUV d'exception notre spécialité. Depuis plusieurs années, nous nous consacrons exclusivement à la réparation, l'entretien et la valorisation de cette gamme emblématique.",
+            "stock": "Nous disposons aujourd'hui de l'un des plus grands stocks de pièces détachées d'occasion au monde dédiées au Porsche Cayenne, toutes rigoureusement contrôlées et garanties. Qu'il s'agisse d'une pièce rare, d'un élément mécanique, électronique ou de carrosserie, vous trouverez chez nous la solution adaptée à vos besoins.",
+            "service": "En plus de la vente de pièces, nous proposons également un service de montage complet dans nos ateliers spécialisés, avec des techniciens formés aux exigences Porsche. Notre mission : prolonger la vie de votre Cayenne, tout en vous faisant bénéficier de la qualité Porsche à prix maîtrisé.",
+            "stat1": "Intervention par an",
+            "stat2": "Ans d'expérience", 
+            "stat3": "Pièces en stock",
+            "vehicleException": "Véhicule d'exception",
+            "cayenneCollection": "Porsche Cayenne Collection",
+            "premium": "Premium",
+            "quality": "Qualité"
+        },
+        "expertise": {
+            "title": "EXPERTISE",
+            "subtitle": "Notre savoir-faire",
+            "description": "Depuis plus de 10 ans, nous avons orienté notre activité autour de l'acquisition de Porsche Cayenne hors service, avec un objectif clair : constituer un stock considérable de pièces détachées pour répondre à toutes les demandes, même les plus spécifiques.",
+            "strategy": "Cette stratégie nous permet aujourd'hui de proposer à nos clients l'une des plus larges sélections de pièces d'occasion pour Porsche Cayenne, couvrant toutes les générations et motorisations. Chaque pièce est soigneusement démontée, contrôlée et référencée dans notre base, garantissant traçabilité, fiabilité et disponibilité immédiate.",
+            "contactExperts": "Besoin d'une expertise personnalisée ?",
+            "contactDescription": "Contactez nos experts pour une évaluation de vos besoins",
+            "assistanceButton": "Nos forfaits assistance à distance",
+            "contactButton": "Nous contacter",
+            "cards": {
+                "technical": {
+                    "title": "EXPERTISE TECHNIQUE",
+                    "description": "Évaluation complète de l'état mécanique, électronique et esthétique de chaque véhicule par nos experts certifiés."
+                },
+                "history": {
+                    "title": "ASSISTANCE À DISTANCE",
+                    "description": "Accompagnement personnalisé et résolution de pannes à distance pour vos véhicules Porsche Cayenne, assurés par nos experts."
+                },
+                "maintenance": {
+                    "title": "MAINTENANCE PREMIUM",
+                    "description": "Service de maintenance préventive et corrective par des techniciens spécialisés Porsche Cayenne."
+                },
+                "warranty": {
+                    "title": "GARANTIE QUALITÉ",
+                    "description": "Garantie étendue sur tous nos véhicules d'occasion avec suivi personnalisé et assistance dédiée."
+                },
+                "selection": {
+                    "title": "SÉLECTION EXCLUSIVE",
+                    "description": "Choix de véhicules d'occasion d'exception provenant de propriétaires méticuleux."
+                },
+                "delivery": {
+                    "title": "LIVRAISON PREMIUM",
+                    "description": "Service de livraison sécurisée partout en France avec remise personnalisée et formation."
+                }
+            }
+        },
+        "services": {
+            "ourServices": "Nos services",
+            "mainService": "Service Principal",
+            "spareParts": "VENTE DE PIÈCES DÉTACHÉES",
+            "stockDescription": "Plus de 10 000 pièces Porsche Cayenne en stock.",
+            "stockDetails": "",
+            "allGenerations": "Toutes générations de motorisations confondues. Chaque pièce est soigneusement démontée, contrôlée et référencée.",
+            "qualityGuarantee": "Garantie qualité",
+            "guaranteeDetails": "sur toutes nos pièces d'occasion avec possibilité de montage dans nos ateliers spécialisés.",
+            "mainCategories": {
+                "engine": "Moteur & Transmission",
+                "electronic": "Électronique",
+                "body": "Carrosserie",
+                "interior": "Intérieur"
+            },
+            "immediateRepurchase": "Rachat immédiat",
+            "immediateRepurchaseDescription": "Nous rachetons votre Porsche Cayenne, même en panne ou accidenté. Évaluation gratuite et paiement comptant sous 24h.",
+            "specializedConsignment": "Dépôt-vente spécialisé",
+            "specializedConsignmentDescription": "Confiez-nous la vente de votre Cayenne. Notre expertise et notre réseau garantissent une valorisation optimale de votre véhicule.",
+            "expertiseAdvice": "Expertise & Conseil",
+            "expertiseAdviceDescription": "10 ans d'expérience Porsche Cayenne à votre service. Diagnostic, estimation, conseil d'achat ou de réparation.",
+            "parts": {
+                "title": "ACHAT DE PIÈCES DÉTACHÉES",
+                "subtitle": "Pièces d'occasion",
+                "description1": "Vous recherchez des pièces d'occasion pour votre Porsche Cayenne ? Vous êtes au bon endroit.",
+                "description2": "Nous disposons d'un stock impressionnant de pièces détachées disponibles immédiatement, couvrant toutes les générations de Cayenne. Mécanique, électronique, carrosserie, intérieur… nous avons ce qu'il vous faut.",
+                "visit": "👉 Rendez-vous directement dans notre dépôt pour découvrir les pièces disponibles, ou",
+                "contact": "📩 contactez-nous via notre chat en ligne : notre équipe dédiée vous répondra rapidement pour vous guider et vérifier la disponibilité des pièces recherchées.",
+                "guarantee": "Toutes nos pièces sont testées, contrôlées et garanties, afin de vous assurer une qualité optimale à prix réduit.",
+                "subtitle2": "Nos produits"
+            },
+            "business": {
+                "title": "ACHAT • REVENTE • DÉPÔT-VENTE",
+                "subtitle": "Nos services",
+                "description": "Vous souhaitez vendre votre Porsche Cayenne ? CayenneFit vous propose plusieurs solutions simples et efficaces :",
+                "buyback": "Rachat immédiat :",
+                "buybackDesc": "Nous reprenons votre Cayenne en l'état, même s'il est non roulant. Pas de contraintes, pas de frais cachés : notre équipe s'occupe de tout.",
+                "consignment": "Dépôt-vente :",
+                "consignmentDesc": "Confiez-nous votre véhicule, et nous nous chargeons de sa mise en valeur et de sa vente. Grâce à notre réseau solide d'acheteurs spécialisés, nous maximisons vos chances de vendre rapidement et au bon prix.",
+                "looking": "Vous êtes à la recherche d'un Porsche Cayenne d'occasion ?",
+                "lookingDesc": "Rendez-vous dans notre rubrique \"Occasions du moment\" pour découvrir notre sélection de véhicules disponibles. Tous nos modèles sont révisés, garantis, et prêts à prendre la route."
+            }
+        },
+        "footer": {
+            "title": "CAYENNEFIT",
+            "subtitle": "Spécialiste en véhicules Porsche Cayenne d'exception. Expertise, qualité et service premium depuis plus de 10 ans.",
+            "quickLinks": "Liens rapides",
+            "expertise": "Notre expertise",
+            "services": "Véhicules d'occasion",
+            "expertiseVehicle": "Expertise véhicule",
+            "spareParts": "Pièces détachées",
+            "buyback": "Rachat de véhicule",
+            "consignment": "Vente en dépôt",
+            "contact": "Contact",
+            "phone": "Téléphone",
+            "email": "Email",
+            "address": "Adresse",
+            "schedule": "Lundi au vendredi, 9h-18h",
+            "rights": "Tous droits réservés.",
+            "followUs": "Suivez-nous",
+            "servicesTitle": "Services",
+            "companyTitle": "Entreprise",
+            "supportTitle": "Support",
+            "news": "Actualités",
+            "helpCenter": "Centre d'aide",
+            "warranties": "Garanties",
+            "financing": "Financement",
+            "delivery": "Livraison",
+            "legalNotice": "Mentions légales",
+            "privacy": "Confidentialité",
+            "terms": "Conditions",
+            "madeWith": "Conçu avec",
+            "forPassionate": "pour les passionnés"
         }
     },
     en: {
         "hero": {
             "services": "SERVICES",
-            "automobiles": "AUTOMOTIVE",
-            "vehicles": "VEHICLES",
-            "parts": "& SPARE PARTS",
+            "automobiles": "MAINTENANCE & REPAIR<br/>FOR PORSCHE CAYENNE",
+            "vehicles": "& USED VEHICLES PORSCHE CAYENNE ",
+            "parts": "SPARE PARTS PORSCHE CAYENNE",
             "discover": "DISCOVER",
             "hoverToPlay": "Hover to play video",
             "excellence": "Automotive Excellence",
@@ -269,13 +416,18 @@ const translations = {
         },
         "navigation": {
             "home": "Home",
+            "about": "About us",
+            "expertise": "Our expertise",
+            "services": "Services",
             "vehicles": "Vehicles",
             "admin": "Administration",
             "history": "History",
-            "contact": "Contact"
+            "contact": "Contact",
+            "menu": "Menu",
+            "close": "Close"
         },
         "home": {
-            "collection": "COLLECTION",
+            "collection": "USED VEHICLES FOR SALE",
             "automobile": "AUTOMOTIVE",
             "description": "Discover an exclusive selection of exceptional vehicles, combining performance, elegance and refinement.",
             "refineSearch": "REFINE YOUR SEARCH",
@@ -293,6 +445,12 @@ const translations = {
             "model": "Model",
             "minPrice": "Minimum price",
             "maxPrice": "Maximum price"
+        },
+        "filters": {
+            "year": "Year",
+            "fuel": "Diesel",
+            "gas": "Gas",
+            "electricity": "Electricity"
         },
         "vehicle": {
             "price": "€",
@@ -398,6 +556,16 @@ const translations = {
             "vehicleModified": "Vehicle modified successfully!",
             "vehicleCreated": "Vehicle created successfully!",
             "priceError": "Price must be greater than 0.",
+            "imageManagement": "📸 Image management",
+            "addImages": "➕ Add images",
+            "imageOrder": "Image order",
+            "moveUp": "↑ Move up",
+            "moveDown": "↓ Move down", 
+            "makePrimary": "🌟 Set as primary",
+            "isPrimary": "✨ Primary",
+            "existingImage": "💾 Existing",
+            "newImage": "🆕 New",
+            "dragToReorder": "🖱️ Drag to reorder",
             "yearError": "Year must be between 1990 and"
         },
         "history": {
@@ -492,7 +660,133 @@ const translations = {
             "day": "day",
             "hour": "hour",
             "minute": "minute"
+        },"aboutUs": {
+            "title": "WHO ARE WE?",
+            "subtitle": "About us",
+            "passion": "Passionate about the",
+            "cayenne": "Porsche Cayenne",
+            "specialty": " universe, we have made this exceptional SUV our specialty. For several years, we have been exclusively dedicated to the repair, maintenance and enhancement of this emblematic range.",
+            "stock": "We now have one of the largest stocks of used spare parts in the world dedicated to the Porsche Cayenne, all rigorously controlled and guaranteed. Whether it's a rare part, a mechanical, electronic or bodywork element, you'll find the solution adapted to your needs with us.",
+            "service": "In addition to selling parts, we also offer a complete assembly service in our specialized workshops, with technicians trained to Porsche requirements. Our mission: to extend the life of your Cayenne, while providing you with Porsche quality at controlled prices.",
+            "stat1": "Interventions per year",
+            "stat2": "Years of experience", 
+            "stat3": "Parts in stock",
+            "vehicleException": "Exceptional vehicle",
+            "cayenneCollection": "Porsche Cayenne Collection",
+            "premium": "Premium",
+            "quality": "Quality"
+        },
+        "expertise": {
+            "title": "EXPERTISE",
+            "subtitle": "Our know-how",
+            "description": "For more than 10 years, we have oriented our activity around the acquisition of out-of-service Porsche Cayenne, with a clear objective: to build up a considerable stock of spare parts to meet all demands, even the most specific.",
+            "strategy": "This strategy now allows us to offer our customers one of the widest selections of used parts for Porsche Cayenne, covering all generations and engines. Each part is carefully dismantled, checked and referenced in our database, guaranteeing traceability, reliability and immediate availability.",
+            "contactExperts": "Need personalized expertise?",
+            "contactDescription": "Contact our experts for an evaluation of your needs",
+            "assistanceButton": "Our remote assistance packages",
+            "contactButton": "Contact us",
+            "cards": {
+                "technical": {
+                    "title": "TECHNICAL EXPERTISE",
+                    "description": "Complete evaluation of the mechanical, electronic and aesthetic condition of each vehicle by our certified experts."
+                },
+                "history": {
+                    "title": "VERIFIED HISTORY",
+                    "description": "Thorough verification of vehicle history, service records and document authenticity."
+                },
+                "maintenance": {
+                    "title": "PREMIUM MAINTENANCE",
+                    "description": "Preventive and corrective maintenance service by Porsche Cayenne specialized technicians."
+                },
+                "warranty": {
+                    "title": "QUALITY WARRANTY",
+                    "description": "Extended warranty on all our used vehicles with personalized follow-up and dedicated assistance."
+                },
+                "selection": {
+                    "title": "EXCLUSIVE SELECTION",
+                    "description": "A selection of exceptional used vehicles from meticulous owners."
+                },
+                "delivery": {
+                    "title": "PREMIUM DELIVERY",
+                    "description": "Secure delivery service throughout France with personalized handover and training."
+                }
+            }
+        },
+        "services": {
+            "ourServices": "Our services",
+            "mainService": "Main Service",
+            "spareParts": "SPARE PARTS FOR SALE",
+            "stockDescription": "Over 10,000 Porsche Cayenne parts in stock.",
+            "stockDetails": "",
+            "allGenerations": "All generations of engines combined. Each part is carefully dismantled, checked and referenced.",
+            "qualityGuarantee": "Quality guarantee",
+            "guaranteeDetails": "on all our used parts with possible assembly in our specialized workshops.",
+            "mainCategories": {
+                "engine": "Engine & Transmission",
+                "electronic": "Electronic",
+                "body": "Bodywork",
+                "interior": "Interior"
+            },
+            "immediateRepurchase": "Immediate buyback",
+            "immediateRepurchaseDescription": "We buy back your Porsche Cayenne, even broken or damaged. Free evaluation and cash payment within 24h.",
+            "specializedConsignment": "Specialized consignment",
+            "specializedConsignmentDescription": "Entrust us with the sale of your Cayenne. Our expertise and network guarantee optimal valuation of your vehicle.",
+            "expertiseAdvice": "Expertise & Advice",
+            "expertiseAdviceDescription": "10 years of Porsche Cayenne experience at your service. Diagnosis, estimation, purchase or repair advice.",
+            "parts": {
+                "title": "PURCHASE OF SPARE PARTS",
+                "subtitle": "Used parts",
+                "description1": "Looking for used parts for your Porsche Cayenne? You're in the right place.",
+                "description2": "We have an impressive stock of spare parts available immediately, covering all generations of Cayenne. Mechanical, electronic, bodywork, interior... we have what you need.",
+                "visit": "👉 Visit our warehouse directly to discover available parts, or",
+                "contact": "📩 contact us via our online chat: our dedicated team will respond quickly to guide you and check the availability of the parts you're looking for.",
+                "guarantee": "All our parts are tested, checked and guaranteed, to ensure optimal quality at reduced prices.",
+                "subtitle2": "Our products"
+            },
+            "business": {
+                "title": "PURCHASE • RESALE • CONSIGNMENT",
+                "subtitle": "Our services",
+                "description": "Do you want to sell your Porsche Cayenne? CayenneFit offers you several simple and effective solutions:",
+                "buyback": "Immediate buyback:",
+                "buybackDesc": "We take back your Cayenne as is, even if it's not running. No constraints, no hidden costs: our team takes care of everything.",
+                "consignment": "Consignment sale:",
+                "consignmentDesc": "Entrust us with your vehicle, and we take care of its enhancement and sale. Thanks to our solid network of specialized buyers, we maximize your chances of selling quickly and at the right price.",
+                "looking": "Are you looking for a used Porsche Cayenne?",
+                "lookingDesc": "Visit our \"Current Opportunities\" section to discover our selection of available vehicles. All our models are serviced, guaranteed, and ready to hit the road."
+            }
+        },
+        "footer": {
+            "title": "CAYENNEFIT",
+            "subtitle": "Specialist in exceptional Porsche Cayenne vehicles. Expertise, quality and premium service for over 10 years.",
+            "quickLinks": "Quick links",
+            "expertise": "Our expertise",
+            "services": "Used vehicles",
+            "expertiseVehicle": "Vehicle expertise",
+            "spareParts": "Spare parts",
+            "buyback": "Vehicle buyback",
+            "consignment": "Consignment sale",
+            "contact": "Contact",
+            "phone": "Phone",
+            "email": "Email",
+            "address": "Address",
+            "schedule": "Monday to Friday, 9am-6pm",
+            "rights": "All rights reserved.",
+            "followUs": "Follow us",
+            "servicesTitle": "Services",
+            "companyTitle": "Company",
+            "supportTitle": "Support",
+            "news": "News",
+            "helpCenter": "Help center",
+            "warranties": "Warranties",
+            "financing": "Financing",
+            "delivery": "Delivery",
+            "legalNotice": "Legal notice",
+            "privacy": "Privacy",
+            "terms": "Terms",
+            "madeWith": "Made with",
+            "forPassionate": "for enthusiasts"
         }
+        
     }
 };
 

@@ -9,8 +9,22 @@ const Hero = () => {
     const [currentVideo, setCurrentVideo] = useState(0);
     const [isHovered, setIsHovered] = useState(false);
     const [isMuted, setIsMuted] = useState(true); // État global du son
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const video1Ref = useRef<HTMLVideoElement>(null);
     const video2Ref = useRef<HTMLVideoElement>(null);
+
+    // Écouter l'événement personnalisé du menu burger depuis la Navbar
+    useEffect(() => {
+        const handleMenuToggle = (event: CustomEvent) => {
+            setIsMenuOpen(event.detail);
+        };
+
+        window.addEventListener('menuToggle', handleMenuToggle as EventListener);
+        
+        return () => {
+            window.removeEventListener('menuToggle', handleMenuToggle as EventListener);
+        };
+    }, []);
 
     // Auto-switch entre les vidéos toutes les 8 secondes (seulement si pas de survol)
     useEffect(() => {
@@ -23,26 +37,39 @@ const Hero = () => {
         }
     }, [isHovered]);
 
-    // Contrôle de la lecture et du son au survol
+    // Démarrer la première vidéo automatiquement au chargement
+    useEffect(() => {
+        if (video1Ref.current) {
+            video1Ref.current.muted = isMuted;
+            video1Ref.current.play().catch(e => console.log('Erreur lecture vidéo 1:', e));
+        }
+    }, []);
+
+    // Gérer le changement de vidéo automatique
+    useEffect(() => {
+        const currentVideoRef = currentVideo === 0 ? video1Ref.current : video2Ref.current;
+        const otherVideoRef = currentVideo === 0 ? video2Ref.current : video1Ref.current;
+        
+        if (currentVideoRef && otherVideoRef) {
+            // Jouer la vidéo active
+            currentVideoRef.muted = isMuted;
+            currentVideoRef.currentTime = 0;
+            currentVideoRef.play().catch(e => console.log('Erreur lecture vidéo:', e));
+            
+            // Arrêter l'autre vidéo
+            otherVideoRef.pause();
+            otherVideoRef.currentTime = 0;
+        }
+    }, [currentVideo, isMuted]);
+
+    // Contrôle de la lecture et du son au survol (pour override temporaire)
     const handleVideoHover = (videoIndex: number, isEntering: boolean) => {
         setIsHovered(isEntering);
         
         if (isEntering) {
             setCurrentVideo(videoIndex);
-            const currentVideoRef = videoIndex === 0 ? video1Ref.current : video2Ref.current;
-            if (currentVideoRef) {
-                currentVideoRef.muted = isMuted; // Respecter l'état global du son
-                currentVideoRef.currentTime = 0; // Recommencer depuis le début
-                currentVideoRef.play().catch(e => console.log('Erreur lecture vidéo:', e));
-            }
-        } else {
-            // Arrêter la vidéo quand on sort du survol
-            const currentVideoRef = videoIndex === 0 ? video1Ref.current : video2Ref.current;
-            if (currentVideoRef) {
-                currentVideoRef.pause();
-                currentVideoRef.currentTime = 0; // Remettre au début
-            }
         }
+        // Plus besoin de gérer la lecture ici car elle est gérée par useEffect
     };
 
     // Contrôle global du son
@@ -55,21 +82,34 @@ const Hero = () => {
         if (video2Ref.current) video2Ref.current.muted = newMutedState;
     };
 
-    const handleScroll = () => {
-        const nextSection = document.getElementById("discover");
-        if (nextSection) {
-            nextSection.scrollIntoView({ behavior: "smooth" });
+    const handleScrollToAbout = () => {
+        const aboutSection = document.getElementById("about");
+        if (aboutSection) {
+            // Calcul de la position avec un décalage pour éviter les données coupées
+            const yOffset = +100; // Ajustez cette valeur selon vos besoins
+            const y = aboutSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: "smooth" });
+        }
+    };
+
+    const handleScrollToCollection = () => {
+        const collectionSection = document.getElementById("discover");
+        if (collectionSection) {
+            // Calcul de la position avec un décalage pour éviter les données coupées
+            const yOffset = +280; // Ajustez cette valeur selon vos besoins
+            const y = collectionSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: "smooth" });
         }
     };
 
     return (
-        <div className="relative h-screen w-full overflow-hidden bg-black">
+        <div id="home" className="relative h-screen w-full overflow-hidden bg-black">
             {/* Contrôles en haut à droite */}
             <div className="absolute top-6 right-6 z-30 flex items-center space-x-4">
-                {/* Contrôle du son */}
+                {/* Contrôle du son - Caché sur mobile */}
                 <button
                     onClick={toggleMute}
-                    className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-lg p-3 transition-all duration-300 group"
+                    className="hidden md:block bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-lg p-3 transition-all duration-300 group"
                     title={isMuted ? t('hero.unmuteVideo') : t('hero.muteVideo')}
                 >
                     {isMuted ? (
@@ -86,12 +126,12 @@ const Hero = () => {
                     )}
                 </button>
 
-                {/* Sélecteur de langue */}
+                {/* Sélecteur de langue - pour desktop ET mobile */}
                 <LanguageSelector />
             </div>
 
-            {/* Section vidéos côte à côte */}
-            <div className="absolute inset-0 flex">
+            {/* Version Desktop - Section vidéos côte à côte */}
+            <div className="hidden md:flex absolute inset-0">
                 {/* Vidéo 1 - Services automobiles */}
                 <div 
                     className="w-1/2 h-full relative group cursor-pointer"
@@ -120,25 +160,26 @@ const Hero = () => {
                         currentVideo === 0 ? 'bg-black/25' : 'bg-black/55'
                     }`}></div>
                     
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="text-center text-white p-4 max-w-sm">
-                            <h2 className="text-xl lg:text-3xl font-light tracking-[0.25em] mb-4">
+                    <div className="absolute inset-0 flex items-center justify-center px-4">
+                        <div className="text-center text-white max-w-sm w-full">
+                            <h2 className="text-lg sm:text-xl lg:text-3xl font-light tracking-[0.25em] mb-4">
                                 {t('hero.services')}
                             </h2>
                             <div className="w-16 h-px bg-white mx-auto mb-4"></div>
-                            <h3 className="text-sm lg:text-lg font-light tracking-[0.15em] mb-6 opacity-90">
-                                {t('hero.automobiles')}
-                            </h3>
+                            <h3 
+                                className="text-xs sm:text-sm lg:text-lg font-light tracking-[0.1em] sm:tracking-[0.15em] mb-6 opacity-90 leading-tight"
+                                dangerouslySetInnerHTML={{
+                                    __html: t('hero.automobiles').replace(/<br\/>/g, '<br/>')
+                                }}
+                            />
                             <button
-                                onClick={handleScroll}
-                                className="bg-transparent border border-white/50 text-white px-6 py-2 font-light tracking-[0.15em] text-xs uppercase hover:bg-white hover:text-black transition-all duration-500 group-hover:border-white group-hover:bg-white group-hover:text-black"
+                                onClick={handleScrollToAbout}
+                                className="bg-transparent border border-white/50 text-white px-4 sm:px-6 py-2 font-light tracking-[0.15em] text-xs uppercase hover:bg-white hover:text-black transition-all duration-500 group-hover:border-white group-hover:bg-white group-hover:text-black"
                             >
                                 {t('hero.discover')}
                             </button>
                         </div>
                     </div>
-
-                    
                 </div>
 
                 {/* Séparateur central */}
@@ -172,55 +213,98 @@ const Hero = () => {
                         currentVideo === 1 ? 'bg-black/25' : 'bg-black/55'
                     }`}></div>
                     
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="text-center text-white p-4 max-w-sm">
-                            <h2 className="text-xl lg:text-3xl font-light tracking-[0.25em] mb-4">
-                                {t('hero.vehicles')}
+                    <div className="absolute inset-0 flex items-center justify-center px-4">
+                        <div className="text-center text-white max-w-sm w-full">
+                            <h2 className="text-lg sm:text-xl lg:text-3xl font-light tracking-[0.25em] mb-4">
+                                {t('hero.parts')}
                             </h2>
                             <div className="w-16 h-px bg-white mx-auto mb-4"></div>
-                            <h3 className="text-sm lg:text-lg font-light tracking-[0.15em] mb-6 opacity-90">
-                                {t('hero.parts')}
-                            </h3>
+                            <h3 
+                                className="text-xs sm:text-sm lg:text-lg font-light tracking-[0.1em] sm:tracking-[0.15em] mb-6 opacity-90 leading-tight"
+                                dangerouslySetInnerHTML={{
+                                    __html: t('hero.vehicles').replace(/<br\/>/g, '<br/>')
+                                }}
+                            />
                             <button
-                                onClick={handleScroll}
-                                className="bg-transparent border border-white/50 text-white px-6 py-2 font-light tracking-[0.15em] text-xs uppercase hover:bg-white hover:text-black transition-all duration-500 group-hover:border-white group-hover:bg-white group-hover:text-black"
+                                onClick={handleScrollToCollection}
+                                className="bg-transparent border border-white/50 text-white px-4 sm:px-6 py-2 font-light tracking-[0.15em] text-xs uppercase hover:bg-white hover:text-black transition-all duration-500 group-hover:border-white group-hover:bg-white group-hover:text-black"
                             >
                                 {t('hero.discover')}
                             </button>
                         </div>
                     </div>
-
-                   
                 </div>
             </div>
 
-            {/* Logo CAYENNEFIT centré en overlay - Plus petit et élégant */}
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none">
-                <div className="text-center bg-black/30 backdrop-blur-sm rounded-lg p-6">
-                    <h1 className="text-white font-light text-2xl lg:text-5xl tracking-[0.3em] leading-tight mb-3 drop-shadow-2xl">
-                        CAYENNEFIT
-                    </h1>
-                    <div className="w-20 h-px bg-white/80 mx-auto mb-3"></div>
-                    <p className="text-white/90 font-light text-sm lg:text-base tracking-[0.2em] uppercase">
-                        {t('hero.excellence')}
-                    </p>
+            {/* Version Mobile - 2 sections verticales */}
+            <div className="md:hidden absolute inset-0 flex flex-col">
+                {/* Section 1 - Logo CAYENNEFIT */}
+                <div className="h-1/2 w-full relative bg-gradient-to-br from-gray-900 via-black to-gray-800">
+                    <img 
+                        src="/videos/slider.jpg" 
+                        alt="Services automobiles" 
+                        className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/50"></div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="text-center bg-black/30 backdrop-blur-sm rounded-lg p-4">
+                            <h1 className="text-white font-light text-2xl tracking-[0.3em] leading-tight mb-2 drop-shadow-2xl">
+                                CAYENNEFIT
+                            </h1>
+                            <p className="text-white/80 font-light text-xs tracking-[0.2em] drop-shadow-lg">
+                                LE SPÉCIALISTE PORSCHE CAYENNE
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Séparateur horizontal */}
+                <div className="h-px bg-white/20 z-10"></div>
+
+                {/* Section 2 - Véhicules & Pièces détachées */}
+                <div className="h-1/2 w-full relative bg-gradient-to-br from-gray-800 via-black to-gray-900">
+                    <img 
+                        src="/videos/high-cayenne-coupa-2019-porsche-ag-redimensionner_1.jpg" 
+                        alt="Véhicules et pièces détachées" 
+                        className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/50"></div>
+                    <div className="absolute inset-0 flex items-center justify-center px-4 py-8">
+                        <div className="text-center text-white max-w-xs w-full">
+                            <h2 className="text-base sm:text-lg font-light tracking-[0.25em] mb-3">
+                                {t('hero.parts')}
+                            </h2>
+                            <div className="w-12 h-px bg-white mx-auto mb-3"></div>
+                            <h3 
+                                className="text-xs sm:text-sm font-light tracking-[0.1em] mb-4 opacity-90 leading-tight"
+                                dangerouslySetInnerHTML={{
+                                    __html: t('hero.vehicles').replace(/<br\/>/g, '<br/>')
+                                }}
+                            />
+                            <button
+                                onClick={handleScrollToCollection}
+                                className="bg-transparent border border-white/50 text-white px-3 py-2 font-light tracking-[0.15em] text-xs uppercase hover:bg-white hover:text-black transition-all duration-500 w-full max-w-[140px] mx-auto"
+                            >
+                                {t('hero.discover')}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            
-
-            {/* Navigation scroll hint */}
-            <div className="absolute bottom-6 right-6 z-20">
-                <button
-                    onClick={handleScroll}
-                    className="text-white/50 hover:text-white transition-colors duration-300 p-2 rounded-full hover:bg-white/10"
-                    title={t('hero.discover')}
-                >
-                    <svg className="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                    </svg>
-                </button>
-            </div>
+            {/* Logo CAYENNEFIT centré en overlay pour DESKTOP seulement - Masqué quand menu burger ouvert */}
+            {!isMenuOpen && (
+                <div className="hidden md:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none">
+                    <div className="text-center bg-black/30 backdrop-blur-sm rounded-lg p-4 md:p-6">
+                        <h1 className="text-white font-light text-xl md:text-2xl lg:text-5xl tracking-[0.3em] leading-tight mb-2 md:mb-3 drop-shadow-2xl">
+                            CAYENNEFIT
+                        </h1>
+                        <p className="text-white/80 font-light text-xs md:text-sm tracking-[0.2em] drop-shadow-lg">
+                            LE SPÉCIALISTE PORSCHE CAYENNE
+                        </p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
