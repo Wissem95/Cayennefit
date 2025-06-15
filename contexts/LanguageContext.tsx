@@ -17,8 +17,8 @@ const translations = {
     fr: {
         "hero": {
             "services": "SERVICES PORSCHE CAYENNE",
-            "automobiles": "ENTRETIEN & REPARATION POUR PORSCHE CAYENNE",
-            "vehicles": "& VÉHICULES D'OCCASION PORSCHE CAYENNE",
+            "automobiles": "ENTRETIEN REPARATION & ASSISTANCE À DISTANCE PORSCHE CAYENNE",
+            "vehicles": "VÉHICULES D'OCCASION PORSCHE CAYENNE",
             "parts": "PIÈCES DÉTACHÉES PORSCHE CAYENNE",
             "discover": "DÉCOUVRIR",
             "hoverToPlay": "Survolez pour lancer la vidéo",
@@ -40,9 +40,9 @@ const translations = {
             "close": "Fermer"
         },
         "home": {
-            "collection": "VENTE DE VÉHICULES D'OCCASION",
-            "automobile": "AUTOMOBILE",
-            "description": "Découvrez une sélection exclusive de véhicules d'exception, alliant performance, élégance et raffinement.",
+            "collection": "NOS OCCASIONS DU MOMENT",
+            "automobile": "",
+            "description": "Découvrez une sélection exclusive de véhicules",
             "refineSearch": "AFFINER VOTRE RECHERCHE",
             "vehiclesFound": "VÉHICULE(S) D'EXCEPTION",
             "noVehiclesFound": "AUCUN VÉHICULE TROUVÉ",
@@ -293,8 +293,8 @@ const translations = {
         "expertise": {
             "title": "EXPERTISE",
             "subtitle": "Notre savoir-faire",
-            "description": "Depuis plus de 10 ans, nous avons orienté notre activité autour de l'acquisition de Porsche Cayenne hors service, avec un objectif clair : constituer un stock considérable de pièces détachées pour répondre à toutes les demandes, même les plus spécifiques.",
-            "strategy": "Cette stratégie nous permet aujourd'hui de proposer à nos clients l'une des plus larges sélections de pièces d'occasion pour Porsche Cayenne, couvrant toutes les générations et motorisations. Chaque pièce est soigneusement démontée, contrôlée et référencée dans notre base, garantissant traçabilité, fiabilité et disponibilité immédiate.",
+            "description": "Depuis plus de 10 ans, nous avons orienté notre activité autour de l'acquisition de Porsche Cayenne , avec un objectif clair : constituer un stock considérable de pièces détachées pour répondre à toutes les demandes, même les plus spécifiques.",
+            "strategy": "Cette stratégie nous permet aujourd'hui de proposer à nos clients l'une des plus larges sélections de pièces d'occasion pour Porsche Cayenne, couvrant toutes les générations et motorisations. Chaque pièce est soigneusement contrôlée et référencée dans notre base, garantissant traçabilité, fiabilité et disponibilité immédiate.",
             "contactExperts": "Besoin d'une expertise personnalisée ?",
             "contactDescription": "Contactez nos experts pour une évaluation de vos besoins",
             "assistanceButton": "Nos forfaits assistance à distance",
@@ -332,7 +332,7 @@ const translations = {
             "spareParts": "VENTE DE PIÈCES DÉTACHÉES",
             "stockDescription": "Plus de 10 000 pièces Porsche Cayenne en stock.",
             "stockDetails": "",
-            "allGenerations": "Toutes générations de motorisations confondues. Chaque pièce est soigneusement démontée, contrôlée et référencée.",
+            "allGenerations": "Toutes générations de motorisations confondues. Chaque pièce est soigneusement contrôlée et référencée.",
             "qualityGuarantee": "Garantie qualité",
             "guaranteeDetails": "sur toutes nos pièces d'occasion avec possibilité de montage dans nos ateliers spécialisés.",
             "mainCategories": {
@@ -404,8 +404,8 @@ const translations = {
     en: {
         "hero": {
             "services": "SERVICES PORSCHE CAYENNE",
-            "automobiles": "MAINTENANCE & REPAIR<br/>FOR PORSCHE CAYENNE",
-            "vehicles": "& USED VEHICLES PORSCHE CAYENNE ",
+            "automobiles": "MAINTENANCE  REPAIR & REMOTE ASSISTANCE FOR PORSCHE CAYENNE",
+            "vehicles": "USED VEHICLES PORSCHE CAYENNE ",
             "parts": "SPARE PARTS PORSCHE CAYENNE",
             "discover": "DISCOVER",
             "hoverToPlay": "Hover to play video",
@@ -427,9 +427,9 @@ const translations = {
             "close": "Close"
         },
         "home": {
-            "collection": "USED VEHICLES FOR SALE",
-            "automobile": "AUTOMOTIVE",
-            "description": "Discover an exclusive selection of exceptional vehicles, combining performance, elegance and refinement.",
+            "collection": "OUR CURRENT OFFERS",
+            "automobile": "",
+            "description": "Discover an exclusive selection of exceptional vehicles",
             "refineSearch": "REFINE YOUR SEARCH",
             "vehiclesFound": "EXCEPTIONAL VEHICLE(S)",
             "noVehiclesFound": "NO VEHICLES FOUND",
@@ -679,8 +679,8 @@ const translations = {
         "expertise": {
             "title": "EXPERTISE",
             "subtitle": "Our know-how",
-            "description": "For more than 10 years, we have oriented our activity around the acquisition of out-of-service Porsche Cayenne, with a clear objective: to build up a considerable stock of spare parts to meet all demands, even the most specific.",
-            "strategy": "This strategy now allows us to offer our customers one of the widest selections of used parts for Porsche Cayenne, covering all generations and engines. Each part is carefully dismantled, checked and referenced in our database, guaranteeing traceability, reliability and immediate availability.",
+            "description": "For more than 10 years, we have oriented our activity around the acquisition of  Porsche Cayenne, with a clear objective: to build up a considerable stock of spare parts to meet all demands, even the most specific.",
+            "strategy": "This strategy now allows us to offer our customers one of the widest selections of used parts for Porsche Cayenne, covering all generations and engines. Each part is carefully checked and referenced in our database, guaranteeing traceability, reliability and immediate availability.",
             "contactExperts": "Need personalized expertise?",
             "contactDescription": "Contact our experts for an evaluation of your needs",
             "assistanceButton": "Our remote assistance packages",
@@ -718,7 +718,7 @@ const translations = {
             "spareParts": "SPARE PARTS FOR SALE",
             "stockDescription": "Over 10,000 Porsche Cayenne parts in stock.",
             "stockDetails": "",
-            "allGenerations": "All generations of engines combined. Each part is carefully dismantled, checked and referenced.",
+            "allGenerations": "All generations of engines combined. Each part is carefully checked and referenced.",
             "qualityGuarantee": "Quality guarantee",
             "guaranteeDetails": "on all our used parts with possible assembly in our specialized workshops.",
             "mainCategories": {

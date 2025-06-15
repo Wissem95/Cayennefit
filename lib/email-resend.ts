@@ -1,7 +1,24 @@
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 
-// Configuration Resend (gratuit jusqu'à 3000 emails/mois)
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Configuration Forward Email SMTP (100% gratuit)
+const emailTransporter = nodemailer.createTransport({
+  host: 'smtp.forwardemail.net',
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.FORWARD_EMAIL_USER, // votre@domaine.com
+    pass: process.env.FORWARD_EMAIL_PASSWORD, // mot de passe généré
+  },
+});
+
+// Fallback Gmail SMTP si Forward Email ne fonctionne pas
+const gmailTransporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD,
+  },
+});
 
 // Types pour les templates d'email
 export interface AppointmentEmailData {
@@ -372,72 +389,116 @@ const getClientReceiptHTML = (data: AppointmentEmailData) => `
 </html>
 `;
 
-// Envoyer notification au propriétaire avec Resend
+// Envoyer notification au propriétaire avec Forward Email
 export const sendOwnerNotificationResend = async (data: AppointmentEmailData): Promise<boolean> => {
   try {
-    const { data: result, error } = await resend.emails.send({
-      from: 'Cayennefit <onboarding@resend.dev>', // Domaine de test Resend (gratuit)
-      to: ['wissemkarboub@gmail.com'],
-      replyTo: data.clientEmail, // Quand vous répondez, ça va directement au client
-      subject: `🚗 Nouvelle demande de RDV - ${data.clientName}`,
-      html: getOwnerNotificationHTML(data),
-    });
+    // Email du propriétaire depuis les variables d'environnement (ou par défaut votre email)
+    const ownerEmail = process.env.OWNER_EMAIL || 'wissemkarboub@gmail.com';
+    const fromEmail = process.env.FORWARD_EMAIL_USER || `contact@${process.env.DOMAIN_NAME || 'votre-domaine.com'}`;
+    
+    // Essayer Forward Email en premier
+    try {
+      await emailTransporter.sendMail({
+        from: `"Cayennefit" <${fromEmail}>`,
+        to: ownerEmail,
+        replyTo: data.clientEmail, // Quand vous répondez, ça va directement au client
+        subject: `🚗 Nouvelle demande de RDV - ${data.clientName}`,
+        html: getOwnerNotificationHTML(data),
+      });
 
-    if (error) {
-      console.error('Erreur Resend propriétaire:', error);
-      return false;
+      console.log('✅ Email propriétaire envoyé avec Forward Email vers:', ownerEmail);
+      return true;
+    } catch (forwardError) {
+      console.log('⚠️ Forward Email a échoué, essai Gmail SMTP...', forwardError);
+      
+      // Fallback avec Gmail
+      await gmailTransporter.sendMail({
+        from: `"Cayennefit" <${process.env.GMAIL_USER}>`,
+        to: ownerEmail,
+        replyTo: data.clientEmail,
+        subject: `🚗 Nouvelle demande de RDV - ${data.clientName}`,
+        html: getOwnerNotificationHTML(data),
+      });
+
+      console.log('✅ Email propriétaire envoyé avec Gmail SMTP vers:', ownerEmail);
+      return true;
     }
-
-    console.log('Email propriétaire envoyé avec succès:', result);
-    return true;
   } catch (error) {
-    console.error('Erreur envoi email propriétaire:', error);
+    console.error('❌ Erreur critique envoi email propriétaire:', error);
     return false;
   }
 };
 
-// Envoyer confirmation au client avec Resend
+// Envoyer confirmation au client avec Forward Email
 export const sendClientConfirmationResend = async (data: AppointmentEmailData): Promise<boolean> => {
   try {
-    const { data: result, error } = await resend.emails.send({
-      from: 'Cayennefit <onboarding@resend.dev>', // Domaine de test Resend (gratuit)
-      to: [data.clientEmail],
-      subject: `✅ Rendez-vous confirmé - Cayennefit`,
-      html: getClientConfirmationHTML(data),
-    });
+    console.log('📧 Tentative envoi email de confirmation vers:', data.clientEmail);
+    const fromEmail = process.env.FORWARD_EMAIL_USER || `contact@${process.env.DOMAIN_NAME || 'votre-domaine.com'}`;
+    
+    // Essayer Forward Email en premier
+    try {
+      await emailTransporter.sendMail({
+        from: `"Cayennefit" <${fromEmail}>`,
+        to: data.clientEmail,
+        subject: `✅ Rendez-vous confirmé - Cayennefit`,
+        html: getClientConfirmationHTML(data),
+      });
 
-    if (error) {
-      console.error('Erreur Resend client:', error);
-      return false;
+      console.log('✅ Email client confirmation envoyé avec Forward Email vers:', data.clientEmail);
+      return true;
+    } catch (forwardError) {
+      console.log('⚠️ Forward Email a échoué, essai Gmail SMTP...', forwardError);
+      
+      // Fallback avec Gmail
+      await gmailTransporter.sendMail({
+        from: `"Cayennefit" <${process.env.GMAIL_USER}>`,
+        to: data.clientEmail,
+        subject: `✅ Rendez-vous confirmé - Cayennefit`,
+        html: getClientConfirmationHTML(data),
+      });
+
+      console.log('✅ Email client confirmation envoyé avec Gmail SMTP vers:', data.clientEmail);
+      return true;
     }
-
-    console.log('Email client envoyé avec succès:', result);
-    return true;
   } catch (error) {
-    console.error('Erreur envoi email client:', error);
+    console.error('❌ Erreur critique envoi email client:', error);
     return false;
   }
 };
 
-// Envoyer annulation au client avec Resend
+// Envoyer annulation au client avec Forward Email
 export const sendClientCancellationResend = async (data: AppointmentEmailData): Promise<boolean> => {
   try {
-    const { data: result, error } = await resend.emails.send({
-      from: 'Cayennefit <onboarding@resend.dev>', // Domaine de test Resend (gratuit)
-      to: [data.clientEmail],
-      subject: `❌ Rendez-vous annulé - Cayennefit`,
-      html: getClientCancellationHTML(data),
-    });
+    console.log('📧 Tentative envoi email d\'annulation vers:', data.clientEmail);
+    const fromEmail = process.env.FORWARD_EMAIL_USER || `contact@${process.env.DOMAIN_NAME || 'votre-domaine.com'}`;
+    
+    // Essayer Forward Email en premier
+    try {
+      await emailTransporter.sendMail({
+        from: `"Cayennefit" <${fromEmail}>`,
+        to: data.clientEmail,
+        subject: `❌ Rendez-vous annulé - Cayennefit`,
+        html: getClientCancellationHTML(data),
+      });
 
-    if (error) {
-      console.error('Erreur Resend annulation client:', error);
-      return false;
+      console.log('✅ Email client annulation envoyé avec Forward Email vers:', data.clientEmail);
+      return true;
+    } catch (forwardError) {
+      console.log('⚠️ Forward Email a échoué, essai Gmail SMTP...', forwardError);
+      
+      // Fallback avec Gmail
+      await gmailTransporter.sendMail({
+        from: `"Cayennefit" <${process.env.GMAIL_USER}>`,
+        to: data.clientEmail,
+        subject: `❌ Rendez-vous annulé - Cayennefit`,
+        html: getClientCancellationHTML(data),
+      });
+
+      console.log('✅ Email client annulation envoyé avec Gmail SMTP vers:', data.clientEmail);
+      return true;
     }
-
-    console.log('Email annulation client envoyé avec succès:', result);
-    return true;
   } catch (error) {
-    console.error('Erreur envoi email annulation client:', error);
+    console.error('❌ Erreur critique envoi email annulation client:', error);
     return false;
   }
 };
@@ -445,40 +506,73 @@ export const sendClientCancellationResend = async (data: AppointmentEmailData): 
 // Fonction pour envoyer une notification de réception au client (pas de confirmation)
 export const sendClientReceiptNotificationResend = async (data: AppointmentEmailData): Promise<boolean> => {
   try {
-    await resend.emails.send({
-      from: 'Cayennefit <onboarding@resend.dev>',
-      to: [data.clientEmail],
-      subject: '📨 Demande de rendez-vous reçue - Cayennefit',
-      html: getClientReceiptHTML(data),
-    });
+    console.log('📧 Tentative envoi email de récepissé vers:', data.clientEmail);
+    const fromEmail = process.env.FORWARD_EMAIL_USER || `contact@${process.env.DOMAIN_NAME || 'votre-domaine.com'}`;
+    
+    // Essayer Forward Email en premier
+    try {
+      await emailTransporter.sendMail({
+        from: `"Cayennefit" <${fromEmail}>`,
+        to: data.clientEmail,
+        subject: '📨 Demande de rendez-vous reçue - Cayennefit',
+        html: getClientReceiptHTML(data),
+      });
 
-    console.log('✅ Email de réception envoyé au client:', data.clientEmail);
-    return true;
+      console.log('✅ Email de réception envoyé avec Forward Email vers:', data.clientEmail);
+      return true;
+    } catch (forwardError) {
+      console.log('⚠️ Forward Email a échoué, essai Gmail SMTP...', forwardError);
+      
+      // Fallback avec Gmail
+      await gmailTransporter.sendMail({
+        from: `"Cayennefit" <${process.env.GMAIL_USER}>`,
+        to: data.clientEmail,
+        subject: '📨 Demande de rendez-vous reçue - Cayennefit',
+        html: getClientReceiptHTML(data),
+      });
+
+      console.log('✅ Email de réception envoyé avec Gmail SMTP vers:', data.clientEmail);
+      return true;
+    }
   } catch (error) {
-    console.error('❌ Erreur envoi email réception client:', error);
+    console.error('❌ Erreur critique envoi email réception client:', error);
     return false;
   }
 };
 
-// Fonction de test de la configuration Resend
+// Fonction de test de la configuration Forward Email
 export const testResendConfiguration = async (): Promise<boolean> => {
   try {
-    const { data: result, error } = await resend.emails.send({
-      from: 'Cayennefit <onboarding@resend.dev>', // Domaine de test Resend (gratuit)
-      to: ['wissemkarboub@gmail.com'],
-      subject: '🧪 Test de configuration Resend',
-      html: '<h1>Test réussi !</h1><p>Votre configuration Resend fonctionne parfaitement.</p>',
-    });
+    console.log('🧪 Test de configuration Forward Email...');
+    const fromEmail = process.env.FORWARD_EMAIL_USER || `contact@${process.env.DOMAIN_NAME || 'votre-domaine.com'}`;
+    
+    // Essayer Forward Email en premier
+    try {
+      await emailTransporter.sendMail({
+        from: `"Cayennefit Test" <${fromEmail}>`,
+        to: 'wissemkarboub@gmail.com',
+        subject: '🧪 Test de configuration Forward Email',
+        html: '<h1>Test réussi !</h1><p>Votre configuration Forward Email fonctionne parfaitement.</p>',
+      });
 
-    if (error) {
-      console.error('Erreur test Resend:', error);
-      return false;
+      console.log('✅ Test Forward Email réussi !');
+      return true;
+    } catch (forwardError) {
+      console.log('⚠️ Forward Email a échoué, essai Gmail SMTP...', forwardError);
+      
+      // Fallback avec Gmail
+      await gmailTransporter.sendMail({
+        from: `"Cayennefit Test" <${process.env.GMAIL_USER}>`,
+        to: 'wissemkarboub@gmail.com',
+        subject: '🧪 Test de configuration Gmail SMTP',
+        html: '<h1>Test réussi !</h1><p>Votre configuration Gmail SMTP fonctionne parfaitement.</p>',
+      });
+
+      console.log('✅ Test Gmail SMTP réussi !');
+      return true;
     }
-
-    console.log('Test Resend réussi:', result);
-    return true;
   } catch (error) {
-    console.error('Erreur test Resend:', error);
+    console.error('❌ Erreur test email:', error);
     return false;
   }
 }; 

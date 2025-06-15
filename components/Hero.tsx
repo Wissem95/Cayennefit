@@ -262,7 +262,7 @@ const Hero = () => {
                                 />
                             </div>
                             
-                            {/* Container pour les boutons avec alignement parfait - fixé en bas */}
+                            {/* Container pour le bouton avec alignement parfait - fixé en bas */}
                             <div className="flex flex-col gap-4 items-center pb-4">
                                 <button
                                     onClick={handleScrollToCollection}
@@ -270,15 +270,6 @@ const Hero = () => {
                                 >
                                     {t('hero.discover')}
                                 </button>
-                                
-                                {/* Bouton Rendez-vous avec alignement parfait */}
-                                <div className="w-full max-w-[240px]">
-                                    <AppointmentSystem 
-                                        variant="minimal"
-                                        size="sm"
-                                        className="w-full bg-white/10 border border-white/30 text-white px-6 py-3 font-light tracking-[0.15em] text-xs uppercase hover:bg-white hover:text-black transition-all duration-500 backdrop-blur-sm"
-                                    />
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -337,14 +328,6 @@ const Hero = () => {
                                 >
                                     {t('hero.discover')}
                                 </button>
-                                {/* Bouton Rendez-vous mobile */}
-                                <div className="mt-3">
-                                    <AppointmentSystem 
-                                        variant="minimal"
-                                        size="sm"
-                                        className="bg-white/10 border border-white/30 text-white px-3 py-2 font-light tracking-[0.15em] text-xs uppercase hover:bg-white hover:text-black transition-all duration-500 w-full max-w-[140px] mx-auto backdrop-blur-sm"
-                                    />
-                                </div>
                             </div>
                         </div>
                     </div>

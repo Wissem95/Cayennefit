@@ -185,14 +185,26 @@ export async function POST(request: NextRequest) {
       } : undefined,
     };
 
-    // Envoyer les emails de notification (en arrière-plan)
-    Promise.all([
-      sendOwnerNotificationResend(emailData),
-      // Ne pas envoyer de confirmation automatique - seulement notification de réception
-      sendClientReceiptNotificationResend(emailData)
-    ]).catch(error => {
-      console.error('Erreur envoi emails:', error);
-    });
+    // Envoyer les emails de notification (avec gestion d'erreur détaillée)
+    try {
+      const [ownerEmailSent, clientEmailSent] = await Promise.all([
+        sendOwnerNotificationResend(emailData),
+        sendClientReceiptNotificationResend(emailData)
+      ]);
+      
+      console.log('📧 Résultats envoi emails:');
+      console.log('- Email propriétaire:', ownerEmailSent ? '✅ Envoyé' : '❌ Échec');
+      console.log('- Email client:', clientEmailSent ? '✅ Envoyé' : '❌ Échec');
+      
+      if (!ownerEmailSent) {
+        console.error('⚠️ Échec email propriétaire pour RDV:', newAppointment.id);
+      }
+      if (!clientEmailSent) {
+        console.error('⚠️ Échec email client pour RDV:', newAppointment.id);
+      }
+    } catch (error) {
+      console.error('❌ Erreur critique envoi emails:', error);
+    }
 
     return NextResponse.json({
       success: true,
