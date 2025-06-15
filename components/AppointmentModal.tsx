@@ -8,6 +8,8 @@ import DatePicker from 'react-datepicker';
 import { XMarkIcon, CalendarDaysIcon, UserIcon, EnvelopeIcon, PhoneIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
 import 'react-datepicker/dist/react-datepicker.css';
 import { fr } from 'date-fns/locale';
+import PhoneInput from './PhoneInput';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 
 // Interface pour les données du formulaire
 interface AppointmentFormData {
@@ -50,6 +52,9 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  
+  // État pour le numéro de téléphone
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
 
   // Configuration du formulaire avec React Hook Form
   const {
@@ -58,7 +63,9 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
     watch,
     setValue,
     reset,
-    formState: { errors, isValid }
+    formState: { errors, isValid },
+    setError,
+    clearErrors
   } = useForm<AppointmentFormData>({
     mode: 'onChange',
     defaultValues: {
@@ -85,19 +92,35 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
         appointmentDate: new Date(),
         serviceType: vehicleInfo ? 'test_drive' : 'meeting',
       });
+      setPhoneNumber('');
       setSubmitError(null);
       setSubmitSuccess(false);
+      clearErrors();
     }
-  }, [isOpen, reset, vehicleInfo]);
+  }, [isOpen, reset, vehicleInfo, clearErrors]);
 
   // Fonction de soumission du formulaire
   const onSubmit = async (data: AppointmentFormData) => {
     setIsSubmitting(true);
     setSubmitError(null);
 
+    // Validation du numéro de téléphone
+    if (!phoneNumber) {
+      setError('clientPhone', { message: 'Le numéro de téléphone est requis' });
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!isValidPhoneNumber(phoneNumber)) {
+      setError('clientPhone', { message: 'Le numéro de téléphone n\'est pas valide' });
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       const payload = {
         ...data,
+        clientPhone: phoneNumber, // Utiliser le numéro formaté
         vehicleId: vehicleInfo?.id || null,
         appointmentDate: data.appointmentDate.toISOString(),
       };
@@ -187,7 +210,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
+              <Dialog.Panel className="w-full max-w-2xl transform overflow-visible rounded-2xl bg-white shadow-2xl transition-all">
                 
                 {/* En-tête du modal */}
                 <motion.div 
@@ -350,27 +373,21 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                         )}
                       </div>
 
-                      {/* Téléphone */}
+                      {/* Téléphone International */}
                       <div>
-                        <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
-                          <PhoneIcon className="w-4 h-4 mr-2" />
-                          Téléphone *
-                        </label>
-                        <input
-                          type="tel"
-                          {...register('clientPhone', { 
-                            required: 'Le téléphone est requis'
-                          })}
-                          className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-                            errors.clientPhone 
-                              ? 'border-red-300 focus:ring-red-500' 
-                              : 'border-gray-300 focus:ring-blue-500'
-                          }`}
-                          placeholder="06 12 34 56 78"
+                        <PhoneInput
+                          value={phoneNumber}
+                          onChange={(value) => {
+                            setPhoneNumber(value || '');
+                            if (value && isValidPhoneNumber(value)) {
+                              clearErrors('clientPhone');
+                            }
+                          }}
+                          error={errors.clientPhone?.message}
+                          placeholder="Numéro de téléphone"
+                          required={true}
+                          disabled={isSubmitting}
                         />
-                        {errors.clientPhone && (
-                          <p className="mt-1 text-sm text-red-600">{errors.clientPhone.message}</p>
-                        )}
                       </div>
 
                       {/* Type de service */}
