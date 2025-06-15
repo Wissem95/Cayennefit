@@ -1,5 +1,5 @@
 {
-  "name": "shopyourcar",
+  "name": "cayennefit",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -14,20 +14,28 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.14",
+    "@heroicons/react": "^2.2.0",
     "@prisma/client": "^6.9.0",
-
     "@types/node": "20.5.6",
+    "@types/nodemailer": "^6.4.17",
     "@types/react": "18.2.21",
+    "@types/react-datepicker": "^6.2.0",
     "@types/react-dom": "18.2.7",
     "@vercel/kv": "^3.0.0",
     "autoprefixer": "10.4.15",
+    "date-fns": "^4.1.0",
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
+    "framer-motion": "^12.17.0",
     "next": "13.4.19",
+    "nodemailer": "^7.0.3",
     "postcss": "8.4.28",
     "prisma": "^6.9.0",
     "react": "18.2.0",
+    "react-datepicker": "^8.4.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.57.0",
+    "resend": "^4.6.0",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2",
     "xml2js": "^0.6.2"

@@ -13,6 +13,7 @@ import { isAuthenticated, logout, extendSession } from "@lib/auth"; // Import de
 export default function AdminPanel() {
     const [vehicles, setVehicles] = useState<VehicleProps[]>([]);
     const [stats, setStats] = useState<any>(null);
+    const [appointmentStats, setAppointmentStats] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [editingVehicle, setEditingVehicle] = useState<VehicleProps | null>(null);
@@ -53,35 +54,45 @@ export default function AdminPanel() {
         setIsLoading(true);
         try {
             // Ajouter un timestamp pour éviter le cache si nécessaire
-            const timestamp = forceReload ? `?t=${Date.now()}` : '';
+            const timestamp = forceReload ? `?t=${Date.now()}` : `?t=${Date.now()}`;
             
-            const [vehiclesResponse, statsResponse] = await Promise.all([
+            console.log('🔄 Chargement des données admin...');
+            
+            const [vehiclesResponse, statsResponse, appointmentStatsResponse] = await Promise.all([
                 fetch(`/api/vehicles${timestamp}`, {
-                    cache: forceReload ? 'no-store' : 'default'
+                    cache: 'no-store'
                 }), // Récupérer tous les véhicules  
                 fetch(`/api/vehicles/stats${timestamp}`, {
-                    cache: forceReload ? 'no-store' : 'default'
+                    cache: 'no-store'
+                }),
+                fetch(`/api/appointments/stats${timestamp}`, {
+                    cache: 'no-store',
+                    headers: {
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache'
+                    }
                 })
             ]);
 
-            if (vehiclesResponse.ok && statsResponse.ok) {
+            if (vehiclesResponse.ok && statsResponse.ok && appointmentStatsResponse.ok) {
                 const vehiclesData = await vehiclesResponse.json();
                 const statsData = await statsResponse.json();
+                const appointmentStatsData = await appointmentStatsResponse.json();
                 
-                console.log('Admin: Tous les véhicules récupérés:', vehiclesData.length)
-                console.log('Admin: Véhicules disponibles:', vehiclesData.filter((v: VehicleProps) => v.isAvailable).length)
-                console.log('Admin: Véhicules vendus:', vehiclesData.filter((v: VehicleProps) => !v.isAvailable).length)
-                console.log('Admin: Statistiques reçues:', statsData)
+                console.log('🚗 Admin: Tous les véhicules récupérés:', vehiclesData.length)
+                console.log('📊 Admin: Stats véhicules:', statsData)
+                console.log('📅 Admin: Stats RDV reçues:', appointmentStatsData)
                 
                 // Filtrer seulement les véhicules disponibles pour l'affichage admin principal
                 const availableVehicles = vehiclesData.filter((v: VehicleProps) => v.isAvailable);
                 setVehicles(availableVehicles);
                 setStats(statsData);
+                setAppointmentStats(appointmentStatsData);
             } else {
-                console.error('Admin: Erreur lors du chargement - vehicles:', vehiclesResponse.status, 'stats:', statsResponse.status)
+                console.error('❌ Admin: Erreur lors du chargement - vehicles:', vehiclesResponse.status, 'stats:', statsResponse.status, 'appointments:', appointmentStatsResponse.status)
             }
         } catch (error) {
-            console.error('Erreur lors du chargement des données:', error);
+            console.error('❌ Erreur lors du chargement des données:', error);
         } finally {
             setIsLoading(false);
         }
@@ -210,6 +221,13 @@ export default function AdminPanel() {
         router.push('/admin/historique');
     };
 
+    /**
+     * Navigue vers la page de gestion des rendez-vous
+     */
+    const handleShowAppointments = () => {
+        router.push('/admin/rendez-vous');
+    };
+
     // Chargement de l'authentification
     if (isCheckingAuth) {
         return (
@@ -275,6 +293,94 @@ export default function AdminPanel() {
 
             {/* Contenu principal */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+                {/* Dashboard Rendez-vous */}
+                {appointmentStats && (
+                    <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-gray-200/50 shadow-sm mb-6 sm:mb-8">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                            <div>
+                                <h2 className="text-lg sm:text-xl font-medium text-gray-900 mb-1 sm:mb-2 flex items-center gap-2">
+                                    📅 Gestion des Rendez-vous
+                                    {appointmentStats.pendingAppointments > 0 && (
+                                        <span className="bg-red-100 text-red-800 text-xs font-medium px-2 py-1 rounded-full">
+                                            {appointmentStats.pendingAppointments} en attente
+                                        </span>
+                                    )}
+                                </h2>
+                                <p className="text-sm text-gray-600 font-light">
+                                    Suivi des demandes de rendez-vous clients
+                                </p>
+                            </div>
+                            <button
+                                onClick={handleShowAppointments}
+                                className="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium tracking-wide transition-all duration-300 hover:shadow-lg hover:shadow-blue-600/25 flex items-center justify-center gap-2"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <span className="hidden sm:inline">Voir les Rendez-vous</span>
+                                <span className="sm:hidden">RDV</span>
+                            </button>
+                        </div>
+                        
+                        {/* Statistiques des rendez-vous */}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-4 border border-orange-200">
+                                <div className="text-2xl font-bold text-orange-600 mb-1">
+                                    {appointmentStats?.pendingAppointments || 0}
+                                </div>
+                                <div className="text-xs text-orange-700 font-medium uppercase tracking-wider">
+                                    En attente
+                                </div>
+                            </div>
+                            
+                            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4 border border-green-200">
+                                <div className="text-2xl font-bold text-green-600 mb-1">
+                                    {appointmentStats?.confirmedAppointments || 0}
+                                </div>
+                                <div className="text-xs text-green-700 font-medium uppercase tracking-wider">
+                                    Confirmés
+                                </div>
+                            </div>
+                            
+                            <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-4 border border-red-200">
+                                <div className="text-2xl font-bold text-red-600 mb-1">
+                                    {appointmentStats?.cancelledAppointments || 0}
+                                </div>
+                                <div className="text-xs text-red-700 font-medium uppercase tracking-wider">
+                                    Annulés
+                                </div>
+                            </div>
+                            
+                            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
+                                <div className="text-2xl font-bold text-blue-600 mb-1">
+                                    {appointmentStats?.totalAppointments || 0}
+                                </div>
+                                <div className="text-xs text-blue-700 font-medium uppercase tracking-wider">
+                                    Total
+                                </div>
+                            </div>
+                            
+                            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4 border border-purple-200">
+                                <div className="text-2xl font-bold text-purple-600 mb-1">
+                                    {appointmentStats ? Math.round((appointmentStats.confirmedAppointments / Math.max(appointmentStats.totalAppointments, 1)) * 100) : 0}%
+                                </div>
+                                <div className="text-xs text-purple-700 font-medium uppercase tracking-wider">
+                                    Taux confirmation
+                                </div>
+                            </div>
+                            
+                            <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-lg p-4 border border-indigo-200">
+                                <div className="text-2xl font-bold text-indigo-600 mb-1">
+                                    {appointmentStats ? (appointmentStats.totalAppointments - appointmentStats.cancelledAppointments - appointmentStats.confirmedAppointments - appointmentStats.pendingAppointments) || 0 : 0}
+                                </div>
+                                <div className="text-xs text-indigo-700 font-medium uppercase tracking-wider">
+                                    Terminés
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {/* Statistiques - Layout mobile/desktop */}
             {stats && (
                     <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">

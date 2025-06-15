@@ -16,7 +16,7 @@ interface LanguageContextType {
 const translations = {
     fr: {
         "hero": {
-            "services": "SERVICES",
+            "services": "SERVICES PORSCHE CAYENNE",
             "automobiles": "ENTRETIEN & REPARATION POUR PORSCHE CAYENNE",
             "vehicles": "& VÉHICULES D'OCCASION PORSCHE CAYENNE",
             "parts": "PIÈCES DÉTACHÉES PORSCHE CAYENNE",
@@ -403,7 +403,7 @@ const translations = {
     },
     en: {
         "hero": {
-            "services": "SERVICES",
+            "services": "SERVICES PORSCHE CAYENNE",
             "automobiles": "MAINTENANCE & REPAIR<br/>FOR PORSCHE CAYENNE",
             "vehicles": "& USED VEHICLES PORSCHE CAYENNE ",
             "parts": "SPARE PARTS PORSCHE CAYENNE",

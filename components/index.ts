@@ -15,6 +15,9 @@ import AboutUs from "./AboutUs";
 import Expertise from "./Expertise";
 import Services from "./Services";
 import HomeContent from "./HomeContent";
+import AppointmentButton from "./AppointmentButton";
+import AppointmentModal from "./AppointmentModal";
+import AppointmentSystem from "./AppointmentSystem";
 
 export {
     Hero,
@@ -35,4 +38,8 @@ export {
     Expertise,
     Services,
     HomeContent,
+    // Composants de rendez-vous
+    AppointmentButton,
+    AppointmentModal,
+    AppointmentSystem,
 };

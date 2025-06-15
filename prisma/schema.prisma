@@ -34,10 +34,58 @@ model Vehicle {
   images      String[] // URLs des images
   isAvailable Boolean  @default(true) @map("is_available") // Disponible ou vendu
   
+  // Relations
+  appointments Appointment[]
+  
   // Métadonnées
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
   soldAt      DateTime? @map("sold_at") // Date de vente
 
   @@map("vehicles") // Nom de la table en base
+}
+
+// Modèle pour les rendez-vous
+model Appointment {
+  id            String   @id @default(cuid())
+  
+  // Informations client
+  clientName    String   @map("client_name")
+  clientEmail   String   @map("client_email")
+  clientPhone   String   @map("client_phone")
+  
+  // Informations du rendez-vous
+  appointmentDate DateTime @map("appointment_date")
+  serviceType     String   @map("service_type") // "test_drive", "inspection", "meeting", "other"
+  message         String?  // Message client optionnel
+  
+  // Statut du rendez-vous
+  status          AppointmentStatus @default(PENDING)
+  
+  // Relation avec le véhicule (optionnel pour RDV généraux)
+  vehicleId       String?   @map("vehicle_id")
+  vehicle         Vehicle?  @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  
+  // Métadonnées
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  confirmedAt     DateTime? @map("confirmed_at")
+  cancelledAt     DateTime? @map("cancelled_at")
+  completedAt     DateTime? @map("completed_at")
+  
+  // Notes administratives
+  adminNotes      String?   @map("admin_notes")
+
+  @@map("appointments")
+}
+
+// Enum pour les statuses des rendez-vous
+enum AppointmentStatus {
+  PENDING     // En attente de confirmation
+  CONFIRMED   // Confirmé
+  CANCELLED   // Annulé
+  COMPLETED   // Terminé
+  RESCHEDULED // Reporté
+
+  @@map("appointment_status")
 }

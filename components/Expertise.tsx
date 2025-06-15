@@ -124,8 +124,8 @@ const Expertise: React.FC = () => {
                         onClick={() => {
                           // Fonction pour télécharger le PDF des forfaits assistance
                           const link = document.createElement('a');
-                          link.href = '/documents/forfaits-assistance-distance.pdf';
-                          link.download = 'forfaits-assistance-distance.pdf';
+                          link.href = '/documents/NOS OFFRES A DISTANCES .pdf';
+                          link.download = 'NOS OFFRES A DISTANCES .pdf';
                           document.body.appendChild(link);
                           link.click();
                           document.body.removeChild(link);
@@ -175,8 +175,8 @@ const Expertise: React.FC = () => {
                 onClick={() => {
                   // Fonction pour télécharger le PDF des forfaits assistance
                   const link = document.createElement('a');
-                  link.href = '/documents/forfaits-assistance-distance.pdf';
-                  link.download = 'forfaits-assistance-distance.pdf';
+                  link.href = '/documents/NOS OFFRES A DISTANCES .pdf';
+                  link.download = 'NOS OFFRES A DISTANCES .pdf';
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link);

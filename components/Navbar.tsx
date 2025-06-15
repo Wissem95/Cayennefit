@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useTranslation } from '../contexts/LanguageContext';
 import Image from 'next/image';
+import AppointmentSystem from './AppointmentSystem';
 
 const NavBar = () => {
     const pathname = usePathname();
@@ -65,7 +66,7 @@ const NavBar = () => {
 
                 {/* Logo CAYENNEFIT centré sur desktop - masqué sur admin */}
                 {!isAdminPage && (
-                    <Link href='/' className='hidden md:flex justify-center items-center group absolute left-1/2 transform -translate-x-1/2'>
+                    <Link href='/' className='hidden md:flex justify-center items-center group absolute left-1/2 transform -translate-x-1/2 z-[9999]'>
                         <div className="text-white font-light text-2xl tracking-[0.3em] hover:tracking-[0.4em] transition-all duration-300">
                             CAYENNEFIT
                         </div>
@@ -101,6 +102,15 @@ const NavBar = () => {
                                 )}
                             </button>
                         ))}
+                        
+                        {/* Bouton de rendez-vous dans le menu mobile */}
+                        <div className="mt-6 pt-6 border-t border-white/20">
+                            <AppointmentSystem 
+                                variant="luxury"
+                                size="md"
+                                className="bg-white/20 border border-white/40 text-white px-8 py-3 font-light tracking-[0.2em] text-sm uppercase hover:bg-white hover:text-black transition-all duration-500 backdrop-blur-md"
+                            />
+                        </div>
                     </div>
                 </div>
             )}

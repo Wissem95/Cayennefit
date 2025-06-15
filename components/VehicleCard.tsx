@@ -6,6 +6,7 @@ import Link from "next/link";
 import { VehicleCardProps } from "@types";
 import CustomButton from "./CustomButton";
 import { useTranslation } from "../contexts/LanguageContext";
+import AppointmentSystem from './AppointmentSystem';
 
 /**
  * Composant VehicleCard CAYENNEFIT - Design luxueux inspiré de Dior
@@ -181,12 +182,29 @@ const VehicleCard = ({ vehicle, isAdmin = false, onEdit, onDelete, onMarkAsSold 
                             />
                         </div>
                     ) : (
+                        <div className="space-y-3">
                         <Link
                             href={`/vehicule/${vehicle.id}`}
-                            className="block w-full bg-black hover:bg-gray-800 text-white py-3 px-4 font-light tracking-wider text-sm transition-all duration-300 text-center rounded"
+                            className="block w-full bg-gray-900 hover:bg-black text-white py-3 px-4 font-light tracking-wider text-sm transition-all duration-300 text-center rounded"
                         >
-                            {t('vehicle.viewDetails')}
+                            VOIR DÉTAILS
                         </Link>
+                            {/* Bouton de rendez-vous avec le véhicule pré-sélectionné */}
+                            <AppointmentSystem 
+                                 variant="secondary"
+                                 size="sm"
+                                 text="RENDEZ-VOUS"
+                                 className="w-full bg-white hover:bg-gray-50 text-gray-900 py-2 px-4 font-light tracking-wider text-sm transition-all duration-300 text-center rounded border border-gray-300"
+                                 vehicleInfo={{
+                                     id: vehicle.id,
+                                     make: vehicle.make,
+                                     model: vehicle.model,
+                                     year: vehicle.year,
+                                     price: vehicle.price,
+                                     images: vehicle.images
+                                 }}
+                             />
+                        </div>
                     )}
                 </div>
             </div>

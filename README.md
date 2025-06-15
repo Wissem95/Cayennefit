@@ -15,7 +15,7 @@ Plateforme moderne de vente de véhicules haut de gamme avec interface admin com
 
 ```bash
 git clone <repo-url>
-cd ShopYourCarV2
+cd CayennefitV2
 npm install
 ```
 
@@ -127,7 +127,7 @@ npx prisma reset     # Reset base (dev seulement)
 ## 📁 Structure
 
 ```
-ShopYourCarV2/
+CayennefitV2/
 ├── app/                 # Pages Next.js
 │   ├── admin/          # Interface admin
 │   ├── api/            # API routes
