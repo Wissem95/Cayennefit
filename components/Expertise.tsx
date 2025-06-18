@@ -124,8 +124,8 @@ const Expertise: React.FC = () => {
                         onClick={() => {
                           // Fonction pour télécharger le PDF des forfaits assistance
                           const link = document.createElement('a');
-                          link.href = '/documents/NOS OFFRES A DISTANCES .pdf';
-                          link.download = 'NOS OFFRES A DISTANCES .pdf';
+                          link.href = '/documents/Nosoffresassistanceadistance.pdf';
+                          link.download = 'Nosoffresassistanceadistance.pdf';
                           document.body.appendChild(link);
                           link.click();
                           document.body.removeChild(link);
@@ -140,7 +140,7 @@ const Expertise: React.FC = () => {
                       </button>
                       {/* Logo WhatsApp */}
                       <button
-                        onClick={() => window.open('https://api.whatsapp.com/send?phone=6583245152', '_blank')}
+                        onClick={() => window.open('https://api.whatsapp.com/send?phone=33785189051', '_blank')}
                         className="w-8 h-8 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-green-500/25 z-10"
                         title="Contacter via WhatsApp"
                       >
@@ -175,8 +175,8 @@ const Expertise: React.FC = () => {
                 onClick={() => {
                   // Fonction pour télécharger le PDF des forfaits assistance
                   const link = document.createElement('a');
-                  link.href = '/documents/NOS OFFRES A DISTANCES .pdf';
-                  link.download = 'NOS OFFRES A DISTANCES .pdf';
+                  link.href = '/documents/Nosoffresassistanceadistance.pdf';
+                  link.download = 'Nosoffresassistanceadistance.pdf';
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link);
@@ -191,7 +191,7 @@ const Expertise: React.FC = () => {
                 </span>
               </button>
               <button 
-                onClick={() => window.open('https://api.whatsapp.com/send?phone=6583245152', '_blank')}
+                onClick={() => window.open('https://api.whatsapp.com/send?phone=33785189051', '_blank')}
                 className="group w-full sm:w-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gray-900 hover:bg-gray-800 text-white rounded-lg sm:rounded-xl font-medium text-sm sm:text-base tracking-wide transition-all duration-300 hover:shadow-lg hover:shadow-gray-900/25 hover:-translate-y-0.5 min-w-0"
               >
                 <span className="flex items-center justify-center gap-2 whitespace-nowrap">

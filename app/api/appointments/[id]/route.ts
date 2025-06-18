@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
-import { sendClientConfirmationResend, sendClientCancellationResend, AppointmentEmailData } from '@/lib/email-resend';
+import { AppointmentEmailData } from '@/lib/email-resend';
 
 // Instance Prisma réutilisable
 const prisma = new PrismaClient();
@@ -147,42 +147,8 @@ export async function PATCH(
       }
     });
 
-    // Envoyer email au client selon l'action
-    if (action === 'confirm' || action === 'cancel') {
-      const emailData: AppointmentEmailData = {
-        clientName: updatedAppointment.clientName,
-        clientEmail: updatedAppointment.clientEmail,
-        clientPhone: updatedAppointment.clientPhone,
-        appointmentDate: updatedAppointment.appointmentDate.toLocaleDateString('fr-FR', {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-        }),
-        serviceType: updatedAppointment.serviceType,
-        message: updatedAppointment.message || undefined,
-        adminMessage: adminMessage || undefined,
-        vehicleInfo: updatedAppointment.vehicle ? {
-          make: updatedAppointment.vehicle.make,
-          model: updatedAppointment.vehicle.model,
-          year: updatedAppointment.vehicle.year,
-          price: updatedAppointment.vehicle.price,
-        } : undefined,
-      };
-
-      // Envoyer l'email approprié (en arrière-plan)
-      if (action === 'confirm') {
-        sendClientConfirmationResend(emailData).catch((error: any) => {
-          console.error('Erreur envoi email confirmation:', error);
-        });
-      } else if (action === 'cancel') {
-        sendClientCancellationResend(emailData).catch((error: any) => {
-          console.error('Erreur envoi email annulation:', error);
-        });
-      }
-    }
+    // Note: Les emails de confirmation/annulation ont été supprimés pour simplifier le système
+    // L'admin gère maintenant les communications manuellement par téléphone/email
 
     return NextResponse.json({
       success: true,

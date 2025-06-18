@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
   const handleSmoothScroll = (targetId: string) => {
     // Redirection spéciale vers WhatsApp pour les liens de contact
     if (targetId === "#contact") {
-      window.open('https://api.whatsapp.com/send?phone=6583245152', '_blank');
+      window.open('https://api.whatsapp.com/send?phone=33785189051', '_blank');
       return;
     }
     
@@ -113,7 +113,7 @@ const Footer: React.FC = () => {
                       </svg>
                     </div>
                     <span className="text-gray-700 font-light group-hover:text-gray-900 transition-colors">
-                      +33 1 XX XX XX XX
+                      07 85 18 90 51
                     </span>
                   </div>
                   
@@ -283,16 +283,11 @@ const Footer: React.FC = () => {
             
             {/* Liens légaux */}
             <div className="flex flex-wrap justify-center md:justify-end items-center gap-6 text-sm">
-              <a href="#" className="text-gray-500 hover:text-gray-900 transition-colors duration-200 font-light hover:underline">
-                {t('footer.legalNotice')}
-              </a>
-              <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-              <a href="#" className="text-gray-500 hover:text-gray-900 transition-colors duration-200 font-light hover:underline">
-                {t('footer.privacy')}
-              </a>
-              <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
-              <a href="#" className="text-gray-500 hover:text-gray-900 transition-colors duration-200 font-light hover:underline">
+              <a href="/conditions-generales" className="text-gray-500 hover:text-gray-900 transition-colors duration-200 font-light hover:underline">
                 {t('footer.terms')}
+              </a>
+              <a href="/politique-de-protection-des-donnees" className="text-gray-500 hover:text-gray-900 transition-colors duration-200 font-light hover:underline">
+                {t('footer.privacy')}
               </a>
             </div>
           </div>

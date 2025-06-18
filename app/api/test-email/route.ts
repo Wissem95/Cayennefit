@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
   const testData: AppointmentEmailData = {
     clientName: 'Client Test',
     clientEmail: testEmail,
-    clientPhone: '+33 6 12 34 56 78',
+            clientPhone: '07 85 18 90 51',
     appointmentDate: new Date().toLocaleDateString('fr-FR', {
       weekday: 'long',
       year: 'numeric',
@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
     const testData: AppointmentEmailData = {
       clientName: name,
       clientEmail: email,
-      clientPhone: '+33 6 12 34 56 78',
+      clientPhone: '07 85 18 90 51',
       appointmentDate: new Date().toLocaleDateString('fr-FR', {
         weekday: 'long',
         year: 'numeric',

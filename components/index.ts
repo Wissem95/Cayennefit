@@ -18,6 +18,8 @@ import HomeContent from "./HomeContent";
 import AppointmentButton from "./AppointmentButton";
 import AppointmentModal from "./AppointmentModal";
 import AppointmentSystem from "./AppointmentSystem";
+import CookieConsent from "./CookieConsent";
+import CookiePreferencesManager from "./CookiePreferencesManager";
 
 export {
     Hero,
@@ -42,4 +44,7 @@ export {
     AppointmentButton,
     AppointmentModal,
     AppointmentSystem,
+    // Composant RGPD
+    CookieConsent,
+    CookiePreferencesManager,
 };

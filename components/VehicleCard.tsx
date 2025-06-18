@@ -189,11 +189,10 @@ const VehicleCard = ({ vehicle, isAdmin = false, onEdit, onDelete, onMarkAsSold 
                         >
                             VOIR DÉTAILS
                         </Link>
-                            {/* Bouton de rendez-vous avec le véhicule pré-sélectionné */}
+                                                         {/* Bouton de rendez-vous avec le véhicule pré-sélectionné */}
                             <AppointmentSystem 
                                  variant="secondary"
                                  size="sm"
-                                 text="RENDEZ-VOUS"
                                  className="w-full bg-white hover:bg-gray-50 text-gray-900 py-2 px-4 font-light tracking-wider text-sm transition-all duration-300 text-center rounded border border-gray-300"
                                  vehicleInfo={{
                                      id: vehicle.id,

@@ -1,6 +1,6 @@
 import "./globals.css";
 
-import { Footer, NavBar } from "@components";
+import { Footer, NavBar, CookieConsent } from "@components";
 import { LanguageProvider } from "../contexts/LanguageContext";
 import ConditionalLayout from "../components/ConditionalLayout";
 
@@ -27,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <ConditionalLayout>
                     {children}
                 </ConditionalLayout>
+                <CookieConsent />
             </LanguageProvider>
         </body>
         </html>

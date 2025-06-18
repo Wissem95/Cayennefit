@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import { CalendarDaysIcon } from '@heroicons/react/24/outline';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Interface pour les props du bouton
 interface AppointmentButtonProps {
@@ -29,19 +31,20 @@ interface AppointmentButtonProps {
 
 /**
  * Composant bouton pour déclencher l'ouverture du modal de rendez-vous
- * Design luxueux avec différentes variantes selon le contexte
+ * Support complet du système de langue et de différents styles
  */
 const AppointmentButton: React.FC<AppointmentButtonProps> = ({
   onClick,
   variant = 'primary',
   size = 'md',
-  text = 'Prendre RDV',
+  text,
   disabled = false,
   className = '',
   showIcon = true,
   vehicleInfo,
 }) => {
-  
+  const { t } = useLanguage();
+
   // Classes de base communes à toutes les variantes
   const baseClasses = `
     inline-flex items-center justify-center font-semibold transition-all duration-300
@@ -85,7 +88,7 @@ const AppointmentButton: React.FC<AppointmentButtonProps> = ({
   // Texte personnalisé selon le contexte véhicule
   const getDisplayText = () => {
     // Utiliser le texte fourni en priorité, sinon texte par défaut
-    return text || 'Prendre RDV';
+    return text || t('appointment.button');
   };
 
   // Gestionnaire de clic avec feedback haptique (si disponible)
@@ -99,21 +102,32 @@ const AppointmentButton: React.FC<AppointmentButtonProps> = ({
     onClick();
   };
 
+  const buttonClasses = `
+    ${baseClasses}
+    ${sizeClasses[size]}
+    ${variantClasses[variant]}
+    ${className}
+  `;
+
   return (
-    <button
+    <motion.button
       type="button"
       onClick={handleClick}
       disabled={disabled}
-      className={`
-        ${baseClasses}
-        ${sizeClasses[size]}
-        ${variantClasses[variant]}
-        ${className}
-      `}
-      aria-label={vehicleInfo 
-        ? `Prendre rendez-vous pour ${vehicleInfo.make} ${vehicleInfo.model} ${vehicleInfo.year}`
-        : 'Prendre rendez-vous'
+      className={buttonClasses}
+      aria-label={
+        vehicleInfo 
+          ? t('appointment.appointmentFor') + ` ${vehicleInfo.make} ${vehicleInfo.model} ${vehicleInfo.year}`
+          : t('appointment.appointmentGeneral')
       }
+      title={
+        vehicleInfo 
+          ? t('appointment.appointmentFor') + ` ${vehicleInfo.make} ${vehicleInfo.model} ${vehicleInfo.year}`
+          : t('appointment.appointmentGeneral')
+      }
+      whileHover={{ scale: disabled ? 1 : 1.02 }}
+      whileTap={{ scale: disabled ? 1 : 0.98 }}
+      transition={{ duration: 0.2 }}
     >
       {/* Icône calendrier */}
       {showIcon && (
@@ -124,13 +138,17 @@ const AppointmentButton: React.FC<AppointmentButtonProps> = ({
       )}
       
       {/* Texte du bouton */}
-      <span>{getDisplayText()}</span>
+      <span className="flex items-center justify-center gap-2">
+        <span className="font-medium tracking-wide">
+          {getDisplayText()}
+        </span>
+      </span>
       
       {/* Animation de pulsation pour attirer l'attention */}
       {variant === 'luxury' && (
         <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-amber-400/20 to-amber-600/20 animate-pulse pointer-events-none" />
       )}
-    </button>
+    </motion.button>
   );
 };
 

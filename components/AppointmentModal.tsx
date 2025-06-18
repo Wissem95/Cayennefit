@@ -10,6 +10,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { fr } from 'date-fns/locale';
 import PhoneInput from './PhoneInput';
 import { isValidPhoneNumber } from 'libphonenumber-js';
+import { useLanguage } from '../contexts/LanguageContext';
+import Image from 'next/image';
 
 // Interface pour les données du formulaire
 interface AppointmentFormData {
@@ -47,6 +49,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   onClose,
   vehicleInfo,
 }) => {
+  const { t } = useLanguage();
   
   // État local pour le loading et les erreurs
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,6 +58,10 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   
   // État pour le numéro de téléphone
   const [phoneNumber, setPhoneNumber] = useState<string>('');
+  
+  // États pour la gestion des créneaux disponibles
+  const [availableTimeSlots, setAvailableTimeSlots] = useState<string[]>([]);
+  const [loadingAvailability, setLoadingAvailability] = useState(false);
 
   // Configuration du formulaire avec React Hook Form
   const {
@@ -77,12 +84,45 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   // Surveiller la date sélectionnée pour le DatePicker
   const selectedDate = watch('appointmentDate');
 
+  // Fonction pour charger les créneaux disponibles
+  const fetchAvailableTimeSlots = async (date: Date) => {
+    if (!date) return;
+    
+    setLoadingAvailability(true);
+    try {
+      const dateString = date.toISOString().split('T')[0]; // Format YYYY-MM-DD
+      const response = await fetch(`/api/appointments/availability?date=${dateString}`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        setAvailableTimeSlots(data.data.availableTimeSlots);
+      } else {
+        console.error('Erreur lors du chargement des créneaux disponibles');
+        // En cas d'erreur, utiliser tous les créneaux par défaut
+        setAvailableTimeSlots(['09:00', '10:00', '11:00', '14:00', '15:00', '16:00', '17:00']);
+      }
+    } catch (error) {
+      console.error('Erreur fetch availability:', error);
+      // En cas d'erreur, utiliser tous les créneaux par défaut
+      setAvailableTimeSlots(['09:00', '10:00', '11:00', '14:00', '15:00', '16:00', '17:00']);
+    } finally {
+      setLoadingAvailability(false);
+    }
+  };
+
+  // Charger les créneaux disponibles quand la date change
+  useEffect(() => {
+    if (selectedDate && isOpen) {
+      fetchAvailableTimeSlots(selectedDate);
+    }
+  }, [selectedDate, isOpen]);
+
   // Types de services disponibles
-  const serviceTypes = [
-    { value: 'test_drive', label: '🚗 Essai du véhicule', icon: '🚗' },
-    { value: 'inspection', label: '🔍 Inspection technique', icon: '🔍' },
+  const meetingTypeOptions = [
     { value: 'meeting', label: '🤝 Rendez-vous commercial', icon: '🤝' },
-    { value: 'other', label: '📋 Autre demande', icon: '📋' }
+    { value: 'visit', label: '🚗 Visite & Essai', icon: '🚗' },
+    { value: 'expertise', label: '🔧 Expertise technique', icon: '🔧' },
+    { value: 'negotiation', label: '💰 Négociation prix', icon: '💰' },
   ];
 
   // Réinitialiser le formulaire à l'ouverture
@@ -164,16 +204,11 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
     return date >= today && date.getDay() !== 0;
   };
 
-  // Heures disponibles
-  const availableHours = [
-    { value: '09:00', label: '09:00' },
-    { value: '10:00', label: '10:00' },
-    { value: '11:00', label: '11:00' },
-    { value: '14:00', label: '14:00' },
-    { value: '15:00', label: '15:00' },
-    { value: '16:00', label: '16:00' },
-    { value: '17:00', label: '17:00' },
-  ];
+  // Fonction pour filtrer les heures disponibles dans le DatePicker
+  const filterAvailableTimes = (time: Date): boolean => {
+    const timeString = time.toTimeString().slice(0, 5); // Format HH:MM
+    return availableTimeSlots.includes(timeString);
+  };
 
   // Gestionnaire de fermeture du modal
   const handleClose = () => {
@@ -200,7 +235,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
 
         {/* Conteneur centré du modal */}
         <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4 text-center">
+          <div className="flex min-h-full items-center justify-center p-2 sm:p-4 text-center">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -210,26 +245,26 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-2xl transform overflow-visible rounded-2xl bg-white shadow-2xl transition-all">
+              <Dialog.Panel className="w-full max-w-2xl mx-2 sm:mx-0 transform overflow-visible rounded-2xl bg-white shadow-2xl transition-all">
                 
                 {/* En-tête du modal */}
                 <motion.div 
-                  className="bg-gradient-to-r from-gray-900 to-black px-6 py-8 text-white"
+                  className="bg-gradient-to-r from-gray-900 to-black px-4 sm:px-6 py-6 sm:py-8 text-white"
                   initial={{ y: -20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.5 }}
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <CalendarDaysIcon className="h-10 w-10" />
-                      <div className="text-left">
-                        <Dialog.Title className="text-2xl font-light tracking-wide">
-                          PRENDRE RENDEZ-VOUS
-                        </Dialog.Title>
-                        <p className="text-gray-300 mt-1 font-light">
-                          Réservez votre créneau en quelques clics
-                        </p>
-                      </div>
+                    <div className="flex items-center space-x-2 sm:space-x-3">
+                      <CalendarDaysIcon className="h-8 w-8 sm:h-10 sm:w-10" />
+                                              <div className="text-left">
+                          <Dialog.Title className="text-lg sm:text-2xl font-light tracking-wide">
+                            {t('appointment.bookAppointment')}
+                          </Dialog.Title>
+                          <p className="text-gray-300 mt-1 font-light text-sm sm:text-base">
+                            {t('appointment.bookAppointmentSubtitle')}
+                          </p>
+                        </div>
                     </div>
                     
                     <button
@@ -251,11 +286,15 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                       transition={{ delay: 0.2, duration: 0.5 }}
                     >
                       <div className="flex items-center space-x-4">
-                        <img 
-                          src={vehicleInfo.images[0]} 
-                          alt={`${vehicleInfo.make} ${vehicleInfo.model}`}
-                          className="w-16 h-12 object-cover rounded-lg"
-                        />
+                        <div className="relative w-16 h-12 rounded-lg overflow-hidden">
+                          <Image 
+                            src={vehicleInfo.images[0]} 
+                            alt={`${vehicleInfo.make} ${vehicleInfo.model}`}
+                            fill
+                            className="object-cover"
+                            sizes="64px"
+                          />
+                        </div>
                         <div className="text-left">
                           <h3 className="font-light text-lg tracking-wide">
                             {vehicleInfo.make} {vehicleInfo.model} {vehicleInfo.year}
@@ -270,7 +309,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                 </motion.div>
 
                 {/* Contenu du formulaire */}
-                <div className="px-6 py-8">
+                <div className="px-4 sm:px-6 py-6 sm:py-8">
                   
                   {/* Message de succès */}
                   {submitSuccess && (
@@ -287,7 +326,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                         </div>
                         <div className="ml-3">
                           <p className="text-sm font-medium text-green-800">
-                            ✅ Demande envoyée avec succès ! Nous vous recontacterons rapidement.
+                            ✅ {t('appointment.bookingSuccess')}
                           </p>
                         </div>
                       </div>
@@ -326,7 +365,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                       <div>
                         <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
                           <UserIcon className="w-4 h-4 mr-2" />
-                          Nom complet *
+                          {t('appointment.clientName')} *
                         </label>
                         <input
                           type="text"
@@ -350,7 +389,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                       <div>
                         <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
                           <EnvelopeIcon className="w-4 h-4 mr-2" />
-                          Email *
+                          {t('appointment.clientEmail')} *
                         </label>
                         <input
                           type="email"
@@ -393,7 +432,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                       {/* Type de service */}
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Type de service *
+                          {t('appointment.serviceType')} *
                         </label>
                         <select
                           {...register('serviceType', { required: 'Sélectionnez un service' })}
@@ -403,7 +442,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                               : 'border-gray-300 focus:ring-blue-500'
                           }`}
                         >
-                          {serviceTypes.map((service) => (
+                          {meetingTypeOptions.map((service) => (
                             <option key={service.value} value={service.value}>
                               {service.label}
                             </option>
@@ -418,7 +457,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                     {/* Date et heure */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Date et heure souhaitées *
+                        {t('appointment.appointmentDate')} *
                       </label>
                       <div className="border border-gray-300 rounded-lg p-4 bg-gray-50 min-h-[100px] flex items-center justify-center">
                         <div className="w-full">
@@ -426,6 +465,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                             selected={selectedDate}
                             onChange={(date) => setValue('appointmentDate', date as Date)}
                             filterDate={isDateAvailable}
+                            filterTime={filterAvailableTimes}
                             showTimeSelect
                             timeIntervals={60}
                             minTime={new Date(new Date().setHours(9, 0))}
@@ -433,12 +473,51 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                             dateFormat="EEEE dd MMMM yyyy 'à' HH:mm"
                             locale={fr}
                             className="w-full text-center text-base font-medium bg-transparent border-none outline-none py-2"
-                            placeholderText="Sélectionnez une date et heure"
+                            placeholderText={loadingAvailability ? "Chargement des créneaux..." : "Sélectionnez une date et heure"}
                             calendarClassName="custom-calendar"
                             popperClassName="custom-popper"
+                            disabled={loadingAvailability}
                           />
                         </div>
                       </div>
+                      
+                      {/* Indicateur des créneaux disponibles */}
+                      {selectedDate && availableTimeSlots.length > 0 && (
+                        <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-sm font-medium text-blue-800">
+                              ✅ {t('appointment.availableSlots')} {selectedDate.toLocaleDateString('fr-FR')}
+                            </span>
+                            <span className="text-xs text-blue-600">
+                              {availableTimeSlots.length}/7 créneaux libres
+                            </span>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {availableTimeSlots.map((slot) => (
+                              <span 
+                                key={slot}
+                                className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full border border-green-300"
+                              >
+                                {slot}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Message si aucun créneau disponible */}
+                      {selectedDate && availableTimeSlots.length === 0 && !loadingAvailability && (
+                        <div className="mt-3 p-3 bg-red-50 rounded-lg border border-red-200">
+                          <div className="flex items-center">
+                            <span className="text-sm font-medium text-red-800">
+                              ❌ {t('appointment.noSlotsAvailable')} {selectedDate.toLocaleDateString('fr-FR')}
+                            </span>
+                          </div>
+                          <p className="text-xs text-red-600 mt-1">
+                            {t('appointment.chooseAnotherDate')}
+                          </p>
+                        </div>
+                      )}
                       <style jsx global>{`
                         .custom-calendar {
                           font-size: 16px !important;
@@ -520,13 +599,13 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                     <div>
                       <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
                         <ChatBubbleLeftRightIcon className="w-4 h-4 mr-2" />
-                        Message (optionnel)
+                        {t('appointment.message')}
                       </label>
                       <textarea
                         {...register('message')}
                         rows={4}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors resize-none"
-                        placeholder="Précisions sur votre demande, questions particulières..."
+                        placeholder={t('appointment.messagePlaceholder')}
                       />
                     </div>
 
@@ -538,26 +617,36 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                         disabled={isSubmitting}
                         className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors disabled:opacity-50 font-light tracking-wide"
                       >
-                        ANNULER
+                        {t('appointment.cancel')}
                       </button>
                       
-                      <button
-                        type="submit"
-                        disabled={isSubmitting || !isValid}
-                        className="flex-1 px-6 py-3 bg-gray-900 hover:bg-black text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all transform hover:scale-105 disabled:opacity-50 disabled:transform-none flex items-center justify-center font-light tracking-wide"
-                      >
-                        {isSubmitting ? (
-                          <>
-                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                            </svg>
-                            ENVOI EN COURS...
-                          </>
-                        ) : (
-                          '📅 ENVOYER MA DEMANDE'
-                        )}
-                      </button>
+                                                      <button
+                                    type="submit"
+                                    disabled={isSubmitting || !isValid}
+                                    className="
+                                        w-full py-4 px-8 
+                                        bg-gradient-to-r from-red-600 to-red-700 
+                                        text-white font-bold text-lg
+                                        rounded-xl border-2 border-red-500
+                                        hover:from-red-700 hover:to-red-800 
+                                        disabled:opacity-50 disabled:cursor-not-allowed
+                                        transition-all duration-300
+                                        shadow-lg hover:shadow-xl
+                                        transform hover:scale-[1.02]
+                                    "
+                                >
+                                    {isSubmitting ? (
+                                        <div className="flex items-center justify-center gap-2">
+                                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                                            <span>{t('appointment.processing')}</span>
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center justify-center gap-2">
+                                            <span>📅</span>
+                                            <span>{t('appointment.bookAppointment')}</span>
+                                        </div>
+                                    )}
+                                </button>
                     </div>
                   </form>
                 </div>

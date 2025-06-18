@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { 
   sendOwnerNotificationResend, 
   sendClientReceiptNotificationResend,
-  sendClientConfirmationResend,
-  sendClientCancellationResend,
+  testResendConfiguration,
   AppointmentEmailData 
 } from '@/lib/email-resend';
 
@@ -56,25 +55,14 @@ export async function GET(request: NextRequest) {
       };
     }
 
-    // Test 3: Email confirmation client
-    if (emailType === 'all' || emailType === 'confirm') {
-      console.log('🧪 Test email confirmation client...');
-      const confirmResult = await sendClientConfirmationResend(testEmailData);
-      results.tests.clientConfirmation = {
-        success: confirmResult,
-        description: 'Email confirmation RDV vers client',
-        error: confirmResult ? null : 'Échec envoi'
-      };
-    }
-
-    // Test 4: Email annulation client
-    if (emailType === 'all' || emailType === 'cancel') {
-      console.log('🧪 Test email annulation client...');
-      const cancelResult = await sendClientCancellationResend(testEmailData);
-      results.tests.clientCancellation = {
-        success: cancelResult,
-        description: 'Email annulation RDV vers client',
-        error: cancelResult ? null : 'Échec envoi'
+    // Test 3: Configuration Resend
+    if (emailType === 'all' || emailType === 'config') {
+      console.log('🧪 Test configuration Resend...');
+      const configResult = await testResendConfiguration();
+      results.tests.resendConfig = {
+        success: configResult,
+        description: 'Test de la configuration Resend',
+        error: configResult ? null : 'Échec configuration'
       };
     }
 
@@ -107,6 +95,6 @@ export async function GET(request: NextRequest) {
 
 export async function POST() {
   return NextResponse.json({
-    message: 'Utilise GET avec ?type=all|owner|receipt|confirm|cancel pour tester les emails'
+    message: 'Utilise GET avec ?type=all|owner|receipt|config pour tester les emails'
   });
 } 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { 
   CalendarDaysIcon, 
@@ -78,7 +78,7 @@ const AdminAppointmentsPage: React.FC = () => {
   const [actionMessage, setActionMessage] = useState('');
 
   // Charger les rendez-vous
-  const fetchAppointments = async () => {
+  const fetchAppointments = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams({
@@ -101,12 +101,12 @@ const AdminAppointmentsPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [pagination.page, statusFilter]);
 
   // Charger les données au montage et quand les filtres changent
   useEffect(() => {
     fetchAppointments();
-  }, [pagination.page, statusFilter]);
+  }, [fetchAppointments]);
 
   // Fonction pour ouvrir le modal d'action avec message
   const openActionModal = (appointment: Appointment, action: 'confirm' | 'cancel') => {
@@ -230,28 +230,28 @@ const AdminAppointmentsPage: React.FC = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 flex items-center">
-                <CalendarDaysIcon className="h-8 w-8 mr-3 text-blue-600" />
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+            <div className="mb-4 lg:mb-0">
+              <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 flex items-center">
+                <CalendarDaysIcon className="h-6 w-6 lg:h-8 lg:w-8 mr-2 lg:mr-3 text-blue-600" />
                 Gestion des Rendez-vous
               </h1>
-              <p className="text-gray-600 mt-2">
+              <p className="text-gray-600 mt-1 lg:mt-2 text-sm lg:text-base">
                 Gérez toutes les demandes de rendez-vous de vos clients
               </p>
             </div>
             
             {/* Statistiques rapides */}
-            <div className="flex space-x-4">
-              <div className="bg-white rounded-lg px-4 py-2 shadow-sm border">
-                <div className="text-2xl font-bold text-blue-600">{pagination.total}</div>
-                <div className="text-sm text-gray-500">Total</div>
+            <div className="flex space-x-3 lg:space-x-4">
+              <div className="bg-white rounded-lg px-3 py-2 lg:px-4 lg:py-2 shadow-sm border flex-1 lg:flex-none">
+                <div className="text-xl lg:text-2xl font-bold text-blue-600">{pagination.total}</div>
+                <div className="text-xs lg:text-sm text-gray-500">Total</div>
               </div>
-              <div className="bg-white rounded-lg px-4 py-2 shadow-sm border">
-                <div className="text-2xl font-bold text-yellow-600">
+              <div className="bg-white rounded-lg px-3 py-2 lg:px-4 lg:py-2 shadow-sm border flex-1 lg:flex-none">
+                <div className="text-xl lg:text-2xl font-bold text-yellow-600">
                   {appointments.filter(a => a.status === 'PENDING').length}
                 </div>
-                <div className="text-sm text-gray-500">En attente</div>
+                <div className="text-xs lg:text-sm text-gray-500">En attente</div>
               </div>
             </div>
           </div>
@@ -259,33 +259,33 @@ const AdminAppointmentsPage: React.FC = () => {
 
         {/* Filtres et recherche */}
         <motion.div 
-          className="bg-white rounded-lg shadow-sm border p-6 mb-8"
+          className="bg-white rounded-lg shadow-sm border p-4 lg:p-6 mb-6 lg:mb-8"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.1, duration: 0.5 }}
         >
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex flex-col gap-3 lg:flex-row lg:gap-4">
             
             {/* Recherche */}
             <div className="flex-1">
               <div className="relative">
-                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 lg:h-5 lg:w-5 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Rechercher par nom, email ou téléphone..."
+                  placeholder="Rechercher par nom, email..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full pl-9 lg:pl-10 pr-4 py-2.5 lg:py-2 text-sm lg:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
             </div>
 
             {/* Filtre par statut */}
-            <div className="md:w-48">
+            <div className="lg:w-48">
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 lg:px-4 py-2.5 lg:py-2 text-sm lg:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="all">Tous les statuts</option>
                 <option value="pending">En attente</option>
@@ -338,31 +338,33 @@ const AdminAppointmentsPage: React.FC = () => {
                 </p>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Client
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Date/Heure
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Service
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Véhicule
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Statut
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+              <>
+                {/* Version Desktop - Tableau */}
+                <div className="hidden lg:block overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Client
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Date/Heure
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Service
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Véhicule
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Statut
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
                     {filteredAppointments.map((appointment) => (
                       <tr key={appointment.id} className="hover:bg-gray-50">
                         
@@ -534,31 +536,200 @@ const AdminAppointmentsPage: React.FC = () => {
                         </td>
                       </tr>
                     ))}
-                  </tbody>
-                </table>
-              </div>
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Version Mobile - Cartes */}
+                <div className="lg:hidden space-y-4">
+                  {filteredAppointments.map((appointment) => (
+                    <motion.div
+                      key={appointment.id}
+                      className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {/* En-tête de la carte */}
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <div className="flex items-center mb-1">
+                            <UserIcon className="h-4 w-4 text-gray-400 mr-2" />
+                            <h3 className="text-sm font-medium text-gray-900">
+                              {appointment.clientName}
+                            </h3>
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {appointment.clientEmail}
+                          </div>
+                        </div>
+                        <div className="ml-2">
+                          {getStatusBadge(appointment.status)}
+                        </div>
+                      </div>
+
+                      {/* Informations principales */}
+                      <div className="space-y-2 mb-3">
+                        <div className="flex items-center text-sm">
+                          <CalendarDaysIcon className="h-4 w-4 text-gray-400 mr-2" />
+                          <span className="text-gray-900">
+                            {new Date(appointment.appointmentDate).toLocaleDateString('fr-FR', {
+                              weekday: 'short',
+                              day: 'numeric',
+                              month: 'short',
+                            })} à {new Date(appointment.appointmentDate).toLocaleTimeString('fr-FR', {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-center text-sm">
+                          <ClockIcon className="h-4 w-4 text-gray-400 mr-2" />
+                          <span className="text-gray-900">
+                            {getServiceTypeLabel(appointment.serviceType)}
+                          </span>
+                        </div>
+
+                        {appointment.clientPhone && (
+                          <div className="flex items-center text-sm">
+                            <PhoneIcon className="h-4 w-4 text-gray-400 mr-2" />
+                            <span className="text-gray-900">
+                              {appointment.clientPhone}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Véhicule */}
+                      {appointment.vehicle && (
+                        <div className="flex items-center p-2 bg-gray-50 rounded-lg mb-3">
+                          <img 
+                            src={appointment.vehicle.images[0]} 
+                            alt="Véhicule"
+                            className="h-8 w-12 object-cover rounded mr-3"
+                          />
+                          <div className="flex-1">
+                            <div className="text-xs font-medium text-gray-900">
+                              {appointment.vehicle.make} {appointment.vehicle.model}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {appointment.vehicle.year} • {appointment.vehicle.price.toLocaleString()} €
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Message */}
+                      {appointment.message && (
+                        <div className="text-xs text-gray-600 bg-blue-50 p-2 rounded mb-3">
+                          💬 {appointment.message.length > 60 ? 
+                            `${appointment.message.substring(0, 60)}...` : 
+                            appointment.message
+                          }
+                        </div>
+                      )}
+
+                      {/* Actions */}
+                      <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                        <div className="flex space-x-2">
+                          {/* Voir détails */}
+                          <button
+                            onClick={() => {
+                              setSelectedAppointment(appointment);
+                              setShowModal(true);
+                            }}
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            title="Voir détails"
+                          >
+                            <EyeIcon className="h-4 w-4" />
+                          </button>
+
+                          {/* Actions selon le statut */}
+                          {appointment.status === 'PENDING' && (
+                            <>
+                              <button
+                                onClick={() => openActionModal(appointment, 'confirm')}
+                                disabled={actionLoading === appointment.id}
+                                className="p-2 text-green-600 hover:bg-green-50 rounded-lg disabled:opacity-50 transition-colors"
+                                title="Confirmer"
+                              >
+                                <CheckCircleIcon className="h-4 w-4" />
+                              </button>
+                              <button
+                                onClick={() => openActionModal(appointment, 'cancel')}
+                                disabled={actionLoading === appointment.id}
+                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50 transition-colors"
+                                title="Annuler"
+                              >
+                                <XCircleIcon className="h-4 w-4" />
+                              </button>
+                            </>
+                          )}
+
+                          {appointment.status === 'CONFIRMED' && (
+                            <button
+                              onClick={() => handleAppointmentAction(appointment.id, 'complete')}
+                              disabled={actionLoading === appointment.id}
+                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg disabled:opacity-50 transition-colors"
+                              title="Marquer terminé"
+                            >
+                              <ClockIcon className="h-4 w-4" />
+                            </button>
+                          )}
+
+                          {/* Supprimer */}
+                          <button
+                            onClick={() => handleDeleteAppointment(appointment.id)}
+                            disabled={actionLoading === appointment.id}
+                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50 transition-colors"
+                            title="Supprimer"
+                          >
+                            <TrashIcon className="h-4 w-4" />
+                          </button>
+                        </div>
+
+                        {/* Indicateur de loading */}
+                        {actionLoading === appointment.id && (
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </>
             )}
 
             {/* Pagination */}
             {pagination.pages > 1 && (
-              <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                <div className="flex-1 flex justify-between sm:hidden">
+              <div className="bg-white px-4 py-3 border-t border-gray-200 lg:px-6">
+                {/* Version Mobile */}
+                <div className="flex items-center justify-between lg:hidden">
                   <button
                     onClick={() => setPagination(prev => ({ ...prev, page: Math.max(1, prev.page - 1) }))}
                     disabled={pagination.page === 1}
-                    className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
+                    className="relative inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 transition-colors"
                   >
-                    Précédent
+                    ← Précédent
                   </button>
+                  
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm text-gray-700">
+                      Page {pagination.page} sur {pagination.pages}
+                    </span>
+                  </div>
+                  
                   <button
                     onClick={() => setPagination(prev => ({ ...prev, page: Math.min(prev.pages, prev.page + 1) }))}
                     disabled={pagination.page === pagination.pages}
-                    className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
+                    className="relative inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 transition-colors"
                   >
-                    Suivant
+                    Suivant →
                   </button>
                 </div>
-                <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+
+                {/* Version Desktop */}
+                <div className="hidden lg:flex lg:items-center lg:justify-between">
                   <div>
                     <p className="text-sm text-gray-700">
                       Affichage de <span className="font-medium">{((pagination.page - 1) * pagination.limit) + 1}</span> à{' '}
@@ -569,20 +740,32 @@ const AdminAppointmentsPage: React.FC = () => {
                     </p>
                   </div>
                   <div>
-                    <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
-                      {Array.from({ length: pagination.pages }, (_, i) => i + 1).map((page) => (
-                        <button
-                          key={page}
-                          onClick={() => setPagination(prev => ({ ...prev, page }))}
-                          className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-colors ${
-                            page === pagination.page
-                              ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
-                              : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
-                          }`}
-                        >
-                          {page}
-                        </button>
-                      ))}
+                                          <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+                        {Array.from({ length: Math.min(pagination.pages, 7) }, (_, i) => {
+                          let page: number;
+                          if (pagination.pages <= 7) {
+                            page = i + 1;
+                          } else if (pagination.page <= 4) {
+                            page = i + 1;
+                          } else if (pagination.page >= pagination.pages - 3) {
+                            page = pagination.pages - 6 + i;
+                          } else {
+                            page = pagination.page - 3 + i;
+                          }
+                          return (
+                            <button
+                              key={page}
+                              onClick={() => setPagination(prev => ({ ...prev, page }))}
+                              className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-colors ${
+                                page === pagination.page
+                                  ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
+                                  : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                              }`}
+                            >
+                              {page}
+                            </button>
+                          );
+                        })}
                     </nav>
                   </div>
                 </div>
@@ -594,45 +777,45 @@ const AdminAppointmentsPage: React.FC = () => {
 
       {/* Modal détails du rendez-vous */}
       {showModal && selectedAppointment && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 lg:p-4 z-50">
           <motion.div 
-            className="bg-white rounded-lg max-w-2xl w-full max-h-screen overflow-y-auto"
+            className="bg-white rounded-lg max-w-2xl w-full max-h-screen overflow-y-auto mx-2 lg:mx-0"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
           >
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-semibold text-gray-900">
+            <div className="p-4 lg:p-6">
+              <div className="flex justify-between items-center mb-4 lg:mb-6">
+                <h3 className="text-lg lg:text-xl font-semibold text-gray-900">
                   📅 Détails du rendez-vous
                 </h3>
                 <button
                   onClick={() => setShowModal(false)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  className="text-gray-400 hover:text-gray-600 transition-colors p-1"
                 >
-                  <XCircleIcon className="h-6 w-6" />
+                  <XCircleIcon className="h-5 w-5 lg:h-6 lg:w-6" />
                 </button>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-4 lg:space-y-6">
                 {/* Informations client */}
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 mb-3">👤 Informations Client</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-gray-50 rounded-lg p-3 lg:p-4">
+                  <h4 className="font-medium text-gray-900 mb-2 lg:mb-3 text-sm lg:text-base">👤 Informations Client</h4>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-4">
                     <div>
-                      <label className="text-sm font-medium text-gray-700">Nom</label>
-                      <p className="text-sm text-gray-900">{selectedAppointment.clientName}</p>
+                      <label className="text-xs lg:text-sm font-medium text-gray-700">Nom</label>
+                      <p className="text-xs lg:text-sm text-gray-900">{selectedAppointment.clientName}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-700">Email</label>
-                      <p className="text-sm text-gray-900">{selectedAppointment.clientEmail}</p>
+                      <label className="text-xs lg:text-sm font-medium text-gray-700">Email</label>
+                      <p className="text-xs lg:text-sm text-gray-900 break-all">{selectedAppointment.clientEmail}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-700">Téléphone</label>
-                      <p className="text-sm text-gray-900">{selectedAppointment.clientPhone}</p>
+                      <label className="text-xs lg:text-sm font-medium text-gray-700">Téléphone</label>
+                      <p className="text-xs lg:text-sm text-gray-900">{selectedAppointment.clientPhone}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-700">Statut</label>
+                      <label className="text-xs lg:text-sm font-medium text-gray-700">Statut</label>
                       <div className="mt-1">{getStatusBadge(selectedAppointment.status)}</div>
                     </div>
                   </div>
@@ -789,14 +972,14 @@ const AdminAppointmentsPage: React.FC = () => {
 
       {/* Modal d'action avec message personnalisé */}
       {showActionModal && selectedAppointment && actionType && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 lg:p-4 z-50">
           <motion.div 
-            className="bg-white rounded-lg max-w-md w-full"
+            className="bg-white rounded-lg max-w-md w-full mx-2 lg:mx-0"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
           >
-            <div className="p-6">
+            <div className="p-4 lg:p-6">
               <div className="flex items-center mb-4">
                 {actionType === 'confirm' ? (
                   <CheckCircleIcon className="h-8 w-8 text-green-600 mr-3" />

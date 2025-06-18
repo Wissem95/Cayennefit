@@ -113,6 +113,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Vérifier qu'il n'y a pas déjà un RDV confirmé à cette date/heure
+    const existingConfirmedAppointment = await prisma.appointment.findFirst({
+      where: {
+        appointmentDate: appointmentDateTime,
+        status: 'CONFIRMED', // Seulement les RDV confirmés bloquent les créneaux
+      },
+    });
+
+    if (existingConfirmedAppointment) {
+      return NextResponse.json(
+        { success: false, message: 'Ce créneau est déjà occupé par un rendez-vous confirmé' },
+        { status: 409 } // Conflict
+      );
+    }
+
     // Vérifier que le véhicule existe si fourni
     let vehicleInfo = null;
     if (vehicleId) {

@@ -278,7 +278,7 @@ const Hero = () => {
 
             {/* Version Mobile - 2 sections verticales */}
             <div className="md:hidden absolute inset-0 flex flex-col">
-                {/* Section 1 - Logo CAYENNEFIT */}
+                {/* Section 1 - Services Porsche Cayenne */}
                 <div className="h-1/2 w-full relative bg-gradient-to-br from-gray-900 via-black to-gray-800">
                     <img 
                         src="/videos/slider.jpg" 
@@ -286,20 +286,45 @@ const Hero = () => {
                         className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-black/50"></div>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="text-center bg-black/30 backdrop-blur-sm rounded-lg p-4">
-                            <h1 className="text-white font-light text-2xl tracking-[0.3em] leading-tight mb-2 drop-shadow-2xl">
-                                CAYENNEFIT
-                            </h1>
-                            <p className="text-white/80 font-light text-xs tracking-[0.2em] drop-shadow-lg">
-                                LE SPÉCIALISTE PORSCHE CAYENNE
-                            </p>
+                    <div className="absolute inset-0 flex items-center justify-center px-4 py-6">
+                        <div className="text-center text-white w-full max-w-sm">
+                            {/* Titre principal */}
+                            <h2 className="text-lg sm:text-xl font-light tracking-[0.2em] mb-4 drop-shadow-2xl">
+                                {t('hero.services')}
+                            </h2>
+                            
+                            {/* Ligne de séparation */}
+                            <div className="w-16 h-px bg-white mx-auto mb-4"></div>
+                            
+                            {/* Sous-titre */}
+                            <h3 
+                                className="text-xs sm:text-sm font-light tracking-[0.1em] mb-6 opacity-90 leading-relaxed drop-shadow-lg px-2"
+                                dangerouslySetInnerHTML={{
+                                    __html: t('hero.automobiles').replace(/<br\/>/g, '<br/>')
+                                }}
+                            />
+                            
+                            {/* Boutons d'action */}
+                            <div className="flex flex-col gap-3 items-center">
+                                <button
+                                    onClick={handleScrollToAbout}
+                                    className="bg-transparent border border-white/50 text-white px-5 py-2.5 font-light tracking-[0.15em] text-xs uppercase hover:bg-white hover:text-black transition-all duration-500 w-full max-w-[170px]"
+                                >
+                                    {t('hero.discover')}
+                                </button>
+                                
+                                {/* Bouton Rendez-vous mobile */}
+                                <div className="w-full max-w-[170px]">
+                                    <AppointmentSystem 
+                                        variant="minimal"
+                                        size="sm"
+                                        className="w-full bg-white/10 border border-white/30 text-white px-5 py-2.5 font-light tracking-[0.15em] text-xs uppercase hover:bg-white hover:text-black transition-all duration-500 backdrop-blur-sm"
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                {/* Séparateur horizontal */}
-                <div className="h-px bg-white/20 z-10"></div>
 
                 {/* Section 2 - Véhicules & Pièces détachées */}
                 <div className="h-1/2 w-full relative bg-gradient-to-br from-gray-800 via-black to-gray-900">
@@ -332,6 +357,18 @@ const Hero = () => {
                         </div>
                     </div>
                 </div>
+
+                {/* Logo CAYENNEFIT centré entre les deux sections - Mobile uniquement */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[20]">
+                    <div className="text-center bg-black/40 backdrop-blur-md rounded-lg p-3 border border-white/20 shadow-2xl">
+                        <h1 className="text-white font-light text-lg tracking-[0.3em] leading-tight mb-1 drop-shadow-2xl">
+                            CAYENNEFIT
+                        </h1>
+                        <p className="text-white/90 font-light text-xs tracking-[0.2em] drop-shadow-lg">
+                            {t('hero.excellence')}
+                        </p>
+                    </div>
+                </div>
             </div>
 
             {/* Logo CAYENNEFIT centré en overlay pour DESKTOP seulement - SANS bouton rendez-vous */}
@@ -342,7 +379,7 @@ const Hero = () => {
                             CAYENNEFIT
                         </h1>
                         <p className="text-white/90 font-light text-xs md:text-sm tracking-[0.2em] drop-shadow-lg">
-                            LE SPÉCIALISTE PORSCHE CAYENNE
+                            {t('hero.excellence')}
                         </p>
                     </div>
                 </div>

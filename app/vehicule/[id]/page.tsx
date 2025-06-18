@@ -197,7 +197,7 @@ export default function VehicleDetailsPage() {
                                 <div className="space-y-3">
                                     <div className="flex gap-2">
                                         <button 
-                                            onClick={() => window.open('https://api.whatsapp.com/send?phone=6583245152', '_blank')}
+                                            onClick={() => window.open('https://api.whatsapp.com/send?phone=33785189051', '_blank')}
                                             className="flex-1 bg-gray-900 text-white py-3 px-4 rounded font-light tracking-wide hover:bg-gray-800 transition-colors"
                                         >
                                             NOUS CONTACTER
@@ -208,7 +208,6 @@ export default function VehicleDetailsPage() {
                                     <AppointmentSystem 
                                         variant="secondary"
                                         size="md"
-                                        text="RENDEZ-VOUS"
                                         className="w-full bg-white hover:bg-gray-50 text-gray-900 py-3 px-4 rounded font-light tracking-wide transition-colors border border-gray-300"
                                         vehicleInfo={{
                                             id: vehicle.id,
@@ -327,7 +326,7 @@ export default function VehicleDetailsPage() {
                     </Link>
                     <div className="flex gap-2 items-center">
                         <button 
-                            onClick={() => window.open('https://api.whatsapp.com/send?phone=6583245152', '_blank')}
+                            onClick={() => window.open('https://api.whatsapp.com/send?phone=33785189051', '_blank')}
                             className="bg-gray-900 hover:bg-black text-white px-8 py-3 font-light tracking-wider text-sm transition-all duration-300 rounded"
                         >
                             NOUS CONTACTER
@@ -336,7 +335,6 @@ export default function VehicleDetailsPage() {
                         <AppointmentSystem 
                             variant="secondary"
                             size="md"
-                            text="RENDEZ-VOUS"
                             className="bg-white hover:bg-gray-50 text-gray-900 px-8 py-3 font-light tracking-wider text-sm transition-all duration-300 border border-gray-300 rounded"
                             vehicleInfo={{
                                 id: vehicle.id,

@@ -224,12 +224,12 @@ const translations = {
             "documents": "DOCUMENTS",
             "notAvailable": "Non disponible",
             "kmUnit": "km",
-            "yearUnit": "années",
+            "yearUnit": "ans",
             "powerUnit": "ch",
             "engineSize": "Cylindrée",
             "power": "Puissance",
             "acceleration": "0-100 km/h",
-            "topSpeed": "Vitesse max",
+            "topSpeed": "Vitesse maximale",
             "consumption": "Consommation",
             "emissions": "Émissions CO2",
             "doors": "Portes",
@@ -242,10 +242,31 @@ const translations = {
             "wheelbase": "Empattement",
             "salePrice": "Prix de vente",
             "vehicleNotFound": "Véhicule non trouvé",
-            "optimalPerformance": "Performance optimale et technologie avancée",
+            "optimalPerformance": "Performances optimales et technologie avancée",
             "elegantDesign": "Design élégant et finitions premium",
             "exceptionalComfort": "Confort de conduite exceptionnel",
             "securitySystems": "Systèmes de sécurité dernière génération"
+        },
+        "appointment": {
+            "button": "RENDEZ-VOUS",
+            "bookAppointment": "PRENDRE RENDEZ-VOUS",
+            "appointmentFor": "Prendre rendez-vous pour",
+            "appointmentGeneral": "Prendre rendez-vous",
+            "meetingType": "🤝 Rendez-vous commercial",
+            "bookAppointmentTitle": "PRENDRE RENDEZ-VOUS",
+            "bookAppointmentSubtitle": "Réservez votre créneau en quelques clics",
+            "bookingSuccess": "Demande envoyée avec succès ! Nous vous recontacterons rapidement.",
+            "clientName": "Nom complet",
+            "clientEmail": "Email",
+            "serviceType": "Type de service",
+            "appointmentDate": "Date et heure souhaitées",
+            "availableSlots": "Créneaux disponibles pour le",
+            "noSlotsAvailable": "Aucun créneau disponible pour le",
+            "chooseAnotherDate": "Veuillez choisir une autre date. Tous les créneaux sont déjà confirmés.",
+            "message": "Message (optionnel)",
+            "messagePlaceholder": "Précisions sur votre demande, questions particulières...",
+            "cancel": "ANNULER",
+            "processing": "TRAITEMENT EN COURS..."
         },
         "common": {
             "loading": "Chargement...",
@@ -394,9 +415,8 @@ const translations = {
             "warranties": "Garanties",
             "financing": "Financement",
             "delivery": "Livraison",
-            "legalNotice": "Mentions légales",
-            "privacy": "Confidentialité",
-            "terms": "Conditions",
+            "terms": "Conditions Générales de Vente",
+            "privacy": "Politique de Protection des Données",
             "madeWith": "Conçu avec",
             "forPassionate": "pour les passionnés"
         }
@@ -409,7 +429,7 @@ const translations = {
             "parts": "SPARE PARTS PORSCHE CAYENNE",
             "discover": "DISCOVER",
             "hoverToPlay": "Hover to play video",
-            "excellence": "Automotive Excellence",
+            "excellence": "THE PORSCHE CAYENNE SPECIALIST",
             "hoverToListen": "Hover to play video",
             "muteVideo": "Mute sound",
             "unmuteVideo": "Unmute sound"
@@ -634,6 +654,27 @@ const translations = {
             "exceptionalComfort": "Exceptional driving comfort",
             "securitySystems": "Latest generation security systems"
         },
+        "appointment": {
+            "button": "APPOINTMENT",
+            "bookAppointment": "BOOK APPOINTMENT",
+            "appointmentFor": "Book appointment for",
+            "appointmentGeneral": "Book appointment",
+            "meetingType": "🤝 Business appointment",
+            "bookAppointmentTitle": "BOOK APPOINTMENT",
+            "bookAppointmentSubtitle": "Book your slot in just a few clicks",
+            "bookingSuccess": "Request sent successfully! We will contact you quickly.",
+            "clientName": "Full name",
+            "clientEmail": "Email",
+            "serviceType": "Service type",
+            "appointmentDate": "Desired date and time",
+            "availableSlots": "Available slots for",
+            "noSlotsAvailable": "No slots available for",
+            "chooseAnotherDate": "Please choose another date. All slots are already confirmed.",
+            "message": "Message (optional)",
+            "messagePlaceholder": "Details about your request, specific questions...",
+            "cancel": "CANCEL",
+            "processing": "PROCESSING..."
+        },
         "common": {
             "loading": "Loading...",
             "error": "Error",
@@ -660,7 +701,8 @@ const translations = {
             "day": "day",
             "hour": "hour",
             "minute": "minute"
-        },"aboutUs": {
+        },
+        "aboutUs": {
             "title": "WHO ARE WE?",
             "subtitle": "About us",
             "passion": "Passionate about the",
@@ -780,13 +822,11 @@ const translations = {
             "warranties": "Warranties",
             "financing": "Financing",
             "delivery": "Delivery",
-            "legalNotice": "Legal notice",
-            "privacy": "Privacy",
-            "terms": "Terms",
+            "terms": "Terms & Conditions",
+            "privacy": "Data Protection Policy",
             "madeWith": "Made with",
             "forPassionate": "for enthusiasts"
         }
-        
     }
 };
 

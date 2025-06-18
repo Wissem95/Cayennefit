@@ -31,7 +31,7 @@ const NavBar = () => {
         { name: t('navigation.expertise'), action: () => scrollToSection('expertise') },
         { name: t('navigation.services'), action: () => scrollToSection('services') },
         { name: t('navigation.vehicles'), action: () => scrollToSection('discover') },
-        { name: t('navigation.contact'), action: () => window.open('https://api.whatsapp.com/send?phone=6583245152', '_blank'), isWhatsApp: true },
+        { name: t('navigation.contact'), action: () => window.open('https://api.whatsapp.com/send?phone=33785189051', '_blank'), isWhatsApp: true },
     ];
 
     return (
