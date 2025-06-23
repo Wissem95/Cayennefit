@@ -101,7 +101,7 @@ const AdminAppointmentsPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [pagination.page, statusFilter]);
+  }, [pagination.page, pagination.limit, statusFilter]);
 
   // Charger les données au montage et quand les filtres changent
   useEffect(() => {

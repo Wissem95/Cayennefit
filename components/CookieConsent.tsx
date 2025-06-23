@@ -159,7 +159,7 @@ const CookieConsent: React.FC<CookieConsentProps> = ({ className = '' }) => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.3 }}
-        className={`fixed inset-0 z-50 flex items-end lg:items-center justify-center p-4 bg-black/50 backdrop-blur-sm ${className}`}
+        className={`fixed inset-0 z-[10000] flex items-end lg:items-center justify-center p-4 bg-black/50 backdrop-blur-sm ${className}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="cookie-consent-title"

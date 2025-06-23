@@ -2,17 +2,15 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "../contexts/LanguageContext";
-import LanguageSelector from "./LanguageSelector";
+import { useVideoSound } from "../contexts/VideoSoundContext";
 import AppointmentSystem from './AppointmentSystem';
 
 const Hero = () => {
     const { t } = useTranslation();
+    const { isMuted, video1Ref, video2Ref } = useVideoSound();
     const [currentVideo, setCurrentVideo] = useState(0);
     const [isHovered, setIsHovered] = useState(false);
-    const [isMuted, setIsMuted] = useState(true); // État global du son
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const video1Ref = useRef<HTMLVideoElement>(null);
-    const video2Ref = useRef<HTMLVideoElement>(null);
 
     // Écouter l'événement personnalisé du menu burger depuis la Navbar
     useEffect(() => {
@@ -44,7 +42,7 @@ const Hero = () => {
             video1Ref.current.muted = isMuted;
             video1Ref.current.play().catch(e => console.log('Erreur lecture vidéo 1:', e));
         }
-    }, []);
+    }, [isMuted]);
 
     // Gérer le changement de vidéo automatique
     useEffect(() => {
@@ -73,15 +71,7 @@ const Hero = () => {
         // Plus besoin de gérer la lecture ici car elle est gérée par useEffect
     };
 
-    // Contrôle global du son
-    const toggleMute = () => {
-        const newMutedState = !isMuted;
-        setIsMuted(newMutedState);
-        
-        // Appliquer à toutes les vidéos
-        if (video1Ref.current) video1Ref.current.muted = newMutedState;
-        if (video2Ref.current) video2Ref.current.muted = newMutedState;
-    };
+    // Le contrôle du son est maintenant géré par le contexte global
 
     const handleScrollToAbout = () => {
         const aboutSection = document.getElementById("about");
@@ -105,31 +95,7 @@ const Hero = () => {
 
     return (
         <div id="home" className="relative h-screen w-full overflow-hidden bg-black">
-            {/* Contrôles en haut à droite */}
-            <div className="absolute top-6 right-6 z-[50] flex items-center space-x-4">
-                {/* Contrôle du son - Caché sur mobile */}
-                <button
-                    onClick={toggleMute}
-                    className="hidden md:block bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-lg p-3 transition-all duration-300 group"
-                    title={isMuted ? t('hero.unmuteVideo') : t('hero.muteVideo')}
-                >
-                    {isMuted ? (
-                        // Icône son coupé
-                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
-                        </svg>
-                    ) : (
-                        // Icône son activé
-                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                        </svg>
-                    )}
-                </button>
-
-                {/* Sélecteur de langue - pour desktop ET mobile */}
-                <LanguageSelector />
-            </div>
+            {/* Le contrôle du son est maintenant dans la navbar */}
 
             {/* Version Desktop - Section vidéos côte à côte */}
             <div className="hidden md:flex absolute inset-0">
@@ -373,7 +339,8 @@ const Hero = () => {
 
             {/* Logo CAYENNEFIT centré en overlay pour DESKTOP seulement - SANS bouton rendez-vous */}
             {!isMenuOpen && (
-                <div className="hidden md:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9999] pointer-events-none">
+                <div className="hidden md:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[50] pointer-events-none"
+                >
                     <div className="text-center bg-black/40 backdrop-blur-md rounded-lg p-4 md:p-6 border border-white/20 shadow-2xl">
                         <h1 className="text-white font-light text-xl md:text-2xl lg:text-4xl tracking-[0.3em] leading-tight mb-2 md:mb-3 drop-shadow-2xl">
                             CAYENNEFIT

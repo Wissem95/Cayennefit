@@ -28,16 +28,24 @@ export const getYearsOfProduction = (t: (key: string) => string) => [
 
 export const getFuels = (t: (key: string) => string) => [
     {
-        title: t('filters.fuel'),
+        title: t('search.fuel'),
         value: "",
     },
     {
         title: t('filters.gas'),
-        value: "Gas",
+        value: "Essence",
+    },
+    {
+        title: t('filters.hybrid'),
+        value: "Hybride",
     },
     {
         title: t('filters.electricity'),
-        value: "Electricity",
+        value: "Électrique",
+    },
+    {
+        title: t('filters.diesel'),
+        value: "Diesel",
     },
 ];
 

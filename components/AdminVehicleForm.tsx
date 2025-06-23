@@ -90,7 +90,7 @@ const AdminVehicleForm = ({ vehicle, onClose }: AdminVehicleFormProps) => {
                 }
             });
         };
-    }, []);
+    }, [images]);
 
     /**
      * Gestion des changements dans les champs du formulaire

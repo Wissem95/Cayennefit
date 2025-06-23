@@ -2,6 +2,7 @@ import "./globals.css";
 
 import { Footer, NavBar, CookieConsent } from "@components";
 import { LanguageProvider } from "../contexts/LanguageContext";
+import { VideoSoundProvider } from "../contexts/VideoSoundContext";
 import ConditionalLayout from "../components/ConditionalLayout";
 
 export const metadata = {
@@ -24,10 +25,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </head>
         <body className='relative bg-white'>
             <LanguageProvider>
-                <ConditionalLayout>
-                    {children}
-                </ConditionalLayout>
-                <CookieConsent />
+                <VideoSoundProvider>
+                    <ConditionalLayout>
+                        {children}
+                    </ConditionalLayout>
+                    <CookieConsent />
+                </VideoSoundProvider>
             </LanguageProvider>
         </body>
         </html>

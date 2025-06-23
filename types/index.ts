@@ -66,8 +66,19 @@ export interface FilterProps {
     minPrice?: number; // Nouveau filtre par prix minimum
 }
 
+// Type spécifique pour les searchParams de Next.js (toujours des chaînes)
+export interface SearchParamsProps {
+    manufacturer?: string;
+    year?: string;
+    model?: string;
+    limit?: string;
+    fuel?: string;
+    maxPrice?: string;
+    minPrice?: string;
+}
+
 export interface HomeProps {
-    searchParams: FilterProps;
+    searchParams: SearchParamsProps;
 }
 
 export interface CarCardProps {

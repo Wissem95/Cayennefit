@@ -152,5 +152,342 @@
     "elegantDesign": "Design élégant et finitions premium",
     "exceptionalComfort": "Confort de conduite exceptionnel",
     "securitySystems": "Systèmes de sécurité dernière génération"
+  },
+  "privacyPolicy": {
+    "title": "Politique de Protection des Données",
+    "subtitle": "Informations sur la collecte et le traitement de vos données personnelles",
+    "backToHome": "Retour à l'accueil",
+    "preamble": {
+      "title": "Préambule",
+      "company": "CAYENNEFIT",
+      "email": "contact@cayennefit.fr",
+      "address": "14 bis rue du Bouchain<br/>59124 Escaudain",
+      "phone": "+33 7 85 18 90 51",
+      "content1": "La présente politique de protection des données personnelles (ci-après « Politique ») a pour objet d'informer les utilisateurs du site web www.cayennefit.fr de la manière dont leurs données personnelles sont collectées et traitées par CAYENNEFIT.",
+      "content2": "CAYENNEFIT accorde une grande importance à la protection de la vie privée de ses utilisateurs et s'engage à traiter leurs données personnelles en conformité avec le Règlement Général sur la Protection des Données (RGPD) et la loi française « Informatique et Libertés ».",
+      "content3": "Cette politique explique quelles données nous collectons, pourquoi nous les collectons, comment nous les utilisons et quels sont vos droits concernant ces données.",
+      "content4": "En utilisant notre site web, vous acceptez les pratiques décrites dans cette politique de protection des données."
+    },
+    "section1": {
+      "title": "Responsable du traitement",
+      "content": "CAYENNEFIT, société basée à Escaudain (59124), est le responsable du traitement des données personnelles collectées sur le site www.cayennefit.fr. Pour toute question relative au traitement de vos données personnelles, vous pouvez nous contacter à l'adresse contact@cayennefit.fr."
+    },
+    "section2": {
+      "title": "Données personnelles collectées",
+      "content": "Nous collectons différents types de données personnelles selon votre utilisation de notre site :",
+      "items": [
+        "Nom et prénom",
+        "Adresse e-mail",
+        "Numéro de téléphone",
+        "Adresse postale",
+        "Préférences de véhicules",
+        "Historique de navigation"
+      ]
+    },
+    "section3": {
+      "title": "Catégories de données traitées",
+      "content": "Les données personnelles que nous traitons sont organisées selon les catégories suivantes :",
+      "categories": {
+        "contact": {
+          "title": "Données de contact",
+          "items": [
+            "Nom et prénom",
+            "Adresse e-mail",
+            "Numéro de téléphone",
+            "Adresse postale"
+          ]
+        },
+        "vehicles": {
+          "title": "Données liées aux véhicules",
+          "items": [
+            "Préférences de marques",
+            "Budget recherché",
+            "Type de véhicule souhaité",
+            "Historique des recherches"
+          ]
+        },
+        "connection": {
+          "title": "Données de connexion",
+          "items": [
+            "Adresse IP",
+            "Type de navigateur",
+            "Pages visitées",
+            "Durée de visite"
+          ]
+        },
+        "communication": {
+          "title": "Données de communication",
+          "items": [
+            "Messages envoyés",
+            "Demandes de contact",
+            "Commentaires",
+            "Évaluations"
+          ]
+        }
+      },
+      "important": "Nous ne collectons que les données strictement nécessaires à la fourniture de nos services et à l'amélioration de votre expérience utilisateur."
+    },
+    "section4": {
+      "title": "Finalités des traitements",
+      "content": "Vos données personnelles sont traitées pour les finalités suivantes, chacune reposant sur une base légale spécifique :",
+      "purposes": [
+        {
+          "objective": "Gestion des demandes de contact",
+          "description": "Répondre à vos questions et demandes d'information",
+          "legalBasis": "Exécution de mesures précontractuelles",
+          "retention": "3 ans après le dernier contact"
+        },
+        {
+          "objective": "Présentation des véhicules",
+          "description": "Afficher les véhicules correspondant à vos critères",
+          "legalBasis": "Intérêt légitime",
+          "retention": "Durée de la session"
+        },
+        {
+          "objective": "Amélioration des services",
+          "description": "Analyser l'utilisation du site pour améliorer nos services",
+          "legalBasis": "Intérêt légitime",
+          "retention": "2 ans"
+        },
+        {
+          "objective": "Obligations légales",
+          "description": "Respecter nos obligations légales et réglementaires",
+          "legalBasis": "Obligation légale",
+          "retention": "Selon les exigences légales"
+        }
+      ]
+    },
+    "section5": {
+      "title": "Partage des données",
+      "content": "Vos données personnelles ne sont pas vendues à des tiers. Elles peuvent être partagées uniquement dans les cas suivants :",
+      "cases": [
+        {
+          "title": "Prestataires de services",
+          "description": "Avec nos prestataires techniques (hébergement, maintenance) sous contrat de confidentialité"
+        },
+        {
+          "title": "Obligations légales",
+          "description": "En cas de demande des autorités compétentes ou pour respecter une obligation légale"
+        },
+        {
+          "title": "Protection des droits",
+          "description": "Pour protéger nos droits, notre propriété ou notre sécurité"
+        }
+      ],
+      "commitment": "Nous nous engageons à ne partager vos données qu'avec des tiers de confiance et uniquement lorsque cela est nécessaire pour fournir nos services."
+    },
+    "section6": {
+      "title": "Vos droits",
+      "content": "Conformément au RGPD, vous disposez des droits suivants concernant vos données personnelles :",
+      "rights": [
+        {
+          "title": "Droit d'accès",
+          "description": "Obtenir confirmation que vos données sont traitées et accéder à ces données"
+        },
+        {
+          "title": "Droit de rectification",
+          "description": "Corriger ou compléter vos données inexactes ou incomplètes"
+        },
+        {
+          "title": "Droit à l'effacement",
+          "description": "Demander la suppression de vos données dans certaines conditions"
+        },
+        {
+          "title": "Droit à la limitation",
+          "description": "Limiter le traitement de vos données dans certains cas"
+        },
+        {
+          "title": "Droit à la portabilité",
+          "description": "Récupérer vos données dans un format structuré et les transmettre"
+        },
+        {
+          "title": "Droit d'opposition",
+          "description": "Vous opposer au traitement de vos données dans certaines situations"
+        }
+      ],
+      "howToExercise": {
+        "title": "Comment exercer vos droits",
+        "content": "Pour exercer ces droits, contactez-nous à <strong>contact@cayennefit.fr</strong> avec une pièce d'identité.",
+        "responseTime": "Nous nous engageons à répondre dans un délai maximum d'un mois."
+      }
+    },
+    "section7": {
+      "title": "Sécurité des données",
+      "content": "Nous mettons en place des mesures techniques et organisationnelles appropriées pour protéger vos données personnelles :",
+      "measures": [
+        {
+          "title": "Chiffrement",
+          "description": "Chiffrement des données en transit et au repos"
+        },
+        {
+          "title": "Accès contrôlé",
+          "description": "Accès limité aux données selon le principe du besoin d'en connaître"
+        },
+        {
+          "title": "Formation du personnel",
+          "description": "Formation régulière de notre équipe sur la protection des données"
+        },
+        {
+          "title": "Audits réguliers",
+          "description": "Contrôles et audits périodiques de nos systèmes de sécurité"
+        }
+      ]
+    },
+    "section8": {
+      "title": "Contact et réclamations",
+      "contact": {
+        "title": "Nous contacter",
+        "email": "contact@cayennefit.fr",
+        "phone": "+33 1 XX XX XX XX",
+        "address": "14 bis rue du Bouchain<br/>59124 Escaudain"
+      },
+      "authority": {
+        "title": "Autorité de contrôle",
+        "name": "Commission Nationale de l'Informatique et des Libertés (CNIL)",
+        "website": "www.cnil.fr",
+        "phone": "01 53 73 22 22"
+      }
+    },
+    "section9": {
+      "title": "Mise à jour de la politique",
+      "content": "Cette politique peut être mise à jour pour refléter les évolutions de nos pratiques ou de la réglementation. Nous vous informerons de tout changement significatif.",
+      "lastUpdate": "Dernière mise à jour :"
+    }
+  },
+  "termsConditions": {
+    "title": "Conditions Générales de Vente",
+    "subtitle": "Conditions d'utilisation et de vente - CAYENNEFIT",
+    "article1": {
+      "title": "Dispositions générales",
+      "content1": "Les présentes conditions générales de vente (ci-après « CGV ») régissent les relations contractuelles entre <strong>CAYENNEFIT</strong>, société située 14 bis rue du Bouchain, 59124 Escaudain (ci-après « le Vendeur »), et toute personne physique ou morale souhaitant effectuer un achat (ci-après « l'Acheteur » ou « le Client »).",
+      "content2": "Ces CGV s'appliquent à toutes les ventes de véhicules et services proposés par CAYENNEFIT, que ce soit via le site web www.cayennefit.fr ou par tout autre canal de distribution.",
+      "content3": "En passant commande, l'Acheteur reconnaît avoir pris connaissance des présentes CGV et les accepter sans réserve.",
+      "content4": "CAYENNEFIT se réserve le droit de modifier ces CGV à tout moment. Les CGV applicables sont celles en vigueur à la date de la commande.",
+      "content5": "Si une ou plusieurs stipulations des présentes CGV sont tenues pour non valides ou déclarées comme telles, les autres stipulations gardent toute leur force et leur portée.",
+      "content6": "Les présentes CGV sont disponibles sur le site web et peuvent être archivées par l'Acheteur."
+    },
+    "article2": {
+      "title": "Objet",
+      "content": "Les présentes CGV ont pour objet de définir les modalités et conditions dans lesquelles <strong>CAYENNEFIT</strong> vend des véhicules d'occasion de luxe, propose des services de conseil automobile et met en relation acheteurs et vendeurs."
+    },
+    "article3": {
+      "title": "Définitions",
+      "client": "<strong>Client/Acheteur :</strong> Toute personne physique ou morale effectuant un achat ou utilisant les services de CAYENNEFIT.",
+      "vehicles": "<strong>Véhicules :</strong> Véhicules d'occasion de luxe, principalement de marque Porsche, proposés à la vente par CAYENNEFIT.",
+      "parties": "<strong>Parties :</strong> CAYENNEFIT d'une part, et le Client d'autre part.",
+      "site": "<strong>Site :</strong> Le site web www.cayennefit.fr et toutes ses pages associées."
+    },
+    "article4": {
+      "title": "Accessibilité et Rendez-vous",
+      "subtitle1": "Consultation en ligne",
+      "content1_1": "Le catalogue des véhicules est accessible 24h/24 et 7j/7 sur le site www.cayennefit.fr, sous réserve de maintenance technique.",
+      "content1_2": "Les informations présentées (photos, descriptions, prix) sont données à titre indicatif et peuvent être modifiées sans préavis.",
+      "content1_3": "CAYENNEFIT s'efforce de maintenir la précision des informations mais ne peut garantir l'absence d'erreurs ou d'omissions.",
+      "content1_4": "En cas d'indisponibilité temporaire du site, CAYENNEFIT ne pourra être tenu responsable des conséquences de cette indisponibilité.",
+      "subtitle2": "Prise de rendez-vous",
+      "content2_1": "La visite des véhicules s'effectue uniquement sur rendez-vous, pris via le site web ou par téléphone.",
+      "content2_2": "Les rendez-vous sont confirmés par e-mail et peuvent être modifiés ou annulés jusqu'à 24h avant l'heure prévue.",
+      "content2_3": "En cas d'absence non justifiée au rendez-vous, CAYENNEFIT se réserve le droit de facturer des frais de déplacement.",
+      "content2_4": "Les visites se déroulent dans le respect des mesures sanitaires en vigueur et des règles de sécurité."
+    },
+    "article5": {
+      "title": "Données personnelles",
+      "content1": "CAYENNEFIT collecte et traite les données personnelles des Clients conformément à sa politique de protection des données.",
+      "content2": "Les données collectées sont nécessaires à l'exécution des commandes et à la gestion de la relation client. Pour plus d'informations, consultez notre <a href=\"/politique-de-protection-des-donnees\" class=\"text-blue-600 hover:underline\">Politique de Protection des Données</a>.",
+      "content3": "Le Client dispose d'un droit d'accès, de rectification, d'effacement et de portabilité de ses données personnelles.",
+      "content4": "Les données peuvent être communiquées à des partenaires dans le cadre de l'exécution des services (livraison, financement).",
+      "content5": "CAYENNEFIT s'engage à ne pas vendre ni louer les données personnelles à des tiers à des fins commerciales.",
+      "content6": "Les données sont conservées pendant la durée nécessaire aux finalités pour lesquelles elles ont été collectées.",
+      "content7": "Le Client peut exercer ses droits en contactant CAYENNEFIT à l'adresse contact@cayennefit.fr.",
+      "content8": "En cas de litige, le Client peut saisir la CNIL (Commission Nationale de l'Informatique et des Libertés)."
+    },
+    "article6": {
+      "title": "Propriété intellectuelle",
+      "content1": "Tous les éléments du site www.cayennefit.fr (textes, images, logos, vidéos) sont protégés par le droit de la propriété intellectuelle.",
+      "content2": "Toute reproduction, représentation, modification ou adaptation sans autorisation expresse de CAYENNEFIT est interdite.",
+      "content3": "Les marques et logos des constructeurs automobiles mentionnés restent la propriété de leurs propriétaires respectifs."
+    },
+    "article7": {
+      "title": "Commandes et Ventes",
+      "content1": "Toute commande suppose l'acceptation pleine et entière des présentes CGV par l'Acheteur.",
+      "content2": "Les commandes peuvent être passées en ligne via le site web ou directement en showroom après visite du véhicule.",
+      "content3": "CAYENNEFIT se réserve le droit d'accepter ou de refuser une commande, notamment en cas de litige antérieur ou de défaut de paiement.",
+      "content4": "La vente est considérée comme définitive après signature du contrat de vente et encaissement du paiement intégral.",
+      "content5": "Un contrat de vente détaillé est établi pour chaque transaction, mentionnant les caractéristiques exactes du véhicule."
+    },
+    "article8": {
+      "title": "Prix",
+      "content1": "Les prix des véhicules sont indiqués en euros toutes taxes comprises (TTC) sur le site web et peuvent être modifiés sans préavis.",
+      "content2": "Le prix applicable est celui en vigueur au moment de la confirmation de la commande.",
+      "content3": "Les frais de livraison, d'immatriculation et d'assurance ne sont pas inclus dans le prix affiché sauf mention contraire.",
+      "content4": "Des remises peuvent être accordées selon les véhicules et les conditions du marché, à la discrétion de CAYENNEFIT."
+    },
+    "article9": {
+      "title": "Modalités de paiement",
+      "content1": "Le paiement s'effectue intégralement au moment de la signature du contrat de vente, sauf accord particulier pour un financement.",
+      "paymentMethods": "Les moyens de paiement acceptés sont :",
+      "method1": "Virement bancaire (privilégié pour les montants importants)",
+      "method2": "Chèque de banque certifié",
+      "method3": "Espèces (dans la limite légale autorisée)",
+      "method4": "Financement bancaire partenaire (sous conditions)",
+      "content3": "En cas de paiement par chèque, la remise du véhicule ne s'effectue qu'après encaissement effectif du chèque."
+    },
+    "article10": {
+      "title": "Réserve de propriété et transfert des risques",
+      "content1": "CAYENNEFIT conserve la propriété du véhicule jusqu'au paiement intégral du prix, même en cas de livraison.",
+      "content2": "Les risques de perte et de détérioration sont transférés à l'Acheteur dès la remise du véhicule."
+    },
+    "article11": {
+      "title": "Livraison",
+      "content1": "La livraison peut s'effectuer selon plusieurs modalités à convenir avec l'Acheteur :",
+      "deliveryMethods": "Modalités de livraison :",
+      "delivery1": "Remise en main propre dans nos locaux (gratuite)",
+      "delivery2": "Livraison à domicile ou lieu convenu (frais selon distance)",
+      "delivery3": "Livraison par transporteur spécialisé (sur devis)",
+      "content3": "Les délais de livraison sont donnés à titre indicatif et peuvent varier selon les contraintes logistiques."
+    },
+    "article12": {
+      "title": "Droit de rétractation",
+      "content1": "Conformément aux dispositions légales en vigueur, l'Acheteur ne dispose pas de droit de rétractation pour l'achat de véhicules d'occasion.",
+      "content2": "Toutefois, CAYENNEFIT peut, à titre commercial et selon les circonstances, examiner les demandes d'échange ou de reprise."
+    },
+    "article13": {
+      "title": "Responsabilités",
+      "content1": "CAYENNEFIT s'engage à fournir des véhicules conformes aux descriptions et en bon état de fonctionnement.",
+      "content2": "La responsabilité de CAYENNEFIT est limitée au prix d'achat du véhicule et ne peut inclure les dommages indirects.",
+      "content3": "L'Acheteur reconnaît avoir vérifié l'état du véhicule avant la signature du contrat de vente.",
+      "content4": "CAYENNEFIT ne peut être tenu responsable de l'utilisation du véhicule après la livraison."
+    },
+    "article14": {
+      "title": "Garantie légale",
+      "content1": "Les véhicules vendus bénéficient de la garantie légale de conformité et de la garantie contre les vices cachés.",
+      "content2": "Une garantie commerciale peut être proposée selon les véhicules, avec des conditions spécifiques détaillées dans le contrat.",
+      "content3": "Les interventions sous garantie doivent être signalées dans les meilleurs délais et effectuées par des professionnels agréés."
+    },
+    "article15": {
+      "title": "Modification et résiliation",
+      "content1": "CAYENNEFIT se réserve le droit de modifier les présentes CGV à tout moment, les nouvelles conditions s'appliquant aux commandes ultérieures.",
+      "content2": "En cas de modification substantielle, les Clients en seront informés par tout moyen approprié."
+    },
+    "article16": {
+      "title": "Litiges",
+      "content1": "Les présentes CGV sont soumises au droit français. Tout litige sera porté devant les tribunaux compétents de Valenciennes.",
+      "content2": "Avant tout recours contentieux, les parties s'efforceront de résoudre leur différend à l'amiable.",
+      "content3": "En cas de litige avec un consommateur, une médiation peut être engagée auprès de la plateforme :",
+      "mediationLink": "https://www.economie.gouv.fr/mediation-conso",
+      "content4": "Le consommateur peut également recourir à la plateforme de règlement en ligne des litiges :",
+      "disputeLink": "https://ec.europa.eu/consumers/odr/",
+      "content5": "À défaut de résolution amiable, les tribunaux de Valenciennes sont seuls compétents."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Pour toute question relative aux présentes conditions générales de vente :",
+      "email": "E-mail :",
+      "phone": "Téléphone :",
+      "address": "Adresse :",
+      "hours": "Horaires :",
+      "hoursValue": "Du lundi au vendredi de 9h à 18h",
+      "lastUpdate": "Dernière mise à jour :"
+    }
   }
 } 

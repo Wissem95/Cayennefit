@@ -152,5 +152,342 @@
     "elegantDesign": "Elegant design and premium finishes",
     "exceptionalComfort": "Exceptional driving comfort",
     "securitySystems": "Latest generation security systems"
+  },
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "subtitle": "Information on the collection and processing of your personal data",
+    "backToHome": "Back to home",
+    "preamble": {
+      "title": "Preamble",
+      "company": "CAYENNEFIT",
+      "email": "contact@cayennefit.fr",
+      "address": "14 bis rue du Bouchain<br/>59124 Escaudain",
+      "phone": "+33 7 85 18 90 51",
+      "content1": "This personal data protection policy (hereinafter \"Policy\") aims to inform users of the www.cayennefit.fr website about how their personal data is collected and processed by CAYENNEFIT.",
+      "content2": "CAYENNEFIT attaches great importance to protecting the privacy of its users and undertakes to process their personal data in accordance with the General Data Protection Regulation (GDPR) and French \"Data Protection\" law.",
+      "content3": "This policy explains what data we collect, why we collect it, how we use it and what your rights are regarding this data.",
+      "content4": "By using our website, you accept the practices described in this data protection policy."
+    },
+    "section1": {
+      "title": "Data controller",
+      "content": "CAYENNEFIT, company based in Escaudain (59124), is the controller of personal data collected on the www.cayennefit.fr website. For any questions regarding the processing of your personal data, you can contact us at contact@cayennefit.fr."
+    },
+    "section2": {
+      "title": "Personal data collected",
+      "content": "We collect different types of personal data according to your use of our site:",
+      "items": [
+        "First and last name",
+        "Email address",
+        "Phone number",
+        "Postal address",
+        "Vehicle preferences",
+        "Navigation history"
+      ]
+    },
+    "section3": {
+      "title": "Categories of data processed",
+      "content": "The personal data we process is organized according to the following categories:",
+      "categories": {
+        "contact": {
+          "title": "Contact data",
+          "items": [
+            "First and last name",
+            "Email address",
+            "Phone number",
+            "Postal address"
+          ]
+        },
+        "vehicles": {
+          "title": "Vehicle-related data",
+          "items": [
+            "Brand preferences",
+            "Budget sought",
+            "Type of vehicle desired",
+            "Search history"
+          ]
+        },
+        "connection": {
+          "title": "Connection data",
+          "items": [
+            "IP address",
+            "Browser type",
+            "Pages visited",
+            "Visit duration"
+          ]
+        },
+        "communication": {
+          "title": "Communication data",
+          "items": [
+            "Messages sent",
+            "Contact requests",
+            "Comments",
+            "Reviews"
+          ]
+        }
+      },
+      "important": "We only collect data strictly necessary for providing our services and improving your user experience."
+    },
+    "section4": {
+      "title": "Processing purposes",
+      "content": "Your personal data is processed for the following purposes, each based on a specific legal basis:",
+      "purposes": [
+        {
+          "objective": "Contact request management",
+          "description": "Respond to your questions and information requests",
+          "legalBasis": "Execution of pre-contractual measures",
+          "retention": "3 years after last contact"
+        },
+        {
+          "objective": "Vehicle presentation",
+          "description": "Display vehicles matching your criteria",
+          "legalBasis": "Legitimate interest",
+          "retention": "Session duration"
+        },
+        {
+          "objective": "Service improvement",
+          "description": "Analyze site usage to improve our services",
+          "legalBasis": "Legitimate interest",
+          "retention": "2 years"
+        },
+        {
+          "objective": "Legal obligations",
+          "description": "Comply with our legal and regulatory obligations",
+          "legalBasis": "Legal obligation",
+          "retention": "According to legal requirements"
+        }
+      ]
+    },
+    "section5": {
+      "title": "Data sharing",
+      "content": "Your personal data is not sold to third parties. It may only be shared in the following cases:",
+      "cases": [
+        {
+          "title": "Service providers",
+          "description": "With our technical providers (hosting, maintenance) under confidentiality agreement"
+        },
+        {
+          "title": "Legal obligations",
+          "description": "In case of request from competent authorities or to comply with a legal obligation"
+        },
+        {
+          "title": "Rights protection",
+          "description": "To protect our rights, property or security"
+        }
+      ],
+      "commitment": "We undertake to only share your data with trusted third parties and only when necessary to provide our services."
+    },
+    "section6": {
+      "title": "Your rights",
+      "content": "In accordance with GDPR, you have the following rights regarding your personal data:",
+      "rights": [
+        {
+          "title": "Right of access",
+          "description": "Obtain confirmation that your data is processed and access this data"
+        },
+        {
+          "title": "Right of rectification",
+          "description": "Correct or complete your inaccurate or incomplete data"
+        },
+        {
+          "title": "Right to erasure",
+          "description": "Request deletion of your data under certain conditions"
+        },
+        {
+          "title": "Right to restriction",
+          "description": "Limit the processing of your data in certain cases"
+        },
+        {
+          "title": "Right to portability",
+          "description": "Retrieve your data in a structured format and transmit it"
+        },
+        {
+          "title": "Right to object",
+          "description": "Object to the processing of your data in certain situations"
+        }
+      ],
+      "howToExercise": {
+        "title": "How to exercise your rights",
+        "content": "To exercise these rights, contact us at <strong>contact@cayennefit.fr</strong> with an identity document.",
+        "responseTime": "We undertake to respond within a maximum period of one month."
+      }
+    },
+    "section7": {
+      "title": "Data security",
+      "content": "We implement appropriate technical and organizational measures to protect your personal data:",
+      "measures": [
+        {
+          "title": "Encryption",
+          "description": "Data encryption in transit and at rest"
+        },
+        {
+          "title": "Controlled access",
+          "description": "Limited access to data according to the need-to-know principle"
+        },
+        {
+          "title": "Staff training",
+          "description": "Regular training of our team on data protection"
+        },
+        {
+          "title": "Regular audits",
+          "description": "Periodic checks and audits of our security systems"
+        }
+      ]
+    },
+    "section8": {
+      "title": "Contact and complaints",
+      "contact": {
+        "title": "Contact us",
+        "email": "contact@cayennefit.fr",
+        "phone": "+33 1 XX XX XX XX",
+        "address": "14 bis rue du Bouchain<br/>59124 Escaudain"
+      },
+      "authority": {
+        "title": "Supervisory authority",
+        "name": "Commission Nationale de l'Informatique et des Libertés (CNIL)",
+        "website": "www.cnil.fr",
+        "phone": "01 53 73 22 22"
+      }
+    },
+    "section9": {
+      "title": "Policy update",
+      "content": "This policy may be updated to reflect changes in our practices or regulations. We will inform you of any significant changes.",
+      "lastUpdate": "Last update:"
+    }
+  },
+  "termsConditions": {
+    "title": "Terms and Conditions of Sale",
+    "subtitle": "Terms of use and sale - CAYENNEFIT",
+    "article1": {
+      "title": "General provisions",
+      "content1": "These general terms and conditions of sale (hereinafter \"Terms\") govern the contractual relations between <strong>CAYENNEFIT</strong>, company located at 14 bis rue du Bouchain, 59124 Escaudain (hereinafter \"the Seller\"), and any natural or legal person wishing to make a purchase (hereinafter \"the Buyer\" or \"the Customer\").",
+      "content2": "These Terms apply to all sales of vehicles and services offered by CAYENNEFIT, whether via the www.cayennefit.fr website or through any other distribution channel.",
+      "content3": "By placing an order, the Buyer acknowledges having read these Terms and accepts them without reservation.",
+      "content4": "CAYENNEFIT reserves the right to modify these Terms at any time. The applicable Terms are those in force at the time of the order.",
+      "content5": "If one or more stipulations of these Terms are held to be invalid or declared as such, the other stipulations retain their full force and scope.",
+      "content6": "These Terms are available on the website and can be archived by the Buyer."
+    },
+    "article2": {
+      "title": "Purpose",
+      "content": "These Terms aim to define the terms and conditions under which <strong>CAYENNEFIT</strong> sells luxury used vehicles, offers automotive consulting services and connects buyers and sellers."
+    },
+    "article3": {
+      "title": "Definitions",
+      "client": "<strong>Customer/Buyer:</strong> Any natural or legal person making a purchase or using CAYENNEFIT services.",
+      "vehicles": "<strong>Vehicles:</strong> Luxury used vehicles, mainly Porsche brand, offered for sale by CAYENNEFIT.",
+      "parties": "<strong>Parties:</strong> CAYENNEFIT on one hand, and the Customer on the other hand.",
+      "site": "<strong>Site:</strong> The www.cayennefit.fr website and all its associated pages."
+    },
+    "article4": {
+      "title": "Accessibility and Appointments",
+      "subtitle1": "Online consultation",
+      "content1_1": "The vehicle catalog is accessible 24/7 on the www.cayennefit.fr website, subject to technical maintenance.",
+      "content1_2": "The information presented (photos, descriptions, prices) is given for information purposes and may be modified without notice.",
+      "content1_3": "CAYENNEFIT strives to maintain the accuracy of information but cannot guarantee the absence of errors or omissions.",
+      "content1_4": "In case of temporary unavailability of the site, CAYENNEFIT cannot be held responsible for the consequences of this unavailability.",
+      "subtitle2": "Appointment booking",
+      "content2_1": "Vehicle visits are by appointment only, made via the website or by phone.",
+      "content2_2": "Appointments are confirmed by email and can be modified or cancelled up to 24 hours before the scheduled time.",
+      "content2_3": "In case of unjustified absence at the appointment, CAYENNEFIT reserves the right to charge travel fees.",
+      "content2_4": "Visits take place in compliance with current health measures and safety rules."
+    },
+    "article5": {
+      "title": "Personal data",
+      "content1": "CAYENNEFIT collects and processes Customer personal data in accordance with its data protection policy.",
+      "content2": "The data collected is necessary for order execution and customer relationship management. For more information, consult our <a href=\"/politique-de-protection-des-donnees\" class=\"text-blue-600 hover:underline\">Privacy Policy</a>.",
+      "content3": "The Customer has the right to access, rectify, delete and port their personal data.",
+      "content4": "Data may be communicated to partners as part of service execution (delivery, financing).",
+      "content5": "CAYENNEFIT undertakes not to sell or rent personal data to third parties for commercial purposes.",
+      "content6": "Data is kept for the duration necessary for the purposes for which it was collected.",
+      "content7": "The Customer can exercise their rights by contacting CAYENNEFIT at contact@cayennefit.fr.",
+      "content8": "In case of dispute, the Customer can contact the CNIL (Commission Nationale de l'Informatique et des Libertés)."
+    },
+    "article6": {
+      "title": "Intellectual property",
+      "content1": "All elements of the www.cayennefit.fr website (texts, images, logos, videos) are protected by intellectual property law.",
+      "content2": "Any reproduction, representation, modification or adaptation without express authorization from CAYENNEFIT is prohibited.",
+      "content3": "The trademarks and logos of automotive manufacturers mentioned remain the property of their respective owners."
+    },
+    "article7": {
+      "title": "Orders and Sales",
+      "content1": "Any order implies full acceptance of these Terms by the Buyer.",
+      "content2": "Orders can be placed online via the website or directly in the showroom after vehicle visit.",
+      "content3": "CAYENNEFIT reserves the right to accept or refuse an order, particularly in case of prior dispute or payment default.",
+      "content4": "The sale is considered final after signing the sales contract and receipt of full payment.",
+      "content5": "A detailed sales contract is established for each transaction, mentioning the exact characteristics of the vehicle."
+    },
+    "article8": {
+      "title": "Prices",
+      "content1": "Vehicle prices are indicated in euros including all taxes (TTC) on the website and may be modified without notice.",
+      "content2": "The applicable price is the one in force at the time of order confirmation.",
+      "content3": "Delivery, registration and insurance fees are not included in the displayed price unless otherwise stated.",
+      "content4": "Discounts may be granted according to vehicles and market conditions, at CAYENNEFIT's discretion."
+    },
+    "article9": {
+      "title": "Payment terms",
+      "content1": "Payment is made in full at the time of signing the sales contract, except for special financing agreement.",
+      "paymentMethods": "Accepted payment methods are:",
+      "method1": "Bank transfer (preferred for large amounts)",
+      "method2": "Certified bank check",
+      "method3": "Cash (within legal limit)",
+      "method4": "Partner bank financing (subject to conditions)",
+      "content3": "In case of payment by check, vehicle delivery is only made after effective cashing of the check."
+    },
+    "article10": {
+      "title": "Retention of ownership and transfer of risks",
+      "content1": "CAYENNEFIT retains ownership of the vehicle until full payment of the price, even in case of delivery.",
+      "content2": "The risks of loss and deterioration are transferred to the Buyer upon delivery of the vehicle."
+    },
+    "article11": {
+      "title": "Delivery",
+      "content1": "Delivery can be carried out according to several modalities to be agreed with the Buyer:",
+      "deliveryMethods": "Delivery methods:",
+      "delivery1": "Hand delivery at our premises (free)",
+      "delivery2": "Delivery to home or agreed location (fees according to distance)",
+      "delivery3": "Delivery by specialized carrier (on quote)",
+      "content3": "Delivery times are given for information only and may vary according to logistical constraints."
+    },
+    "article12": {
+      "title": "Right of withdrawal",
+      "content1": "In accordance with legal provisions in force, the Buyer does not have a right of withdrawal for the purchase of used vehicles.",
+      "content2": "However, CAYENNEFIT may, commercially and according to circumstances, examine requests for exchange or trade-in."
+    },
+    "article13": {
+      "title": "Responsibilities",
+      "content1": "CAYENNEFIT undertakes to provide vehicles conforming to descriptions and in good working order.",
+      "content2": "CAYENNEFIT's liability is limited to the vehicle purchase price and cannot include indirect damages.",
+      "content3": "The Buyer acknowledges having checked the vehicle's condition before signing the sales contract.",
+      "content4": "CAYENNEFIT cannot be held responsible for the use of the vehicle after delivery."
+    },
+    "article14": {
+      "title": "Legal warranty",
+      "content1": "Vehicles sold benefit from the legal warranty of conformity and warranty against hidden defects.",
+      "content2": "A commercial warranty may be offered depending on vehicles, with specific conditions detailed in the contract.",
+      "content3": "Warranty interventions must be reported as soon as possible and carried out by approved professionals."
+    },
+    "article15": {
+      "title": "Modification and termination",
+      "content1": "CAYENNEFIT reserves the right to modify these Terms at any time, the new conditions applying to subsequent orders.",
+      "content2": "In case of substantial modification, Customers will be informed by any appropriate means."
+    },
+    "article16": {
+      "title": "Disputes",
+      "content1": "These Terms are subject to French law. Any dispute will be brought before the competent courts of Valenciennes.",
+      "content2": "Before any contentious recourse, the parties will endeavor to resolve their dispute amicably.",
+      "content3": "In case of dispute with a consumer, mediation can be initiated with the platform:",
+      "mediationLink": "https://www.economie.gouv.fr/mediation-conso",
+      "content4": "The consumer can also use the online dispute resolution platform:",
+      "disputeLink": "https://ec.europa.eu/consumers/odr/",
+      "content5": "Failing amicable resolution, the courts of Valenciennes have sole jurisdiction."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "For any questions regarding these general terms and conditions of sale:",
+      "email": "Email:",
+      "phone": "Phone:",
+      "address": "Address:",
+      "hours": "Hours:",
+      "hoursValue": "Monday to Friday from 9am to 6pm",
+      "lastUpdate": "Last update:"
+    }
   }
 } 
