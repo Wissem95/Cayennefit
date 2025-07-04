@@ -4,8 +4,8 @@ import { usePathname } from 'next/navigation';
 import { Footer, NavBar } from "@components";
 
 /**
- * Composant de layout conditionnel - Gère l'affichage du footer selon la page
- * N'affiche pas le footer sur les pages d'administration
+ * Composant de layout conditionnel - Gère l'affichage de la navbar et du footer selon la page
+ * N'affiche ni la navbar ni le footer sur les pages d'administration
  */
 export default function ConditionalLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
@@ -13,7 +13,8 @@ export default function ConditionalLayout({ children }: { children: React.ReactN
 
     return (
         <>
-            <NavBar />
+            {/* N'afficher la navbar que si ce n'est pas une page admin */}
+            {!isAdminPage && <NavBar />}
             {children}
             {/* N'afficher le footer que si ce n'est pas une page admin */}
             {!isAdminPage && <Footer />}
